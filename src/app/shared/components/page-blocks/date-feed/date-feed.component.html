@@ -1,0 +1,34 @@
+<div class="date-feed">
+  <div class="date-feed__wrap">
+
+    <swiper-container1 class="swiper111" slides-per-view="30" speed="500" loop="true" css-mode="true">
+
+<!--      <ng-container *ngFor="let date of dates" >-->
+        <swiper-slide >
+          <date-item class="swiper-slide date-item @@class" [date]="{month: 'Апрель', weekDay: 'ПН', date: '21'}" />
+          <date-item class="swiper-slide date-item @@class" [date]="{month: 'Апрель', weekDay: 'ПН', date: '21'}" />
+          <date-item class="swiper-slide date-item @@class" [date]="{month: 'Апрель', weekDay: 'ПН', date: '21'}" />
+        </swiper-slide>
+<!--      </ng-container>-->
+    </swiper-container1>
+
+<!--    <div class="swiper-container">-->
+
+<!--      <div class="swiper-wrapper">-->
+<!--        <ng-container *ngFor="let date of dates" >-->
+<!--          <date-item class="swiper-slide date-item @@class" [date]="{month: 'Апрель', weekDay: 'ПН', date: '21'}" />-->
+<!--        </ng-container>-->
+<!--      </div>-->
+<!--    </div>-->
+  </div>
+  <div class="swiper-button swiper-button-prev">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M27.0008 14L16.7988 24.202L27.0008 34.404" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="swiper-button swiper-button-next">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.9992 34L31.2012 23.798L20.9992 13.596" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
