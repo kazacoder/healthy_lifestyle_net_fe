@@ -1,0 +1,122 @@
+.payment{
+  &__grid{
+    margin-top: 1.875em;
+    display: grid;
+    grid-template-columns: 20.5em calc(100% - 22em);
+    gap: 1.5em 1.5em;
+  }
+  &__btn{
+    width: 100%;
+    margin-top: 1.5em;
+  }
+  &__items{
+    margin-top: 1.875em;
+    @include grid100gap(1.5em);
+    max-width: 41.25em;
+  }
+}
+
+.balance{
+  padding: 2.1875em 2.1875em 3em;
+  border-radius: 1em;
+  background-color: #fff;
+  box-shadow: $shadow;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  &__info{
+    @include grid100gap(.75em);
+  }
+  &__sum{
+    font-size: 1.875em;
+    font-weight: 500;
+    color: #7a8a98;
+  }
+  &__currency{
+    margin-top: 2.625em;
+    width: 5.0625em;
+  }
+}
+
+.payment-item{
+  &__title{
+    font-size: 1em;
+    line-height: 138%;
+    font-weight: 500;
+    font-family: $font2;
+  }
+  &__wrap{
+    display: flex;
+    margin-top: 1em;
+  }
+  &__field{
+    flex-grow: 1;
+  }
+  &__img{
+    position: absolute;
+    height: 2.3125em;
+    bottom: .375em;
+    right: .5em;
+    display: flex;
+    align-items: center;
+    img{
+      max-height: 100%;
+      max-width: 9.125em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .payment{
+    &__grid{
+      margin-top: 1.5em;
+    }
+  }
+
+  .payment-item{
+    position: relative;
+    &--bank{
+      .payment-item__title{
+        padding-left: 0;
+      }
+      .payment-item__img{
+        display: none;
+      }
+    }
+    &__title{
+      padding-left: 2em;
+      min-height: 3.125em;
+      display: flex;
+      align-items: center;
+    }
+    .publication-card__nav{
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    &__field{
+      position: static;
+    }
+    &__img{
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3.125em;
+      width: 1.75em;
+      img{
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+  .payment{
+    &__grid{
+      grid-template-columns: 100%;
+    }
+  }
+}

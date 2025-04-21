@@ -1,0 +1,36 @@
+.tabs{
+  display: flex;
+}
+
+.tab{
+  height: 1.9375em;
+  padding: 0 1.125em;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: .625em;
+  font-weight: 600;
+  background-color: #fff;
+  border: 1px solid $primary;
+  transition: all .3s;
+  @include lastM(0 1em 0 0);
+  span{
+    font-size: 1em;
+    line-height: 120%;
+  }
+  &:hover{
+    background: $primary;
+    cursor: pointer;
+  }
+  &._active{
+    background: $primary;
+    pointer-events: none;
+  }
+}
+
+.tab-content{
+  display: none;
+  &._active{
+    display: block;
+  }
+}

@@ -1,0 +1,373 @@
+.event-desc{
+  padding: .75em 0 1.5em;
+  &__grid{
+    display: grid;
+    grid-template-columns: calc(100% - 24em) 22.5em;
+    gap: 1.5em;
+    padding-right: 1.375em;
+  }
+  &__col{
+    padding-top: 3.5em;
+  }
+  &__col2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__status{
+    padding: 0 1.5em;
+    display: flex;
+    align-items: center;
+    background: #1e1e1e;
+    border-radius: 3.125em;
+    color: #fff;
+    height: 1.9375em;
+    margin-bottom: .75em;
+    img{
+      width: 1.3125em;
+      margin-right: .375em;
+    }
+  }
+  &__text{
+    margin-top: 1.5em;
+    max-width: 49.375em;
+    opacity: .6;
+  }
+  &__nav{
+    display: flex;
+    margin-top: .625em;
+    font-weight: 500;
+    color: #4956c3;
+  }
+  &__btn{
+    width: 100%;
+    font-weight: 600;
+  }
+  .events-slider2{
+    margin-top: 3.125em;
+  }
+  &__inner{
+    position: relative;
+  }
+  &__title2{
+    display: none;
+  }
+}
+
+.event-item{
+  &__top{
+    position: relative;
+  }
+  &__img{
+    width: 100%;
+    display: block;
+    border-radius: 1.875em;
+    &._view2{
+      display: none;
+    }
+  }
+  &__badges{
+    display: flex;
+    position: absolute;
+    top: 1.25em;
+    left: 1.5em;
+  }
+  &__time,
+  &__duration{
+    box-shadow: 0 2px 4px 0 rgba(96, 97, 112, 0.16), 0 0 1px 0 rgba(40, 41, 61, 0.04);
+    border-radius: .75em;
+    background-color: #fff;
+    padding: 0 .8125em;
+    height: 3.5em;
+    display: flex;
+    align-items: center;
+    font-family: $font2;
+    font-weight: 600;
+  }
+  &__time{
+    margin-right: .625em;
+    &-hours{
+      display: flex;
+      align-items: center;
+      min-height: 1.875em;
+      padding-left: 1em;
+      margin-left: 1em;
+      border-left: 1px solid $black;
+    }
+  }
+  &__duration{
+    position: absolute;
+    right: 1.5em;
+    top: 1.25em;
+    img{
+      width: 1.5em;
+      margin-right: .625em;
+    }
+  }
+  &__badges2{
+    position: absolute;
+    left: 1.5em;
+    bottom: 1.5em;
+    .m-badge{
+      margin-right: .375em;
+    }
+  }
+  &__bottom{
+    padding: 0 1.75em;
+    margin-top: 2.375em;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__wrap{
+    margin-top: 1em;
+  }
+  .event-card2__master{
+    padding: .375em 1.25em .375em .625em;
+    margin: 0;
+    .avatar{
+      width: 3.875em;
+      height: 3.875em;
+    }
+  }
+  &__street{
+    margin-left: 2.5em;
+    color: rgba(0, 0, 0, 0.8);
+    img{
+      width: 1.3125em;
+      margin-right: .25em;
+    }
+  }
+  &__badges3{
+    display: none;
+  }
+}
+
+.event-action{
+  display: flex;
+  align-items: center;
+  .favourite-btn{
+    top: unset;
+    right: unset;
+    border: .0625em solid $primary;
+    position: relative;
+    width: 2.8125em;
+    height: 2.8125em;
+    margin-right: 1.375em;
+    &:not(._added){
+      background-color: transparent;
+    }
+    ._view2{
+      width: 1.75em;
+      margin-top: .125em;
+    }
+  }
+  &__price{
+    font-weight: 700;
+    font-family: $font2;
+    margin-left: 1.375em;
+  }
+}
+
+.share-btn{
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-family: $font2;
+  svg{
+    width: 2.8125em;
+    margin-right: .875em;
+  }
+  &:hover{
+    transform: translateY(-.25em);
+  }
+}
+
+.event-contacts{
+  position: absolute;
+  right: 1.75em;
+  bottom: 100%;
+  margin-bottom: 2.25em;
+  &__title{
+    display: none;
+  }
+  &__items{
+    display: flex;
+    align-items: center;
+  }
+  &__item{
+    display: flex;
+    align-items: center;
+    font-family: $font2;
+    font-weight: 500;
+    margin-right: 1.875em;
+    &:last-child{
+      margin-right: 0;
+    }
+    span{
+      font-size: 1.125em;
+    }
+    img{
+      margin-right: .25em;
+      width: 1.5em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .event-desc{
+    overflow: hidden;
+    &__grid{
+      grid-template-columns: 100%;
+      padding-right: 0;
+    }
+    &__col{
+      padding-top: 0;
+    }
+    .events-slider2{
+      margin-top: 1.5em;
+    }
+    &__title2{
+      display: block;
+      margin-bottom: .75em;
+    }
+  }
+
+  .event-item{
+    &__img{
+      border-radius: .75em;
+    }
+    &__badges{
+      top: .875em;
+      left: .875em;
+    }
+    &__time{
+      padding: 0 .5em;
+      height: 2.5em;
+      margin-right: .375em;
+      &-hours{
+        padding-left: .25em;
+        margin-left: .25em;
+      }
+    }
+    .event-premium{
+      &__show{
+        width: 2.5em;
+        height: 2.5em;
+        img{
+          width: 1.5em;
+        }
+      }
+    }
+    &__duration{
+      top: .875em;
+      right: .875em;
+      height: 2.5em;
+      ._hide-tablet{
+        display: none;
+      }
+      img{
+        margin-right: .25em;
+      }
+    }
+    &__badges2{
+      left: .875em;
+      bottom: .875em;
+    }
+    &__col{
+      display: flex;
+      flex-direction: column;
+      padding-top: .3125em;
+    }
+    &__street{
+      display: none;
+    }
+    &__title{
+      order: 2;
+      margin-top: 1.2em;
+    }
+    &__wrap{
+      margin: 0;
+    }
+    .event-card2__master{
+      padding: .125em .75em .125em .25em;
+      margin: 0;
+      .avatar{
+        width: 2em;
+        height: 2em;
+      }
+    }
+    &__badges3{
+      display: flex;
+      margin-top: .75em;
+      .m-badge{
+        margin-right: .375em;
+        border: 1px solid $primary;
+      }
+    }
+    &__bottom{
+      margin-top: 1em;
+      padding: 0;
+      position: relative;
+    }
+  }
+
+  ._hide-tablet{
+    display: none;
+  }
+
+  .event-action{
+    .favourite-btn{
+      margin-right: .625em;
+    }
+    &__price{
+      padding: 0 .625em;
+      height: 1.875em;
+      background-color: #fff;
+      border-radius: .5em;
+      position: absolute;
+      right: .875em;
+      bottom: 100%;
+      margin-bottom: 1.875em;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .share-btn{
+    svg{
+      margin: 0;
+    }
+    span{
+      display: none;
+    }
+  }
+
+  .event-contacts{
+    position: static;
+    margin-top: 1.5em;
+    &__title{
+      display: block;
+      margin-bottom: .75em;
+    }
+    &__item{
+      span{
+        font-size: 1em;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+  .event-item{
+    &__img{
+      &._view1{
+        display: none;
+      }
+      &._view2{
+        display: block;
+      }
+    }
+  }
+}

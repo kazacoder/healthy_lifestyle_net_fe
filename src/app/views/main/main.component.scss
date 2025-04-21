@@ -1,0 +1,270 @@
+@import "../../../assets/styles/vars";
+@import "../../../assets/styles/mixins";
+
+.search-field{
+  input{
+    height: 2.375em;
+    padding-left: 2.75em;
+    border-radius: .625em;
+  }
+  &__icon{
+    position: absolute;
+    top: 50%;
+    left: .75em;
+    transform: translateY(-50%);
+    width: 1.25em;
+  }
+}
+
+.swiper-button{
+  width: 3em;
+  height: 3em;
+  @include center;
+  border-radius: 50%;
+  box-shadow: 0 .25em .375em 0 rgba(0, 0, 0, 0.24);
+  background: #202020;
+  &:hover{
+    background: $primary;
+    path{
+      stroke: $black;
+    }
+  }
+  svg{
+    width: 100%;
+    display: block;
+  }
+}
+
+.slider{
+  position: relative;
+  &__wrap{
+    padding: 0 2.75em;
+  }
+  .swiper{
+    &-container{
+      width: calc(100% + .625em);
+    }
+    &-wrapper{
+      align-items: stretch;
+    }
+    &-slide{
+      padding-right: .625em;
+      height: auto;
+    }
+    &-button{
+      transition: all .3s;
+      top: 50%;
+      margin: 0;
+      transform: translateY(-50%);
+      &-prev{
+        left: -.9375em;
+      }
+      &-next{
+        right: -.9375em;
+      }
+      @media screen and (min-width: 993px){
+        &:hover{
+          transform: translateY(calc(-50% - .25em));
+          box-shadow: rgba(193, 193, 193, 0.7) 0 .3125em 1.25em;
+        }
+      }
+    }
+  }
+}
+
+.events{
+  padding: .75em 0 1.5625em;
+  overflow: hidden;
+}
+
+.events-slider{
+  .swiper{
+    &-slide{
+      width: 30.1875em;
+    }
+    &-button-disabled{
+      opacity: 0;
+    }
+  }
+}
+
+.event-card{
+  display: block;
+  position: relative;
+  &:hover{
+    color: $black;
+  }
+  &__img{
+    @include imgCover(70%);
+    border-radius: 1.25em;
+  }
+  .day-badge{
+    position: absolute;
+    top: 1.25em;
+    left: 1.25em;
+  }
+  &__bottom{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.25em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .m-badge{
+    margin-bottom: .625em;
+  }
+  &__title{
+    overflow: hidden;
+    padding: .375em 1em;
+    border-radius: 3.125em;
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.2);
+    font-family: $font3;
+    color: #fff;
+  }
+}
+
+.day-badge{
+  padding: 0 .125em;
+  height: 3.5em;
+  min-width: 3.75em;
+  box-shadow: 0 .125em .25em rgba(96, 97, 112, 0.16), 0 0 .0625em rgba(40, 41, 61, 0.04);
+  background-color: #fff;
+  @include center;
+  flex-direction: column;
+  border-radius: .75em;
+  font-family: $font2;
+  .text12{
+    letter-spacing: 0.02em;
+  }
+}
+
+.favourite-btn{
+  @include center;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.23);
+  width: 3.75em;
+  height: 3.75em;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  &._added{
+    backdrop-filter: unset;
+    background-color: #fff;
+    ._view1{
+      opacity: 0;
+    }
+    ._view2{
+      opacity: 1;
+    }
+  }
+  &._absolute{
+    position: absolute;
+    top: 1.25em;
+    right: 1.25em;
+  }
+  ._view2{
+    opacity: 0;
+  }
+  img{
+    @include centerAbsolute;
+    width: 2.125em;
+  }
+}
+
+.m-badge{
+  font-family: $font2;
+  height: 1.875em;
+  padding: 0 1em;
+  background-color: #fff;
+  border-radius: .5em;
+  display: flex;
+  align-items: center;
+  img{
+    width: 1.125em;
+    margin-right: .25em;
+  }
+  &__remove{
+    width: .9375em;
+    @include center;
+    margin-left: .5em;
+    svg{
+      width: 100%;
+    }
+    &:hover{
+      path{
+        stroke: $primary;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .slider {
+    &__wrap {
+      padding: 0;
+    }
+  }
+
+  .events{
+    padding: 0 0 .875em;
+  }
+
+  .events-slider{
+    .swiper{
+      &-slide{
+        width: 20.5em;
+        padding-right: 1em;
+      }
+      &-nav{
+        display: none;
+      }
+    }
+  }
+
+  .event-card{
+    &__img{
+      padding-bottom: 93.5%;
+    }
+    &__bottom{
+      padding: .875em;
+    }
+    .day-badge{
+      top: .875em;
+      left: .875em;
+    }
+  }
+
+  .m-badge{
+    padding: 0 .625em;
+  }
+
+  .day-badge{
+    &:not(._big){
+      height: 2.75em;
+      min-width: 3em;
+      padding: 0 .125em;
+    }
+  }
+
+  .favourite-btn{
+    width: 2.75em;
+    height: 2.75em;
+    &._absolute{
+      top: .875em;
+      right: .875em;
+    }
+    img{
+      width: 1.625em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+
+}

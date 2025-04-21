@@ -1,0 +1,70 @@
+.masters{
+  padding: 1.5625em 0;
+  overflow: hidden;
+}
+
+.master-slider{
+  .swiper{
+    &-button{
+      top: 11.47em;
+    }
+  }
+}
+
+.master-card{
+  position: relative;
+  &__img{
+    @include imgCover(87.3%);
+    border-radius: 1.25em;
+    &:after{
+      height: 50%;
+      background: linear-gradient(180deg, rgba(#000,0) 0%, #000 100%);
+    }
+  }
+  .favourite-btn{
+    width: 3.125em;
+    height: 3.125em;
+  }
+  &__content{
+    margin-top: 1.25em;
+  }
+  &__text{
+    margin-top: .75em;
+    max-width: 20em;
+    opacity: .6;
+  }
+  &__tags{
+    margin-top: .5em;
+  }
+  .tags{
+    margin-top: .25em;
+    &__btn{
+      background-color: $primary;
+    }
+    &__hidden{
+      width: auto;
+    }
+  }
+  .m-badge{
+    background-color: $primary;
+    padding: 0 .625em;
+    margin: .25em .25em 0 0;
+    border-radius: 1.25em;
+    font-weight: 600;
+    color: rgba($black,.6);
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .master-card{
+    &__img{
+      padding-bottom: 105.4%;
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+
+}

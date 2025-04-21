@@ -1,0 +1,40 @@
+.text{
+  blockquote,
+  p{
+    font-size: 1.125em;
+    line-height: 133%;
+    @include lastM(0 0 .9em);
+  }
+  blockquote{
+    font-weight: 500;
+    padding: .67em;
+    background: #f9f9f9;
+    border-radius: 1.11em;
+  }
+  h3{
+    font-size: 1.125em;
+    line-height: 133%;
+    font-weight: 700;
+    margin-bottom: 1.11em;
+  }
+  hr{
+    height: .875em;
+    opacity: 0;
+    display: block;
+    margin: 0;
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .text{
+    p{
+      font-size: .875em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+
+}

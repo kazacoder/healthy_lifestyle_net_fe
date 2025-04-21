@@ -1,0 +1,290 @@
+.poster{
+  padding: 1.5625em 0;
+  &__top{
+    &-col{
+      flex-shrink: 0;
+    }
+    &-col2{
+      flex-grow: 1;
+      justify-content: flex-end;
+    }
+  }
+  .city-select{
+    margin-left: .875em;
+  }
+  .search-block{
+    flex-grow: 1;
+    max-width: 30em;
+    input{
+      height: 2.375em;
+    }
+  }
+  &__settings{
+    margin-left: .5em;
+    height: 2.75em;
+    padding: 0 1.75em;
+    img{
+      width: .9375em;
+      margin-right: .25em;
+    }
+  }
+}
+
+.city-select{
+  padding: 0 1em;
+  border: 1px solid #b6b6b6;
+  background-color: #fff;
+  border-radius: 3.125em;
+  display: flex;
+  align-items: center;
+  height: 2.5em;
+  font-weight: 600;
+  cursor: pointer;
+  img{
+    margin-left: .75em;
+    width: 1.125em;
+    display: block;
+  }
+}
+
+._scale-btn{
+  transition: all .3s;
+  &:hover{
+    transform: scale(1.0125);
+  }
+}
+
+.poster-filter{
+  margin-top: 1.875em;
+  display: grid;
+  grid-template-columns: calc(100% - 4em) 4em;
+  align-items: center;
+}
+
+.date-feed{
+  padding: 0 3em 0 1em;
+  position: relative;
+  &__wrap{
+    overflow: hidden;
+  }
+  .swiper{
+    &-button{
+      background-color: transparent;
+      box-shadow: none;
+      transform: unset;
+      top: 3.375em;
+      &-prev{
+        left: -1.5em;
+      }
+      &-next{
+        right: .5em;
+      }
+      path{
+        stroke: $black;
+      }
+      &.swiper-button-disabled{
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.date-item{
+  padding-top: 1.375em;
+  padding-bottom: 1em;
+  position: relative;
+  font-family: $font2;
+  &._first-day,
+  &.swiper-slide-active{
+    .date-item__month{
+      display: block;
+    }
+  }
+  &._weekend{
+    .date-item__day{
+      color: #f72f2f;
+    }
+  }
+  &:hover{
+    cursor: pointer;
+    .date-item__inner{
+      border-color: $primary;
+    }
+  }
+  &._selected{
+    .date-item__inner{
+      background: rgba(189, 218, 19, 0.06);
+      border-color: $primary;
+    }
+    .date-item__num{
+      font-weight: 700;
+    }
+    .date-item__day{
+      font-weight: 600;
+      color: #424242;
+    }
+    .date-item__inner{
+      &:before{
+        left: 100%;
+        opacity: 1;
+      }
+    }
+    &~._selected{
+      .date-item__inner{
+        &:before{
+          display: none;
+        }
+        &:after{
+          opacity: 1;
+          right: 100%;
+        }
+      }
+      &~.date-item{
+        .date-item__inner{
+          &:after,
+          &:before{
+            opacity: 0;
+          }
+        }
+      }
+    }
+    &~.date-item{
+      .date-item__inner{
+        &:after,
+        &:before{
+          opacity: 1;
+        }
+      }
+    }
+  }
+  &__wrap{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  &__month{
+    position: absolute;
+    top: 0;
+    left: 1em;
+    display: none;
+    span{
+      font-size: .5625em;
+      line-height: 142%;
+      text-transform: uppercase;
+      color: rgba(0, 0, 0, 0.3);
+    }
+  }
+  &__inner{
+    @include grid100gap(.25em);
+    padding: .5em .25em;
+    border-radius: .5em;
+    border: 2px solid transparent;
+    position: relative;
+    transition: all .3s;
+    min-width: 2.125em;
+    &:after,
+    &:before{
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 20em;
+      height: 100%;
+      background: rgba(189, 218, 19, 0.2);
+      opacity: 0;
+      pointer-events: none;
+    }
+    &:before{
+      left: 50%;
+    }
+    &:after{
+      right: 50%;
+    }
+  }
+  &__num {
+    font-size: 1.25em;
+    line-height: 140%;
+    @include center;
+    @include sameNumWidth;
+  }
+  &__day{
+    font-size: .625em;
+    line-height: 140%;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .poster{
+    padding: .875em 0;
+    &:not(._not-hidden){
+      overflow: hidden;
+    }
+    &__top{
+      display: block;
+      &-col{
+        justify-content: space-between;
+      }
+      &-col2{
+        margin-top: 1.25em;
+      }
+      .search-field{
+        max-width: 100%;
+      }
+    }
+    &__settings{
+      width: 2.75em;
+      padding: 0;
+      img{
+        margin: 0;
+      }
+      span{
+        display: none;
+      }
+    }
+  }
+
+  .city-select{
+    padding: 0 .75em;
+    height: 1.875em;
+    &__current{
+      font-size: .875em;
+    }
+    img{
+      margin-left: .25em;
+    }
+  }
+
+  .poster-filter{
+    margin-top: 1em;
+    grid-template-columns: 2.75em calc(100% - 2.75em);
+  }
+
+  .date-feed{
+    order: 2;
+    .swiper-button{
+      display: none;
+    }
+  }
+
+  .date-item{
+    width: 3em;
+  }
+}
+
+
+@media screen and (max-width: 576px){
+  .date-feed{
+    padding-right: 0;
+  }
+
+  .date-item{
+    width: 2.625em;
+    &__month{
+      left: .625em;
+    }
+  }
+}

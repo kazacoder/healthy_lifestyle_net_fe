@@ -1,0 +1,93 @@
+.favourite{
+  .tabs,
+  .tab-content{
+    margin-top: 1.5em;
+  }
+  .tab:hover{
+    background-color: transparent;
+  }
+  .tab._active{
+    background-color: $primary !important;
+  }
+}
+
+.note-card2{
+  background-color: #fff;
+  box-shadow: $shadow;
+  border-radius: 1.25em;
+  &__top{
+    position: relative;
+  }
+  .note-card__img{
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    &:after{
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60.11%, rgba(0, 0, 0, 0.7) 88.5%);
+    }
+  }
+  &__content{
+    padding: 1.5em;
+  }
+  &__settings{
+    &-title{
+      font-size: 1em;
+      line-height: 138%;
+      font-weight: 700;
+      font-family: $font2;
+    }
+  }
+  .favourite-btn{
+    width: 3.125em;
+    height: 3.125em;
+  }
+}
+
+.notification{
+  &__items{
+    margin-top: 1.875em;
+    @include grid100gap(.875em);
+  }
+}
+
+.notification-card{
+  padding: 1.25em .625em;
+  background-color: #fff;
+  box-shadow: 0 .125em .625em 0 rgba(0, 0, 0, 0.08);
+  @include grid100gap(.625em);
+  &__title{
+    font-weight: 700;
+  }
+  &__date{
+    margin-left: 1em;
+    font-family: $font2;
+  }
+  &__desc{
+    font-weight: 300;
+  }
+  .faq-card__badge{
+    display: inline-flex;
+    margin-right: auto;
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .favourite{
+    .tabs{
+      padding-bottom: .5em;
+      @include fullScroll;
+    }
+    .tab-content{
+      margin-top: 1em;
+    }
+    .tab{
+      font-size: .9375em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+
+}

@@ -1,0 +1,76 @@
+.participant-modal{
+  .modal__dialog{
+    width: 25.625em;
+    @media screen and (min-width: 993px){
+      padding: 4em;
+    }
+  }
+  &__items{
+    margin-top: 2.1875em;
+    @include grid100gap(1em);
+  }
+}
+
+.participant-item{
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  font-family: $font2;
+  .avatar{
+    width: 2.5em;
+    height: 2.5em;
+    margin-right: .5em;
+  }
+}
+
+.prepayment{
+  &__top{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+  }
+  .pricing__title{
+    margin: 0;
+  }
+  .pricing__count{
+    height: calc(3.125em + 2px);
+    border: 1px solid #f1f1f1;
+    border-radius: .5em;
+  }
+  .hint{
+    margin-left: .375em;
+    &__tooltip{
+      width: 15.5em;
+    }
+    &__inner{
+      padding: .875em 1.5em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px){
+
+}
+
+
+@media screen and (max-width: 576px){
+  .participant-modal{
+    &__items{
+      margin-top: 0;
+    }
+    .modal__top{
+      padding: 0;
+    }
+    .modal__scroll{
+      margin-top: 1.5em;
+    }
+  }
+
+  .prepayment{
+    .pricing__count:not(._active):before{
+      display: none;
+    }
+  }
+}

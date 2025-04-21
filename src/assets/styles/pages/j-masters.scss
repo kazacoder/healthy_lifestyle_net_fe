@@ -1,0 +1,135 @@
+.master-contacts{
+  padding: 1.25em 1.875em;
+  background: #f7f7f7;
+  border-radius: 1.25em;
+  @include grid100gap(1.25em);
+}
+
+.contact-item{
+  @include grid100gap(1.0625em);
+  &__desc{
+    display: flex;
+  }
+  &__link,
+  &__place{
+    display: flex;
+    align-items: center;
+    img{
+      width: 1.5em;
+      margin-right: .5em;
+    }
+    span{
+      font-size: 1.125em;
+      line-height: 133%;
+    }
+  }
+}
+
+.master-top{
+  display: flex;
+  align-items: center;
+}
+
+.master-badge{
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  height: 3.5em;
+  padding: 0 .8125em;
+  margin-left: 1.5em;
+  span{
+    letter-spacing: 0.02em;
+    font-size: 1em;
+  }
+  img{
+    width: 1.875em;
+    margin-right: .625em;
+  }
+}
+
+.master-info{
+  margin-top: 1.25em;
+  .text{
+    margin-top: 1.125em;
+  }
+}
+
+.master-prof{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: .5em;
+  .prof-badge{
+    margin: .625em .625em 0 0;
+  }
+}
+
+.prof-badge{
+  padding: 0 1em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  background-color: $primary;
+  border-radius: 2.5em;
+  color: #3c3c3c;
+  &__title,
+  &__years span{
+    font-weight: 500;
+    font-size: 1em;
+    line-height: 100%;
+    letter-spacing: 0.02em;
+  }
+  &__years{
+    margin-left: .625em;
+    padding: 0 .25em;
+    height: 1.25em;
+    background-color: #fff;
+    border-radius: 3.125em;
+    display: flex;
+    align-items: center;
+    font-family: $font2;
+  }
+}
+
+
+@media screen and (max-width: 992px){
+  .master-contacts{
+    padding: 0;
+    background-color: transparent;
+    gap: .75em;
+  }
+
+  .contact-item{
+    &._last{
+      order: 2;
+    }
+    &__link,
+    &__place{
+      span{
+        font-size: .875em;
+      }
+    }
+  }
+
+  .master-top{
+    min-height: 2.8125em;
+    .master-badge{
+      display: none;
+    }
+  }
+
+  .master-prof{
+    margin-top: .375em;
+  }
+
+  .prof-badge{
+    &__title,
+    &__years span{
+      font-size: .875em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 576px){
+
+}

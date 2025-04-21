@@ -1,0 +1,29 @@
+.events-items{
+  display: grid;
+  grid-template-columns: repeat(3,calc(100% / 3 - 1.25em / 3));
+  gap: 1.75em .625em;
+  margin-top: 1.875em;
+}
+
+
+@media screen and (max-width: 992px){
+  .events-items{
+    grid-template-columns: repeat(2,calc(50% - .3125em));
+    gap: 1em .625em;
+    margin-top: 1.25em;
+    position: relative;
+    z-index: 5;
+  }
+  .poster__top,
+  .poster-filter{
+    position: relative;
+    z-index: 5;
+  }
+}
+
+
+@media screen and (max-width: 576px){
+  .events-items{
+    grid-template-columns: 100%;
+  }
+}

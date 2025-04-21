@@ -1,0 +1,189 @@
+.font2{
+  font-family: $font2;
+}
+
+.h1,
+.text34{
+  font-size: 2.125em;
+  line-height: 118%;
+}
+
+.h1{
+  font-weight: 600;
+}
+
+.h2,
+.text30{
+  font-size: 1.875em;
+  line-height: 118%;
+}
+
+.h2,.h3{
+  font-weight: 600;
+  font-family: $font2;
+}
+
+.h4{
+  font-size: 1.125em;
+  line-height: 133%;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+.text28{
+  font-size: 1.75em;
+  line-height: 122%;
+}
+
+.text24{
+  font-size: 1.5em;
+  line-height: 117%;
+}
+
+.h3,
+.text20{
+  font-size: 1.25em;
+  line-height: 120%;
+}
+
+.text19{
+  font-size: 1.1875em;
+  line-height: 120%;
+}
+
+.text18{
+  font-size: 1.125em;
+  line-height: 120%;
+}
+
+.text17{
+  font-size: 1.0625em;
+  line-height: 120%;
+}
+
+.text16{
+  font-size: 1em;
+  line-height: 125%;
+}
+
+.text15{
+  font-size: .9375em;
+  line-height: 120%;
+}
+
+.text14{
+  font-size: .875em;
+  line-height: 120%;
+}
+
+.text13{
+  font-size: .8125em;
+  line-height: 120%;
+}
+
+.text12{
+  font-size: .75em;
+  line-height: 120%;
+}
+
+.text11{
+  font-size: .6875em;
+  line-height: 120%;
+}
+
+.text10{
+  font-size: .625em;
+  line-height: 120%;
+}
+
+.extra-bold-text{
+  font-weight: 800;
+}
+
+.bold-text{
+  font-weight: 700;
+}
+
+.semi-bold-text{
+  font-weight: 600;
+}
+
+.medium-text{
+  font-weight: 500;
+}
+
+.regular-text{
+  font-weight: 400;
+}
+
+.light-text{
+  font-weight: 300;
+}
+
+.text-center{
+  text-align: center;
+}
+
+
+
+@media screen and (max-width: 992px){
+  .h1,
+  .text24-tablet{
+    font-size: 1.5em;
+  }
+
+  .text20-tablet{
+    font-size: 1.25em;
+  }
+
+  .text19-tablet{
+    font-size: 1.1875em;
+  }
+
+  .text18-tablet{
+    font-size: 1.125em;
+  }
+
+  .text17-tablet{
+    font-size: 1.0625em;
+  }
+
+  .h2,
+  .h3,
+  .h4,
+  .text16-tablet{
+    font-size: 1em;
+  }
+
+  .text15-tablet{
+    font-size: .9375em;
+  }
+
+  .text14-tablet{
+    font-size: .875em;
+  }
+
+  .text13-tablet{
+    font-size: .8125em;
+  }
+
+  .text12-tablet{
+    font-size: .75em;
+  }
+
+  .text11-tablet{
+    font-size: .6875em;
+  }
+
+  .text10-tablet{
+    font-size: .625em;
+  }
+
+}
+
+
+@media screen and (max-width: 576px){
+  .text14-mob{
+    font-size: .875em;
+  }
+}
