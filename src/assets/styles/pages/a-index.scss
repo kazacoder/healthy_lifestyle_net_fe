@@ -1,18 +1,19 @@
-@import "../../../assets/styles/vars";
-@import "../../../assets/styles/mixins";
-
-.search-field{
-  input{
-    height: 2.375em;
-    padding-left: 2.75em;
-    border-radius: .625em;
+.swiper-button{
+  width: 3em!important;
+  height: 3em!important;
+  @include center;
+  border-radius: 50%;
+  box-shadow: 0 .25em .375em 0 rgba(0, 0, 0, 0.24);
+  background: #202020;
+  &:hover{
+    background: $primary;
+    path{
+      stroke: $black;
+    }
   }
-  &__icon{
-    position: absolute;
-    top: 50%;
-    left: .75em;
-    transform: translateY(-50%);
-    width: 1.25em;
+  svg{
+    width: 100%;
+    display: block;
   }
 }
 
