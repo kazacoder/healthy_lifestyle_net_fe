@@ -1,6 +1,6 @@
 <div class="date-feed__wrap">
   <swiper-container init="false" class="date-swiper">
-    <swiper-slide *ngFor="let date of dates" style="max-width: 47px"
+    <swiper-slide *ngFor="let date of dates"
                   class="swiper-slide date-item " [ngClass]="date.class">
       <date-item [date]="{month: date.month, weekDay: date.weekDay, date: date.date}"/>
     </swiper-slide>

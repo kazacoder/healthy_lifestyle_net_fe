@@ -1,0 +1,22 @@
+<a href="" class="event-card__img m-backdrop _scale-img">
+  <img src="assets/img/{{event?.img}}.webp" alt="">
+</a>
+<div class="day-badge">
+  <div class="text24 text20-tablet bold-text font2">{{ event?.day }}</div>
+  <div class="text12 text10-tablet">{{event?.month}}</div>
+</div>
+<button class="favourite-btn _absolute m-btn-bounce">
+  <img src="assets/img/favourite.svg" alt="" class="_view1">
+  <img src="assets/img/favourite2.svg" alt="" class="_view2">
+</button>
+<div class="event-card__bottom">
+  <div class="m-badge">
+    <img src="assets/img/{{event?.typeIcon}}.svg" alt="">
+    <span>{{event?.type}}</span>
+  </div>
+  <div class="event-card__title">
+    <a href="" class="text28 text18-tablet bold-text">
+      {{ event?.title }}
+    </a>
+  </div>
+</div>
