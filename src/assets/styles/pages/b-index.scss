@@ -77,6 +77,13 @@
   }
 }
 
+.events2 {
+  swiper-container::part(container) {
+    overflow: visible;
+  }
+}
+
+
 .event-card2{
   position: relative;
   height: 100%;

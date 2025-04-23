@@ -6,11 +6,12 @@ import {DateFilterComponent} from '../../shared/components/page-blocks/date-filt
 import {EventCardComponent} from '../../shared/components/cards/event-card/event-card.component';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {SwiperNavComponent} from '../../shared/components/ui/swiper-nav/swiper-nav.component';
+import {EventCard2Component} from '../../shared/components/cards/event-card2/event-card2.component';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf],
+  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -18,64 +19,8 @@ import {SwiperNavComponent} from '../../shared/components/ui/swiper-nav/swiper-n
 export class MainComponent implements AfterViewInit {
 
   //ToDo
-  eventsTempData = [
-    {
-     img: "event",
-     day: "4",
-     month: "Марта",
-     type: "Йога",
-     typeIcon: "type-icon",
-     title: "Центр йоги №1",
-    },
-    {
-      img: "event2",
-      day: "25",
-      month: "Мая",
-      type: "Баня",
-      typeIcon: "type-icon2",
-      title: "Перовские бани",
-    },
-    {
-      img: "event3",
-      day: "8",
-      month: "Апреля",
-      type: "Йога",
-      typeIcon: "type-icon",
-      title: "Центр йоги №1",
-    },
-    {
-      img: "event3",
-      day: "8",
-      month: "Апреля",
-      type: "Йога",
-      typeIcon: "type-icon",
-      title: "Центр йоги №1",
-    },
-    {
-      img: "event2",
-      day: "25",
-      month: "Мая",
-      type: "Баня",
-      typeIcon: "type-icon2",
-      title: "Перовские бани",
-    },
-    {
-      img: "event3",
-      day: "8",
-      month: "Апреля",
-      type: "Йога",
-      typeIcon: "type-icon",
-      title: "Центр йоги №1",
-    },
-    {
-      img: "event3",
-      day: "8",
-      month: "Апреля",
-      type: "Йога",
-      typeIcon: "type-icon",
-      title: "Центр йоги №1",
-    }
-  ]
+  eventsTempData = events
+  eventsTempData2 = events2
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
@@ -89,11 +34,152 @@ export class MainComponent implements AfterViewInit {
     },
   }
 
+  event2Swiper: SwiperContainer | null = null;
+  event2SwiperParams = {
+    spaceBetween: 0,
+    slidesPerView: "auto",
+    freeMode: true,
+    watchSlidesProgress: true,
+    navigation: {
+      nextEl: `.events-slider2 .swiper-button-next`,
+      prevEl: `.events-slider2 .swiper-button-prev`,
+    },
+  }
+
   ngAfterViewInit() {
     this.eventSwiper = document.querySelector('.event-swiper');
     if (this.eventSwiper) {
       Object.assign(this.eventSwiper, this.eventSwiperParams);
       this.eventSwiper.initialize();
     }
+
+    this.event2Swiper = document.querySelector('.nearest-events');
+    if (this.event2Swiper) {
+      Object.assign(this.event2Swiper, this.event2SwiperParams);
+      this.event2Swiper.initialize();
+    }
   }
 }
+
+
+//ToDo remove after backend is ready
+
+const events = [
+  {
+    img: "event",
+    day: "4",
+    month: "Марта",
+    type: "Йога",
+    typeIcon: "type-icon",
+    title: "Центр йоги №1",
+  },
+  {
+    img: "event2",
+    day: "25",
+    month: "Мая",
+    type: "Баня",
+    typeIcon: "type-icon2",
+    title: "Перовские бани",
+  },
+  {
+    img: "event3",
+    day: "8",
+    month: "Апреля",
+    type: "Йога",
+    typeIcon: "type-icon",
+    title: "Центр йоги №1",
+  },
+  {
+    img: "event3",
+    day: "8",
+    month: "Апреля",
+    type: "Йога",
+    typeIcon: "type-icon",
+    title: "Центр йоги №1",
+  },
+  {
+    img: "event2",
+    day: "25",
+    month: "Мая",
+    type: "Баня",
+    typeIcon: "type-icon2",
+    title: "Перовские бани",
+  },
+  {
+    img: "event3",
+    day: "8",
+    month: "Апреля",
+    type: "Йога",
+    typeIcon: "type-icon",
+    title: "Центр йоги №1",
+  },
+  {
+    img: "event3",
+    day: "8",
+    month: "Апреля",
+    type: "Йога",
+    typeIcon: "type-icon",
+    title: "Центр йоги №1",
+  }
+]
+
+const events2 = [
+  {
+    img: "event4",
+    day: "15",
+    month: "Декабря",
+    premium: "true",
+    price: "от 1700₽",
+    avatar: "avatar",
+    master: "Дарья Солодаева",
+    city: "Москва",
+    title: "Парная йога",
+    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
+    time: "2 дня",
+    many: "true",
+  },
+  {
+    img: "event5",
+    day: "15",
+    month: "Декабря",
+    premium: "",
+    price: "Бесплатно",
+    avatar: "avatar2",
+    master: "Андрей Филоменко",
+    city: "Пермь",
+    title: "Парная йога",
+    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
+    time: "3 часа",
+    many: "",
+  },
+  {
+    img: "event6",
+    day: "15",
+    month: "Декабря",
+    premium: "true",
+    price: "от 1700₽",
+    avatar: "avatar3",
+    master: "Валентина Солодкина",
+    city: "Нижний-<br>Новгород",
+    title: "Баня с Валентиной Солодкиной",
+    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
+    time: "2 дня",
+    many: "true",
+  }
+  , {
+    img: "event6",
+    day: "15",
+    month: "Декабря",
+    premium: "true",
+    price: "от 1700₽",
+    avatar: "avatar3",
+    master: "Валентина Солодкина",
+    city: "Нижний-<br>Новгород",
+    title: "Баня с Валентиной Солодкиной",
+    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
+    time: "2 дня",
+    many: "true",
+  }
+]
+
+

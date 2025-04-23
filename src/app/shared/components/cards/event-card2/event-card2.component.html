@@ -1,0 +1,129 @@
+<div class="event-card2__top">
+  <a href="" class="event-card2__img m-backdrop _scale-img">
+    <img src="assets/img/{{ event?.img }}.webp" alt="">
+  </a>
+
+  <div class="event-card2__info _flex-between">
+    <div class="m-badge">
+      <img src="assets/img/type-icon3.svg" alt="">
+      <span class="text12">Для мужчин и женщин</span>
+    </div>
+    <div class="event-card2__price">
+      <span>{{ event?.price }}</span>
+    </div>
+  </div>
+</div>
+<div class="event-card2__badges">
+  <div class="day-badge">
+    <div class="text24 text20-tablet bold-text font2">{{ event?.day }}</div>
+    <div class="text12 text10-tablet">{{ event?.month }}</div>
+  </div>
+  <div class="event-premium" *ngIf="event?.premium">
+    <div class="event-premium__show">
+      <img src="assets/img/crone.svg" alt="">
+    </div>
+    <div class="event-premium__hidden">
+      <div class="event-premium__inner _triangle">
+        <div class="text12">Мероприятие от мастера</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="favourite-btn _absolute m-btn-bounce">
+  <img src="assets/img/favourite.svg" alt="" class="_view1">
+  <img src="assets/img/favourite2.svg" alt="" class="_view2">
+</button>
+<div class="event-card2__bottom">
+  <div class="event-card2__wrap _flex-between">
+    <a href="" class="event-card2__master _flex m-btn-bounce">
+      <div class="avatar">
+        <img src="assets/img/{{ event?.avatar }}.webp" alt="">
+      </div>
+      <span class="text16 text14-tablet">
+          {{ event?.master }}
+      </span>
+    </a>
+    <div class="event-city _flex">
+      <img src="assets/img/marker.svg" alt="">
+      <span class="text16 text12-tablet" [innerHTML]="event?.city">
+      </span>
+    </div>
+  </div>
+  <div class="event-card2__text font2">
+    <div class="text20 text16-tablet bold-text">
+      <a href="">{{ event?.title }}</a>
+    </div>
+    <div class="event-card2__desc text14">
+      {{ event?.desc }}
+    </div>
+  </div>
+  <div class="event-card2__wrap2 _flex-between">
+    <div class="event-card2__tags _flex">
+      <div class="event-card2__tag m-badge">
+        <img src="assets/img/type-icon4.svg" alt="">
+        <span>Йога</span>
+      </div>
+      <div class="event-card2__tag m-badge">
+        <img src="assets/img/type-icon5.svg" alt="">
+        <span>Баня</span>
+      </div>
+      <ng-container *ngIf="event?.many">
+      <div class="event-card2__tag _hide-tablet m-badge">
+        <img src="assets/img/type-icon5.svg" alt="">
+        <span>Баня</span>
+      </div>
+      <div class="tags" [ngClass]="tagsOpen ? '_open' : ''">
+        <div class="tags__show">
+          <button class="tags__btn m-btn-bounce" (click)="clickTagsButton()">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19.5 14.5C19.5 14.6511 19.443 14.8024 19.3291 14.9177L13.4958 20.8268C13.2678 21.0577 12.8987 21.0577 12.671 20.8268C12.4432 20.5959 12.443 20.222 12.671 19.9913L18.0918 14.5L12.671 9.00866C12.443 8.77777 12.443 8.40387 12.671 8.17312C12.8989 7.94237 13.268 7.94222 13.4958 8.17312L19.3291 14.0822C19.443 14.1976 19.5 14.3488 19.5 14.5Z"
+                fill="#3C3C3C"/>
+            </svg>
+          </button>
+        </div>
+        <div class="tags__hidden _triangle">
+          <div class="tags__items">
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon4.svg" alt="">
+              <span>Йога</span>
+            </div>
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon5.svg" alt="">
+              <span>Баня</span>
+            </div>
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon5.svg" alt="">
+              <span>Баня</span>
+            </div>
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon5.svg" alt="">
+              <span>Баня</span>
+            </div>
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon5.svg" alt="">
+              <span>Баня</span>
+            </div>
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon5.svg" alt="">
+              <span>Баня</span>
+            </div>
+            <div class="event-card2__tag m-badge">
+              <img src="assets/img/type-icon5.svg" alt="">
+              <span>Баня</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      </ng-container>
+    </div>
+    <div class="event-time _flex">
+      <img src="assets/img/time.svg" alt="">
+      <span class="text16">
+          {{ event?.time }}
+      </span>
+    </div>
+  </div>
+</div>
+

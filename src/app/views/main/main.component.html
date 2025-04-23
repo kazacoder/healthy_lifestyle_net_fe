@@ -4,9 +4,9 @@
       <div class="events-slider slider _wheel">
         <div class="slider__wrap">
           <swiper-container class="event-swiper" init="false">
-              <swiper-slide class="swiper-slide" *ngFor="let event of eventsTempData">
-                <event-card [event]="event" class="event-card"></event-card>
-              </swiper-slide>
+            <swiper-slide class="swiper-slide" *ngFor="let event of eventsTempData">
+              <event-card [event]="event" class="event-card"></event-card>
+            </swiper-slide>
           </swiper-container>
         </div>
         <swiper-nav></swiper-nav>
@@ -60,17 +60,17 @@
     <div class="container">
       <div class="events2__top">
         <a href="" class="title-link">
-                            <span class="text34 text20-tablet">
-                                Ближайшие мероприятия
-                            </span>
+          <span class="text34 text20-tablet">
+              Ближайшие мероприятия
+          </span>
         </a>
         <a href="" class="arrow-link">
-                            <span class="_view1">
-                                Смотреть все
-                            </span>
+          <span class="_view1">
+              Смотреть все
+          </span>
           <span class="_view2">
-                                Все
-                            </span>
+              Все
+          </span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M12.1665 9.00011C12.1665 9.08159 12.1515 9.16228 12.1223 9.23755C12.093 9.31282 12.0501 9.38118 11.996 9.43872L6.18008 15.6424C5.95282 15.8848 5.58481 15.8848 5.3577 15.6424C5.13059 15.4 5.13044 15.0075 5.3577 14.7652L10.7625 9.00011L5.3577 3.23502C5.13044 2.99261 5.13044 2.60007 5.3577 2.35782C5.58496 2.11556 5.95296 2.11541 6.18008 2.35782L11.996 8.56151C12.0501 8.61904 12.093 8.68741 12.1223 8.76268C12.1515 8.83795 12.1665 8.91864 12.1665 9.00011Z"
@@ -80,76 +80,13 @@
       </div>
       <div class="events-slider2 slider">
         <div class="slider__wrap">
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_event-card2.html',{-->
-                <!--                "img":"event4",-->
-                <!--                "day":"15",-->
-                <!--                "month":"Декабря",-->
-                <!--                "premium":"true",-->
-                <!--                "price":"от 1700₽",-->
-                <!--                "avatar":"avatar",-->
-                <!--                "master":"Дарья Солодаева",-->
-                <!--                "city":"Москва",-->
-                <!--                "title":"Парная йога",-->
-                <!--                "desc":"Раскачаем межбровный центр, пообщаемся с единомышленниками.",-->
-                <!--                "time":"2 дня",-->
-                <!--                "many":"true",-->
-                <!--                })-->
-              </div>
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_event-card2.html',{-->
-                <!--                "img":"event5",-->
-                <!--                "day":"15",-->
-                <!--                "month":"Декабря",-->
-                <!--                "premium":"",-->
-                <!--                "price":"Бесплатно",-->
-                <!--                "avatar":"avatar2",-->
-                <!--                "master":"Андрей Филоменко",-->
-                <!--                "city":"Пермь",-->
-                <!--                "title":"Парная йога",-->
-                <!--                "desc":"Раскачаем межбровный центр, пообщаемся с единомышленниками.",-->
-                <!--                "time":"3 часа",-->
-                <!--                "many":"",-->
-                <!--                })-->
-              </div>
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_event-card2.html',{-->
-                <!--                "img":"event6",-->
-                <!--                "day":"15",-->
-                <!--                "month":"Декабря",-->
-                <!--                "premium":"true",-->
-                <!--                "price":"от 1700₽",-->
-                <!--                "avatar":"avatar3",-->
-                <!--                "master":"Валентина Солодкина",-->
-                <!--                "city":"Нижний-<br>Новгород",-->
-                <!--                "title":"Баня с Валентиной Солодкиной",-->
-                <!--                "desc":"Раскачаем межбровный центр, пообщаемся с единомышленниками.",-->
-                <!--                "time":"2 дня",-->
-                <!--                "many":"true",-->
-                <!--                })-->
-              </div>
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_event-card2.html',{-->
-                <!--                "img":"event6",-->
-                <!--                "day":"15",-->
-                <!--                "month":"Декабря",-->
-                <!--                "premium":"true",-->
-                <!--                "price":"от 1700₽",-->
-                <!--                "avatar":"avatar3",-->
-                <!--                "master":"Валентина Солодкина",-->
-                <!--                "city":"Нижний-<br>Новгород",-->
-                <!--                "title":"Баня с Валентиной Солодкиной",-->
-                <!--                "desc":"Раскачаем межбровный центр, пообщаемся с единомышленниками.",-->
-                <!--                "time":"2 дня",-->
-                <!--                "many":"true",-->
-                <!--                })-->
-              </div>
-            </div>
-          </div>
+          <swiper-container class="event-swiper nearest-events" init="false">
+            <swiper-slide class="swiper-slide" *ngFor="let event of eventsTempData2">
+              <event-card2 [event]="event" class="event-card2"></event-card2>
+            </swiper-slide>
+          </swiper-container>
         </div>
-        <!--        @@include('components/ui/_swiper-nav.html')-->
+        <swiper-nav></swiper-nav>
       </div>
     </div>
   </div>
