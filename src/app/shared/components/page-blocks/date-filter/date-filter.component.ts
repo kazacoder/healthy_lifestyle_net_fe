@@ -1,7 +1,6 @@
 import {Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
 import AirDatepicker from 'air-datepicker';
 import localeRu from 'air-datepicker/locale/ru'
-// import 'air-datepicker/air-datepicker.css'
 import {NgClass} from '@angular/common';
 
 @Component({
@@ -46,6 +45,7 @@ export class DateFilterComponent implements OnInit {
             attrs: {
               class: 'datepicker-button'
             },
+            // ToDO ANY!!!!!
             onClick: (dp: any) => {
               let today = new Date();
               dp.selectDate(today);
