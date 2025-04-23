@@ -33,6 +33,7 @@
               }
             ],
             "styles": [
+              "./node_modules/air-datepicker/air-datepicker.css",
               "src/assets/styles/styles.scss"
             ],
             "scripts": []

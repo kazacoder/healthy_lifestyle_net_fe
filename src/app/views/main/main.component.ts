@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {PosterInfoComponent} from '../../shared/components/events/poster-info/poster-info.component';
 import {DateFeedComponent} from '../../shared/components/page-blocks/date-feed/date-feed.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {DateFilterComponent} from '../../shared/components/page-blocks/date-filter/date-filter.component';
 import {EventCardComponent} from '../../shared/components/cards/event-card/event-card.component';
 import {SwiperContainer} from 'swiper/element/bundle';
@@ -11,7 +11,7 @@ import {EventCard2Component} from '../../shared/components/cards/event-card2/eve
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component],
+  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -21,6 +21,7 @@ export class MainComponent implements AfterViewInit {
   //ToDo
   eventsTempData = events
   eventsTempData2 = events2
+  calendarActive: boolean = false;
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
@@ -59,6 +60,11 @@ export class MainComponent implements AfterViewInit {
       this.event2Swiper.initialize();
     }
   }
+
+  toggleCalendarActive(value: boolean) {
+    this.calendarActive = value;
+  }
+
 }
 
 

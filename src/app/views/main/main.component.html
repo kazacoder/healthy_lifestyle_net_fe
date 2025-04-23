@@ -51,7 +51,8 @@
 
       <div class="poster-filter">
         <date-feed class="date-feed"></date-feed>
-        <date-filter class="date-filter _active2"></date-filter>
+        <date-filter class="date-filter _active2" [ngClass]="calendarActive ? '_active' : ''"
+                     (onCalendarToggle)="toggleCalendarActive($event)"></date-filter>
       </div>
     </div>
   </div>

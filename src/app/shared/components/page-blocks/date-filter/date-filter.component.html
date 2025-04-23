@@ -1,7 +1,8 @@
-  <button class="_toggle-date-filter date-filter__show m-btn m-btn-primary m-btn-bounce">
+  <button class="_toggle-date-filter date-filter__show m-btn m-btn-primary m-btn-bounce"
+          (click)="toggleCalendar()">
     <img src="assets/img/calendar.svg" alt="">
   </button>
-  <div class="date-modal">
+  <div class="date-modal" [ngClass]="calendarActive ? '_active2' : '' ">
     <button class="close-btn">
       <img src="assets/img/close2.svg" alt="">
     </button>
