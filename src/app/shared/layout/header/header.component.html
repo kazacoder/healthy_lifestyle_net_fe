@@ -7,14 +7,19 @@
 
       <nav class="nav">
         <ul class="menu">
-          <li class="menu-item current-menu-item">
-            <a href="">Мероприятия</a>
+          <li class="menu-item"
+              [routerLinkActiveOptions]="{exact: true}"
+              routerLinkActive="current-menu-item">
+            <a [routerLink]="['/']">Главная</a>
           </li>
-          <li class="menu-item">
-            <a href="">Мастера</a>
+          <li class="menu-item" routerLinkActive="current-menu-item">
+            <a routerLink="/events">Мероприятия</a>
           </li>
-          <li class="menu-item">
-            <a href="">Статьи</a>
+          <li class="menu-item" routerLinkActive="current-menu-item">
+            <a routerLink="/masters">Мастера</a>
+          </li>
+          <li class="menu-item" routerLinkActive="current-menu-item">
+            <a routerLink="/articles">Статьи</a>
           </li>
         </ul>
       </nav>

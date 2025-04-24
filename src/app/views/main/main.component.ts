@@ -7,11 +7,13 @@ import {EventCardComponent} from '../../shared/components/cards/event-card/event
 import {SwiperContainer} from 'swiper/element/bundle';
 import {SwiperNavComponent} from '../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {EventCard2Component} from '../../shared/components/cards/event-card2/event-card2.component';
+import {MasterCardComponent} from '../../shared/components/cards/master-card/master-card.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass],
+  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -21,6 +23,7 @@ export class MainComponent implements AfterViewInit {
   //ToDo
   eventsTempData = events
   eventsTempData2 = events2
+  mastersTempData = masters
   calendarActive: boolean = false;
 
   eventSwiper: SwiperContainer | null = null;
@@ -47,6 +50,18 @@ export class MainComponent implements AfterViewInit {
     },
   }
 
+  masterSwiper: SwiperContainer | null = null;
+  masterSwiperParams = {
+    spaceBetween: 0,
+    slidesPerView: "auto",
+    freeMode: true,
+    watchSlidesProgress: true,
+    navigation: {
+      nextEl: `.master-slider .swiper-button-next`,
+      prevEl: `.master-slider .swiper-button-prev`,
+    },
+  }
+
   ngAfterViewInit() {
     this.eventSwiper = document.querySelector('.event-swiper');
     if (this.eventSwiper) {
@@ -58,6 +73,12 @@ export class MainComponent implements AfterViewInit {
     if (this.event2Swiper) {
       Object.assign(this.event2Swiper, this.event2SwiperParams);
       this.event2Swiper.initialize();
+    }
+
+    this.masterSwiper = document.querySelector('.master-swiper');
+    if (this.masterSwiper) {
+      Object.assign(this.masterSwiper, this.masterSwiperParams);
+      this.masterSwiper.initialize();
     }
   }
 
@@ -171,8 +192,22 @@ const events2 = [
     desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
     time: "2 дня",
     many: "true",
-  }
-  , {
+  },
+  {
+    img: "event6",
+    day: "15",
+    month: "Декабря",
+    premium: "true",
+    price: "от 1700₽",
+    avatar: "avatar3",
+    master: "Валентина Солодкина",
+    city: "Нижний-<br>Новгород",
+    title: "Баня с Валентиной Солодкиной",
+    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
+    time: "2 дня",
+    many: "true",
+  },
+  {
     img: "event6",
     day: "15",
     month: "Декабря",
@@ -188,4 +223,29 @@ const events2 = [
   }
 ]
 
-
+const masters = [
+  {
+    img: "master",
+    city: "Москва",
+    title: "Притула Ирина",
+    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
+  },
+  {
+    img: "master2",
+    city: "Москва",
+    title: "Филименко Андрей",
+    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
+  },
+  {
+    img: "master3",
+    city: "Москва",
+    title: "Марченко Елена",
+    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
+  },
+  {
+    img: "master3",
+    city: "Москва",
+    title: "Марченко Елена",
+    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
+  }
+]

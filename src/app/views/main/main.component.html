@@ -95,12 +95,12 @@
   <div class="masters">
     <div class="container">
       <div class="events2__top">
-        <a href="" class="title-link">
+        <a routerLink="/masters" class="title-link">
                             <span class="text34 text20-tablet">
                                 Мастера недели
                             </span>
         </a>
-        <a href="" class="arrow-link">
+        <a routerLink="/masters" class="arrow-link">
                             <span class="_view1">
                                 Смотреть все
                             </span>
@@ -116,44 +116,13 @@
       </div>
       <div class="master-slider slider">
         <div class="slider__wrap">
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_master-card.html',{-->
-                <!--                "img":"master",-->
-                <!--                "city":"Москва",-->
-                <!--                "title":"Притула Ирина",-->
-                <!--                "desc":"Описание основной сферы деятельности мастера в 2х предложениях",-->
-                <!--                })-->
-              </div>
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_master-card.html',{-->
-                <!--                "img":"master2",-->
-                <!--                "city":"Москва",-->
-                <!--                "title":"Филименко Андрей",-->
-                <!--                "desc":"Описание основной сферы деятельности мастера в 2х предложениях",-->
-                <!--                })-->
-              </div>
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_master-card.html',{-->
-                <!--                "img":"master3",-->
-                <!--                "city":"Москва",-->
-                <!--                "title":"Марченко Елена",-->
-                <!--                "desc":"Описание основной сферы деятельности мастера в 2х предложениях",-->
-                <!--                })-->
-              </div>
-              <div class="swiper-slide">
-                <!--                @@include('components/cards/_master-card.html',{-->
-                <!--                "img":"master3",-->
-                <!--                "city":"Москва",-->
-                <!--                "title":"Марченко Елена",-->
-                <!--                "desc":"Описание основной сферы деятельности мастера в 2х предложениях",-->
-                <!--                })-->
-              </div>
-            </div>
-          </div>
+          <swiper-container class="master-swiper" init="false">
+            <swiper-slide class="swiper-slide" *ngFor="let master of mastersTempData">
+              <master-card [master]="master" class="master-card"></master-card>
+            </swiper-slide>
+          </swiper-container>
         </div>
-        <!--        @@include('components/ui/_swiper-nav.html')-->
+        <swiper-nav></swiper-nav>
       </div>
     </div>
   </div>

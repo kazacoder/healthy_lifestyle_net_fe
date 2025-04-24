@@ -1,0 +1,54 @@
+<a href="" class="master-card__img m-backdrop _scale-img">
+  <img src="assets/img/{{ master?.img }}.jpg" alt="">
+</a>
+<button class="favourite-btn _absolute m-btn-bounce">
+  <img src="assets/img/favourite.svg" alt="" class="_view1">
+  <img src="assets/img/favourite2.svg" alt="" class="_view2">
+</button>
+
+
+<div class="master-card__content">
+  <div class="master-card__wrap _flex-between">
+    <div class="font2 text20 text16-tablet bold-text">
+      <a href="">{{ master?.title }}</a>
+    </div>
+    <div class="event-city _flex">
+      <img src="assets/img/marker.svg" alt="">
+      <span class="text16 text14-tablet">
+        {{ master?.city }}
+      </span>
+    </div>
+  </div>
+  <div class="master-card__tags _flex">
+    <div class="m-badge">
+      <span>Эндокринолог</span>
+    </div>
+    <div class="m-badge">
+      <span>Терапевт</span>
+    </div>
+    <div class="tags" [ngClass]="tagsOpen ? '_open' : ''">
+      <div class="tags__show">
+        <button class="tags__btn m-btn-bounce" (click)="tagButtonProceed()">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.5 14.5C19.5 14.6511 19.443 14.8024 19.3291 14.9177L13.4958 20.8268C13.2678 21.0577 12.8987 21.0577 12.671 20.8268C12.4432 20.5959 12.443 20.222 12.671 19.9913L18.0918 14.5L12.671 9.00866C12.443 8.77777 12.443 8.40387 12.671 8.17312C12.8989 7.94237 13.268 7.94222 13.4958 8.17312L19.3291 14.0822C19.443 14.1976 19.5 14.3488 19.5 14.5Z" fill="#3C3C3C"/>
+          </svg>
+        </button>
+      </div>
+      <div class="tags__hidden _triangle">
+        <div class="tags__items">
+          <div class="m-badge">
+            <span>Эндокринолог</span>
+          </div>
+          <div class="m-badge">
+            <span>Терапевт</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="master-card__text font2">
+    <div class="master-card__desc text14">
+      {{ master?.desc }}
+    </div>
+  </div>
+</div>

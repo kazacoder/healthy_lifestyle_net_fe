@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import {NgIf, NgOptimizedImage} from '@angular/common';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     NgIf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
