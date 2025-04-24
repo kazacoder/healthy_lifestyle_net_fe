@@ -17,7 +17,9 @@
   <div class="poster">
     <div class="container">
       <div class="poster__top _flex-between">
-        <poster-info [title]="'Афиша мероприятий'" (onAllCityModalButtonClick)="toggleCityModal($event)"></poster-info>
+        <poster-info [title]="'Афиша мероприятий'"
+                     [currentCity]="chosenCity"
+                     (onAllCityModalButtonClick)="toggleCityModal($event)"></poster-info>
         <div class="poster__top-col2 _flex">
           <div class="search-block">
             <div class="fg search-field">
@@ -96,17 +98,17 @@
     <div class="container">
       <div class="events2__top">
         <a routerLink="/masters" class="title-link">
-                            <span class="text34 text20-tablet">
-                                Мастера недели
-                            </span>
+          <span class="text34 text20-tablet">
+            Мастера недели
+          </span>
         </a>
         <a routerLink="/masters" class="arrow-link">
-                            <span class="_view1">
-                                Смотреть все
-                            </span>
+          <span class="_view1">
+            Смотреть все
+          </span>
           <span class="_view2">
-                                Все
-                            </span>
+            Все
+          </span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M12.1665 9.00011C12.1665 9.08159 12.1515 9.16228 12.1223 9.23755C12.093 9.31282 12.0501 9.38118 11.996 9.43872L6.18008 15.6424C5.95282 15.8848 5.58481 15.8848 5.3577 15.6424C5.13059 15.4 5.13044 15.0075 5.3577 14.7652L10.7625 9.00011L5.3577 3.23502C5.13044 2.99261 5.13044 2.60007 5.3577 2.35782C5.58496 2.11556 5.95296 2.11541 6.18008 2.35782L11.996 8.56151C12.0501 8.61904 12.093 8.68741 12.1223 8.76268C12.1515 8.83795 12.1665 8.91864 12.1665 9.00011Z"
@@ -127,4 +129,7 @@
     </div>
   </div>
 </main>
-<city-modal [isOpened]="isCityModalOpened" (onCloseModal)="toggleCityModal($event)"></city-modal>
+<city-modal [isOpened]="isCityModalOpened"
+            [chosenCity]="chosenCity"
+            (onChoiceCity)="chooseCity($event)"
+            (onCloseModal)="toggleCityModal($event)"></city-modal>

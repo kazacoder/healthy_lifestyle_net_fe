@@ -16,27 +16,11 @@
     </div>
     <div class="cities _mt16">
       <div class="cities__items">
-        <div class="cities__item _active"><span>Абаза</span></div>
-        <div class="cities__item"><span>Абакан</span></div>
-        <div class="cities__item"><span>Абдулино</span></div>
-        <div class="cities__item"><span>Абинск</span></div>
-        <div class="cities__item"><span>Агидель</span></div>
-        <div class="cities__item"><span>Агрыз</span></div>
-        <div class="cities__item"><span>Адыгейск</span></div>
-        <div class="cities__item"><span>Азнакаево</span></div>
-        <div class="cities__item"><span>Азов</span></div>
-        <div class="cities__item"><span>Ак-Довурак</span></div>
-        <div class="cities__item"><span>Аксай</span></div>
-        <div class="cities__item"><span>Алагир</span></div>
-        <div class="cities__item"><span>Алапаевск</span></div>
-        <div class="cities__item"><span>Алатырь</span></div>
-        <div class="cities__item"><span>Алдан</span></div>
-        <div class="cities__item"><span>Ак-Довурак</span></div>
-        <div class="cities__item"><span>Аксай</span></div>
-        <div class="cities__item"><span>Алагир</span></div>
-        <div class="cities__item"><span>Алапаевск</span></div>
-        <div class="cities__item"><span>Алатырь</span></div>
-        <div class="cities__item"><span>Алдан</span></div>
+        <div class="cities__item" [ngClass]="city === chosenCity ? '_active' : ''"
+             (click)="cityProceed(city)"
+             *ngFor="let city of cities">
+          <span>{{ city }}</span>
+        </div>
       </div>
     </div>
   </div>

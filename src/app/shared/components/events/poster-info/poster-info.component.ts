@@ -13,6 +13,8 @@ export class PosterInfoComponent {
 
   @Input()
   title: string = '';
+  @Input()
+  currentCity: string = '';
 
   @Output() onAllCityModalButtonClick: EventEmitter<boolean> = new EventEmitter<boolean>(false);
 

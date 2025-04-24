@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, Renderer2} from '@angular/core';
 import {PosterInfoComponent} from '../../shared/components/events/poster-info/poster-info.component';
 import {DateFeedComponent} from '../../shared/components/page-blocks/date-feed/date-feed.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
@@ -29,6 +29,7 @@ export class MainComponent implements AfterViewInit {
 
   isCityModalOpened:boolean = false;
   calendarActive: boolean = false;
+  chosenCity: string = 'Все города';
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
@@ -71,6 +72,11 @@ export class MainComponent implements AfterViewInit {
     (event.target as Window).innerWidth;
   }
 
+  constructor(private renderer: Renderer2) {
+
+  }
+
+
   ngAfterViewInit() {
     this.eventSwiper = document.querySelector('.event-swiper');
     if (this.eventSwiper) {
@@ -98,6 +104,15 @@ export class MainComponent implements AfterViewInit {
 
   toggleCityModal(value: boolean) {
     this.isCityModalOpened = value;
+    if (value) {
+      this.renderer.addClass(document.body, 'fixed-body2');
+    } else {
+      this.renderer.removeClass(document.body, 'fixed-body2');
+    }
+  }
+
+  chooseCity(value: string) {
+    this.chosenCity = value;
   }
 
   fix100vh() {
