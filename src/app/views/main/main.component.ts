@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener} from '@angular/core';
 import {PosterInfoComponent} from '../../shared/components/events/poster-info/poster-info.component';
 import {DateFeedComponent} from '../../shared/components/page-blocks/date-feed/date-feed.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
@@ -9,21 +9,25 @@ import {SwiperNavComponent} from '../../shared/components/ui/swiper-nav/swiper-n
 import {EventCard2Component} from '../../shared/components/cards/event-card2/event-card2.component';
 import {MasterCardComponent} from '../../shared/components/cards/master-card/master-card.component';
 import {RouterLink} from '@angular/router';
+import {CityModalComponent} from '../../shared/components/modals/city-modal/city-modal.component';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink],
+  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink, CityModalComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
+
 export class MainComponent implements AfterViewInit {
 
   //ToDo
   eventsTempData = events
   eventsTempData2 = events2
   mastersTempData = masters
+
+  isCityModalOpened:boolean = false;
   calendarActive: boolean = false;
 
   eventSwiper: SwiperContainer | null = null;
@@ -62,6 +66,11 @@ export class MainComponent implements AfterViewInit {
     },
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    (event.target as Window).innerWidth;
+  }
+
   ngAfterViewInit() {
     this.eventSwiper = document.querySelector('.event-swiper');
     if (this.eventSwiper) {
@@ -80,12 +89,21 @@ export class MainComponent implements AfterViewInit {
       Object.assign(this.masterSwiper, this.masterSwiperParams);
       this.masterSwiper.initialize();
     }
+    this.fix100vh()
   }
 
   toggleCalendarActive(value: boolean) {
     this.calendarActive = value;
   }
 
+  toggleCityModal(value: boolean) {
+    this.isCityModalOpened = value;
+  }
+
+  fix100vh() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
 }
 
 

@@ -17,7 +17,7 @@
   <div class="poster">
     <div class="container">
       <div class="poster__top _flex-between">
-        <poster-info [title]="'Афиша мероприятий'"></poster-info>
+        <poster-info [title]="'Афиша мероприятий'" (onAllCityModalButtonClick)="toggleCityModal($event)"></poster-info>
         <div class="poster__top-col2 _flex">
           <div class="search-block">
             <div class="fg search-field">
@@ -127,3 +127,4 @@
     </div>
   </div>
 </main>
+<city-modal [isOpened]="isCityModalOpened" (onCloseModal)="toggleCityModal($event)"></city-modal>

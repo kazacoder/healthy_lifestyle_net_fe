@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 
 
@@ -13,5 +13,12 @@ export class PosterInfoComponent {
 
   @Input()
   title: string = '';
+
+  @Output() onAllCityModalButtonClick: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+
+
+  allCityModalOpen() {
+    this.onAllCityModalButtonClick.emit(true);
+  }
 
 }

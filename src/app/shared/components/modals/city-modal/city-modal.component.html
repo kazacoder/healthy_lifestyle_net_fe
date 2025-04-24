@@ -1,0 +1,43 @@
+<div class="modal" [ngClass]="isOpened ? '_active _active2' : ''" id="cityModal">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top">
+      <div class="text30 text24-tablet semi-bold-text text-center">
+        Найти город
+      </div>
+    </div>
+    <div class="fg search-field _mt30">
+      <input type="text" placeholder="Введите название города">
+      <img src="assets/img/search.svg" alt="" class="search-field__icon">
+    </div>
+    <div class="cities _mt16">
+      <div class="cities__items">
+        <div class="cities__item _active"><span>Абаза</span></div>
+        <div class="cities__item"><span>Абакан</span></div>
+        <div class="cities__item"><span>Абдулино</span></div>
+        <div class="cities__item"><span>Абинск</span></div>
+        <div class="cities__item"><span>Агидель</span></div>
+        <div class="cities__item"><span>Агрыз</span></div>
+        <div class="cities__item"><span>Адыгейск</span></div>
+        <div class="cities__item"><span>Азнакаево</span></div>
+        <div class="cities__item"><span>Азов</span></div>
+        <div class="cities__item"><span>Ак-Довурак</span></div>
+        <div class="cities__item"><span>Аксай</span></div>
+        <div class="cities__item"><span>Алагир</span></div>
+        <div class="cities__item"><span>Алапаевск</span></div>
+        <div class="cities__item"><span>Алатырь</span></div>
+        <div class="cities__item"><span>Алдан</span></div>
+        <div class="cities__item"><span>Ак-Довурак</span></div>
+        <div class="cities__item"><span>Аксай</span></div>
+        <div class="cities__item"><span>Алагир</span></div>
+        <div class="cities__item"><span>Алапаевск</span></div>
+        <div class="cities__item"><span>Алатырь</span></div>
+        <div class="cities__item"><span>Алдан</span></div>
+      </div>
+    </div>
+  </div>
+</div>
