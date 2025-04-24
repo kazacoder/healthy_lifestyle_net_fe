@@ -18,7 +18,7 @@ export class CityModalComponent implements OnInit {
 
   @Input()
   isOpened: boolean = false;
-  @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);  @Input()
+  @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
 
   @Input()
   chosenCity: string | null = null;

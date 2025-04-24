@@ -44,7 +44,9 @@
             </div>
           </div>
 
-          <button data-modal="paramModal" class="poster__settings m-btn m-btn-primary m-btn-bounce">
+          <button data-modal="paramModal"
+                  (click)="toggleParamModal(true)"
+                  class="poster__settings m-btn m-btn-primary m-btn-bounce">
             <img src="assets/img/settings.svg" alt="">
             <span>Параметры</span>
           </button>
@@ -133,3 +135,5 @@
             [chosenCity]="chosenCity"
             (onChoiceCity)="chooseCity($event)"
             (onCloseModal)="toggleCityModal($event)"></city-modal>
+<param-modal [isOpened]="isParamModalOpened"
+             (onCloseModal)="toggleParamModal($event)"></param-modal>

@@ -11,11 +11,12 @@ import {MasterCardComponent} from '../../shared/components/cards/master-card/mas
 import {RouterLink} from '@angular/router';
 import {CityModalComponent} from '../../shared/components/modals/city-modal/city-modal.component';
 import {WindowsUtils} from '../../shared/utils/windows-utils';
+import {ParamModalComponent} from '../../shared/components/modals/param-modal/param-modal.component';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink, CityModalComponent],
+  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink, CityModalComponent, ParamModalComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -29,6 +30,7 @@ export class MainComponent implements AfterViewInit {
   mastersTempData = masters
 
   isCityModalOpened:boolean = false;
+  isParamModalOpened:boolean = false;
   calendarActive: boolean = false;
   chosenCity: string = 'Все города';
 
@@ -101,6 +103,12 @@ export class MainComponent implements AfterViewInit {
   toggleCityModal(value: boolean) {
     this.isCityModalOpened = value;
     WindowsUtils.fixBody(value)
+  }
+
+  toggleParamModal(value: boolean) {
+    this.isParamModalOpened = value;
+    WindowsUtils.fixBody(value)
+    console.log('here')
   }
 
   chooseCity(value: string) {
