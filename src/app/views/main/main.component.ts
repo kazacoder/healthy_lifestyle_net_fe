@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, Renderer2} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener} from '@angular/core';
 import {PosterInfoComponent} from '../../shared/components/events/poster-info/poster-info.component';
 import {DateFeedComponent} from '../../shared/components/page-blocks/date-feed/date-feed.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
@@ -10,6 +10,7 @@ import {EventCard2Component} from '../../shared/components/cards/event-card2/eve
 import {MasterCardComponent} from '../../shared/components/cards/master-card/master-card.component';
 import {RouterLink} from '@angular/router';
 import {CityModalComponent} from '../../shared/components/modals/city-modal/city-modal.component';
+import {WindowsUtils} from '../../shared/utils/windows-utils';
 
 @Component({
   selector: 'app-main',
@@ -72,11 +73,6 @@ export class MainComponent implements AfterViewInit {
     (event.target as Window).innerWidth;
   }
 
-  constructor(private renderer: Renderer2) {
-
-  }
-
-
   ngAfterViewInit() {
     this.eventSwiper = document.querySelector('.event-swiper');
     if (this.eventSwiper) {
@@ -95,7 +91,7 @@ export class MainComponent implements AfterViewInit {
       Object.assign(this.masterSwiper, this.masterSwiperParams);
       this.masterSwiper.initialize();
     }
-    this.fix100vh()
+    WindowsUtils.fix100vh()
   }
 
   toggleCalendarActive(value: boolean) {
@@ -104,20 +100,11 @@ export class MainComponent implements AfterViewInit {
 
   toggleCityModal(value: boolean) {
     this.isCityModalOpened = value;
-    if (value) {
-      this.renderer.addClass(document.body, 'fixed-body2');
-    } else {
-      this.renderer.removeClass(document.body, 'fixed-body2');
-    }
+    WindowsUtils.fixBody(value)
   }
 
   chooseCity(value: string) {
     this.chosenCity = value;
-  }
-
-  fix100vh() {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 }
 

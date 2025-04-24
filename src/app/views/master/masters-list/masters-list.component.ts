@@ -2,13 +2,16 @@ import { Component } from '@angular/core';
 import {MasterCardComponent} from '../../../shared/components/cards/master-card/master-card.component';
 import {NgForOf} from '@angular/common';
 import {PosterInfoComponent} from '../../../shared/components/events/poster-info/poster-info.component';
+import {CityModalComponent} from '../../../shared/components/modals/city-modal/city-modal.component';
+import {WindowsUtils} from '../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'app-masters-list',
   imports: [
     MasterCardComponent,
     NgForOf,
-    PosterInfoComponent
+    PosterInfoComponent,
+    CityModalComponent
   ],
   standalone: true,
   templateUrl: './masters-list.component.html',
@@ -16,6 +19,17 @@ import {PosterInfoComponent} from '../../../shared/components/events/poster-info
 })
 export class MastersListComponent {
   masters = masters;
+  isCityModalOpened: boolean = false;
+  chosenCity: string = 'Все города';
+
+  toggleCityModal(value: boolean) {
+    this.isCityModalOpened = value;
+    WindowsUtils.fixBody(value)
+  }
+
+  chooseCity(value: string) {
+    this.chosenCity = value;
+  }
 }
 
 

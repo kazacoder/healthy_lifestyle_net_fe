@@ -3,7 +3,9 @@
   <div class="poster masters-page">
     <div class="container">
       <div class="poster__top _flex-between">
-        <poster-info [title]="'Мастера'"></poster-info>
+        <poster-info [title]="'Мастера'"
+                     [currentCity]="chosenCity"
+                     (onAllCityModalButtonClick)="toggleCityModal($event)"></poster-info>
       </div>
 
       <div class="filter">
@@ -224,6 +226,8 @@
       </button>
     </div>
   </div>
-
-
 </main>
+<city-modal [isOpened]="isCityModalOpened"
+            [chosenCity]="chosenCity"
+            (onChoiceCity)="chooseCity($event)"
+            (onCloseModal)="toggleCityModal($event)"></city-modal>
