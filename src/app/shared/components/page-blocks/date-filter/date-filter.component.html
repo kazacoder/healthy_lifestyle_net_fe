@@ -11,9 +11,10 @@
             data-swipe-unit="px"
             data-swipe-timeout="500"
             data-swipe-ignore="false"
+            (click)="toggleCalendar()"
     ></button>
     <div class="date-input">
       <input type="text">
     </div>
   </div>
-  <div class="date-modal__bg modal-bg _toggle-date-filter"></div>
+  <div class="date-modal__bg modal-bg _toggle-date-filter" (click)="toggleCalendar()"></div>
