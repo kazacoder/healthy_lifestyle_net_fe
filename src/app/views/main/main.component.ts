@@ -93,7 +93,6 @@ export class MainComponent implements AfterViewInit {
       Object.assign(this.masterSwiper, this.masterSwiperParams);
       this.masterSwiper.initialize();
     }
-    WindowsUtils.fix100vh()
   }
 
   toggleCalendarActive(value: boolean) {

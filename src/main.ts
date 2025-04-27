@@ -8,6 +8,7 @@ import {WindowsUtils} from './app/shared/utils/windows-utils';
 register();
 
 WindowsUtils.getScrollBarSize()();
+WindowsUtils.fix100vh()
 
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
