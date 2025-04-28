@@ -11,6 +11,9 @@
       padding: 0;
     }
   }
+  .container {
+    overflow-x: clip;
+  }
 }
 
 .title-link{
@@ -60,6 +63,7 @@
     &-slide{
       width: calc(100% / 3);
       @media screen and (min-width: 993px){
+        //ToDo
         opacity: 0;
         pointer-events: none;
         transition: all .3s;

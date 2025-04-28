@@ -38,9 +38,7 @@
             <div class="param-field__title text20 font2 medium-text">
               Регион
             </div>
-<!--            @@include('../ui/_region-select.html',{-->
-<!--            "name":"cityField"-->
-<!--            })-->
+            <region-select></region-select>
           </div>
           <div class="param-group">
             <div class="param-group__title text20 font2 medium-text">
@@ -131,7 +129,7 @@
                 <div class="range-slider"></div>
                 <input type="hidden" class="range-slider__input">
               </div>
-              <div class="filter-slider__bottom _flex-between" style="display: none">
+              <div class="filter-slider__bottom _flex-between slider-0" style="display: none">
                 <div class="filter-slider__title">Любая</div>
                 <div class="filter-slider__title">1-2 часа</div>
                 <div class="filter-slider__title">3-12 часов</div>
@@ -418,9 +416,7 @@
             <div class="param-field__title text20 font2 medium-text">
               Регион
             </div>
-<!--            @@include('../ui/_region-select.html',{-->
-<!--            "name":"cityField2"-->
-<!--            })-->
+            <region-select></region-select>
           </div>
           <div class="param-group">
             <div class="param-group__title text20 font2 medium-text">
@@ -471,8 +467,8 @@
                 <div class="range-slider"></div>
                 <input type="hidden" class="range-slider__input">
               </div>
-              <div class="filter-slider__bottom _flex-between" style="display: none">
-                <div class="filter-slider__title">Любая</div>
+              <div class="filter-slider__bottom _flex-between slider-1" style="display: none">
+                <div class="filter-slider__title">Любой</div>
                 <div class="filter-slider__title">6-12 месяцев</div>
                 <div class="filter-slider__title">1-3 года</div>
                 <div class="filter-slider__title">4-7 лет</div>
@@ -494,7 +490,7 @@
                 <div class="param-select__items">
                   <div class="param-select__option m-check">
                     <input type="radio" data-value="Любая" name="experienceDuration">
-                    <label><span>Любая</span></label>
+                    <label><span>Любой</span></label>
                   </div>
                   <div class="param-select__option m-check">
                     <input checked type="radio" data-value="6-12 месяцев" name="experienceDuration">

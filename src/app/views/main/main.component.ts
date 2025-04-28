@@ -107,7 +107,6 @@ export class MainComponent implements AfterViewInit {
   toggleParamModal(value: boolean) {
     this.isParamModalOpened = value;
     WindowsUtils.fixBody(value)
-    console.log('here')
   }
 
   chooseCity(value: string) {
