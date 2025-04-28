@@ -71,7 +71,7 @@
           </div>
         </div>
         <!--      @@if(auth == ""){-->
-        <a *ngIf="1 === 1" href="" class="header-action__login m-btn m-btn-primary m-btn-bounce">
+        <a *ngIf="1 === 1" (click)="toggleLoginModal(true)" class="header-action__login m-btn m-btn-primary m-btn-bounce">
           <img src="/assets/img/user.svg" alt="">
           <span>Войти</span>
         </a>
@@ -96,7 +96,7 @@
             </div>
           </a>
           <a href="" class="header-action__login m-btn m-btn-primary m-btn-bounce">
-            <img src="img/user.svg" alt="">
+            <img src="assets/img/user.svg" alt="">
             <span>Имя</span>
             <div class="header-user__count">
               2
@@ -108,3 +108,4 @@
     </div>
   </div>
 </header>
+<login-modal (onCloseModal)="toggleLoginModal($event)" [isOpen]="isOpenLoginModal"></login-modal>

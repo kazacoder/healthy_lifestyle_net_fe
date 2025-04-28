@@ -68,6 +68,7 @@
   flex-grow: 1;
   justify-content: flex-end;
   &__login{
+    cursor: pointer;
     padding: 0 1.1875em;
     height: 2.875em;
     img{

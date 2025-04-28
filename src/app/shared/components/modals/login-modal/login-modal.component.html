@@ -1,0 +1,37 @@
+<div class="modal" [ngClass]="isOpen ? '_active _active2' : ''" id="loginModal">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top text-center">
+      <div class="text30 text24-tablet semi-bold-text">
+        Вход
+      </div>
+    </div>
+    <form action="" class="modal-form modal-form2">
+      <div class="fg _error">
+        <label>E-mail или номер телефона</label>
+        <input type="text" placeholder="pochta@mail.ru">
+        <div class="fg__error-text">
+          <div class="text12">Ошибка</div>
+        </div>
+      </div>
+      <div class="modal-form__pass">
+        <pass-field label="Пароль"></pass-field>
+        <div class="modal-form__pass-nav">
+          <a href="" class="modal-form__pass-link m-link">Забыли пароль?</a>
+        </div>
+      </div>
+      <button type="button" class="m-btn m-btn-primary m-btn-bounce" (click)="login()">
+        <span>Войти</span>
+      </button>
+      <div class="modal-form__bottom text-center">
+        <div class="text18 text14-mob">
+          Еще нет аккаунта? <a href="" class="m-link">Зарегистрироваться</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
