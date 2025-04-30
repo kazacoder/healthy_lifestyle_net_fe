@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import 'swiper/css/bundle'
 
 @Component({
   selector: 'app-root',

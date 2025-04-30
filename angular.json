@@ -87,6 +87,9 @@
             },
             "development": {
               "buildTarget": "healthy_lifestyle_net_fe:build:development"
+            },
+            "remote": {
+              "buildTarget": "healthy_lifestyle_net_fe:build:remote"
             }
           },
           "defaultConfiguration": "development"
