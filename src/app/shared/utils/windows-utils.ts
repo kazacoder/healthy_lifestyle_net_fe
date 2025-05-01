@@ -9,6 +9,10 @@ export class WindowsUtils {
     fix ? document.body.classList.add('fixed-body2') : document.body.classList.remove('fixed-body2');
   }
 
+  static clickOutsideComponent(event: Event, selector: string): boolean |undefined {
+    return !document.querySelector(selector)?.contains(event.target as Element);
+  }
+
   // ToDo разобраться
   static getScrollBarSize () {
     const el = window.document.createElement('textarea')

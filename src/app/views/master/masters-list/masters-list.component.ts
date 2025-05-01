@@ -5,6 +5,7 @@ import {PosterInfoComponent} from '../../../shared/components/events/poster-info
 import {CityModalComponent} from '../../../shared/components/modals/city-modal/city-modal.component';
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
+import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 
 @Component({
   selector: 'app-masters-list',
@@ -14,7 +15,8 @@ import {ParamFilterComponent} from '../../../shared/components/param-filter/para
     PosterInfoComponent,
     CityModalComponent,
     NgIf,
-    ParamFilterComponent
+    ParamFilterComponent,
+    SortComponent
   ],
   standalone: true,
   templateUrl: './masters-list.component.html',

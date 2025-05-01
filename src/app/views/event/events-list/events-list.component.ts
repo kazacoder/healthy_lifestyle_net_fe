@@ -8,6 +8,7 @@ import {ParamModalComponent} from '../../../shared/components/modals/param-modal
 import {NgClass, NgForOf} from '@angular/common';
 import {EventCard2Component} from '../../../shared/components/cards/event-card2/event-card2.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
+import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 
 @Component({
   selector: 'app-events-list',
@@ -20,7 +21,8 @@ import {ParamFilterComponent} from '../../../shared/components/param-filter/para
     NgClass,
     EventCard2Component,
     NgForOf,
-    ParamFilterComponent
+    ParamFilterComponent,
+    SortComponent
   ],
   standalone: true,
   templateUrl: './events-list.component.html',
