@@ -6,7 +6,7 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - build:/usr/share/nginx/html
+      - ./build:/usr/share/nginx/html
     ports:
       - '7077:7077'
 
@@ -14,7 +14,17 @@ services:
     build: .
     volumes:
       - ./src:/frontend/src
-      - build:/frontend/dist/healthy_lifestyle_net_fe/browser
+      - ./build:/frontend/dist/healthy_lifestyle_net_fe/browser
+      - ./public:/frontend/public
+      - ./.editorconfig:/frontend/.editorconfig
+      - ./.gitignore:/frontend/.gitignore
+      - ./angular.json:/frontend/angular.json
+      - ./nginx.conf:/frontend/nginx.conf
+      - ./tsconfig.app.json:/frontend/tsconfig.app.json
+      - ./tsconfig.json:/frontend/tsconfig.json
+      - ./tsconfig.spec.json:/frontend/tsconfig.spec.json
+
+    command: sh -c "npm run build"
 
 volumes:
   build:
