@@ -4,6 +4,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {PosterInfoComponent} from '../../../shared/components/events/poster-info/poster-info.component';
 import {CityModalComponent} from '../../../shared/components/modals/city-modal/city-modal.component';
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
+import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 
 @Component({
   selector: 'app-masters-list',
@@ -12,16 +13,19 @@ import {WindowsUtils} from '../../../shared/utils/windows-utils';
     NgForOf,
     PosterInfoComponent,
     CityModalComponent,
-    NgIf
+    NgIf,
+    ParamFilterComponent
   ],
   standalone: true,
   templateUrl: './masters-list.component.html',
   styleUrl: './masters-list.component.scss'
 })
 export class MastersListComponent {
-  masters = masters;
   isCityModalOpened: boolean = false;
   chosenCity: string = 'Все города';
+
+  protected readonly masters = masters;
+  protected readonly filterObjects = filterObjects;
 
   toggleCityModal(value: boolean) {
     this.isCityModalOpened = value;
@@ -33,7 +37,7 @@ export class MastersListComponent {
   }
 }
 
-
+// ToDo remove after the Backend is ready
 
 const masters = [
   {
@@ -108,4 +112,12 @@ const masters = [
     title: "Филименко Андрей",
     desc: "Описание основной сферы деятельности мастера в 2х предложениях",
   },
+]
+
+const filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = [
+  {title: 'Формат занятий', options: ['Формат 1', 'Формат 2'], search: false},
+  {title: 'Стаж', options: ['1 год', '2 года'], search: false, defaultOption: 'Любой'},
+  {title: 'Вид деятельности', options: ['Деятельность', 'Деятельность', 'Деятельность', 'Деятельность', 'Деятельность',
+      'Деятельность', 'Деятельность', 'Деятельность', 'Деятельность', 'Деятельность', 'Деятельность', 'Деятельность'],
+    search: true},
 ]

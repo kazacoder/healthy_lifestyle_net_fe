@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {DateItemComponent} from '../../cards/date-item/date-item.component';
 import {SwiperContainer} from 'swiper/element/bundle';
-import 'swiper/css/navigation'
+// import 'swiper/css/navigation'
 import 'swiper'
 import {NgClass, NgForOf} from '@angular/common';
 

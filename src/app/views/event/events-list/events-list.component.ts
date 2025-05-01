@@ -7,6 +7,7 @@ import {CityModalComponent} from '../../../shared/components/modals/city-modal/c
 import {ParamModalComponent} from '../../../shared/components/modals/param-modal/param-modal.component';
 import {NgClass, NgForOf} from '@angular/common';
 import {EventCard2Component} from '../../../shared/components/cards/event-card2/event-card2.component';
+import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 
 @Component({
   selector: 'app-events-list',
@@ -18,7 +19,8 @@ import {EventCard2Component} from '../../../shared/components/cards/event-card2/
     ParamModalComponent,
     NgClass,
     EventCard2Component,
-    NgForOf
+    NgForOf,
+    ParamFilterComponent
   ],
   standalone: true,
   templateUrl: './events-list.component.html',
@@ -49,8 +51,10 @@ export class EventsListComponent {
   }
 
   protected readonly events = events;
+  protected readonly filterObjects = filterObjects;
 }
 
+// ToDo remove after the Backend is ready
 
 const events = [
   {
@@ -179,4 +183,13 @@ const events = [
     time: "2 дня",
     many: "true",
   }
+]
+
+const filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = [
+  {title: 'Формат', options: ['Формат 1', 'Формат 2'], search: false},
+  {title: 'Категории', options: ['Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна'], search: true},
+  {title: 'Тип мероприятия', options: ['Платное', 'Бесплатное'], search: false},
+  {title: 'Для кого', options: ['Мужчинам', 'Женщинам'], search: false, defaultOption: 'Всем'},
+  {title: 'Длительность', options: ['1 час', '2 часа'], search: false, defaultOption: 'Любая'},
+  {title: 'Создатель мероприятия', options: ['Создатель 1', 'Создатель 2'], search: false},
 ]

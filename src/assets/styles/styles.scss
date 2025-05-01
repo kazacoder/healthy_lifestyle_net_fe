@@ -3,6 +3,7 @@
 @import 'global';
 @import 'ui';
 @import 'page-blocks/page-blocks';
+@import 'layout/layout.scss';
 @import "pages/1-text";
 @import "pages/a-index";
 @import "pages/b-index";
@@ -27,4 +28,3 @@
 @import "pages/u-payment";
 @import "pages/v-param";
 @import "pages/w-filter";
-//@import "air-datepicker/air-datepicker.css";
