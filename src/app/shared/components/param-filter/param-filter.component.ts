@@ -26,6 +26,8 @@ export class ParamFilterComponent {
     if(window.innerWidth <= 992){
       this.zIndex = val ? 7 : 1
       console.log(this.zIndex)
+      document.querySelector(".m-page")?.classList.toggle("fixed-body")
+      document.querySelector(".m-page")?.classList.toggle("open-calendar")
     }
   }
 

@@ -102,7 +102,7 @@ export class DateFilterComponent implements OnInit {
       document.body.scrollTop = document.documentElement.scrollTop = 400;
     }
     if(window.innerWidth <= 992){
-      document.querySelector(".m-page")?.classList.toggle("fixed-body ")
+      document.querySelector(".m-page")?.classList.toggle("fixed-body")
       document.querySelector(".m-page")?.classList.toggle("open-calendar")
     }
   }
