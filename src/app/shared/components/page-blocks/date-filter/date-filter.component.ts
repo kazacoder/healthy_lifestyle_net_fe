@@ -97,16 +97,15 @@ export class DateFilterComponent implements OnInit {
   toggleCalendar() {
     this.calendarActive = !this.calendarActive;
     this.onCalendarToggle.emit(this.calendarActive);
-    // let eventsBlock = document.querySelector(".events2")
-    // if(eventsBlock && window.innerWidth > 992){
-    //   document.body.scrollTop = document.documentElement.scrollTop = 400;
-    // }
-    // if(window.innerWidth <= 992){
-    //   $(".m-page").toggleClass("fixed-body")
-    //   $(".m-page").toggleClass("_open-calendar")
-    // }
+    let eventsBlock = document.querySelector(".events2")
+    if(eventsBlock && window.innerWidth > 992 && this.calendarActive){
+      document.body.scrollTop = document.documentElement.scrollTop = 400;
+    }
+    if(window.innerWidth <= 992){
+      document.querySelector(".m-page")?.classList.toggle("fixed-body ")
+      document.querySelector(".m-page")?.classList.toggle("open-calendar")
+    }
   }
-
 }
 
 

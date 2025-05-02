@@ -1,0 +1,35 @@
+<div class="blog-card">
+  <div class="blog-card__top">
+    <a routerLink="/articles" class="blog-card__img m-backdrop _scale-img">
+      <img src="assets/img/{{ img }}" alt="">
+    </a>
+
+    <button class="favourite-btn _absolute @@if(favourite !== ''){_added} m-btn-bounce" [ngClass]="{'_added': favorite}">
+      <img src="assets/img/favourite.svg" alt="" class="_view1">
+      <img src="assets/img/favourite2.svg" alt="" class="_view2">
+    </button>
+
+    <div class="blog-card__badges">
+      <div class="m-badge" *ngFor="let tag of tags">
+        <img src="assets/img/{{ tag.img }}" alt="">
+        <span>{{ tag.title }}</span>
+      </div>
+    </div>
+
+    <div class="blog-card__badges2 _flex">
+      <div class="day-badge">
+        <div class="text16 bold-text">{{ date.day }}</div>
+        <div class="text10">{{ date.month }}</div>
+      </div>
+      <div class="blog-card__type">
+        <span>{{ type }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="blog-card__content">
+    <div class="blog-card__text text16 medium-text">
+      {{ text }}
+    </div>
+  </div>
+</div>
