@@ -1,4 +1,4 @@
-<div class="param-slider">
+<div class="param-slider" [ngStyle]="{'z-index': zIndex, 'position': 'relative'}">
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <param-filter-item *ngFor="let filter of filterObjects; index as i"
@@ -6,7 +6,8 @@
                          [filterOptions]="filter.options"
                          [defaultOption]="filter.defaultOption ? filter.defaultOption : defaultOption"
                          [index]="i"
-                         [search]="filter.search">
+                         [search]="filter.search"
+                         (onDropdownOpen)="isFilterOpen($event)">
       </param-filter-item>
     </div>
   </div>

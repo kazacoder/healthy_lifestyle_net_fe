@@ -4,7 +4,9 @@
       <img src="assets/img/{{ img }}" alt="">
     </a>
 
-    <button class="favourite-btn _absolute @@if(favourite !== ''){_added} m-btn-bounce" [ngClass]="{'_added': favorite}">
+    <button class="favourite-btn _absolute m-btn-bounce"
+            (click)="toggleFavorite()"
+            [ngClass]="{'_added': favorite}">
       <img src="assets/img/favourite.svg" alt="" class="_view1">
       <img src="assets/img/favourite2.svg" alt="" class="_view2">
     </button>

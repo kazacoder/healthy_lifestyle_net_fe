@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {WindowsUtils} from '../../../utils/windows-utils';
 import {FormsModule} from '@angular/forms';
@@ -23,6 +23,8 @@ export class ParamFilterItemComponent implements OnInit {
   @Input() defaultOption: string | undefined = "Все"
   @Input() index: number = 0
 
+  @Output() onDropdownOpen = new EventEmitter<boolean>(false);
+
   selector: string = '';
   isDropdownOpen: boolean = false;
   selectedOption: string = '';
@@ -45,11 +47,13 @@ export class ParamFilterItemComponent implements OnInit {
   toggleDropdown(event: Event | null = null): void {
     if (event?.target !== document.querySelector(`.filter-${this.index} .param-select__clear`)) {
       this.isDropdownOpen = !this.isDropdownOpen;
+      this.onDropdownOpen.emit(this.isDropdownOpen)
     }
   }
 
   clearFilter() {
     this.selectedOption = this.filterTitle;
     this.isDropdownOpen = false;
+    this.onDropdownOpen.emit(false)
   }
 }

@@ -20,4 +20,8 @@ export class BlogCardComponent {
   @Input() type: string = '';
   @Input() favorite: boolean = false;
   @Input() text: string = '';
+
+  toggleFavorite() {
+    this.favorite = !this.favorite;
+  }
 }

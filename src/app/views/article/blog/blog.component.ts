@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {BlogCardComponent} from '../../../shared/components/cards/blog-card/blog-card.component';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-blog',
@@ -10,7 +10,8 @@ import {NgForOf} from '@angular/common';
     SortComponent,
     ParamFilterComponent,
     BlogCardComponent,
-    NgForOf
+    NgForOf,
+    NgStyle
   ],
   standalone: true,
   templateUrl: './blog.component.html',
