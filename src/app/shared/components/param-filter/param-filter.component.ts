@@ -24,7 +24,7 @@ export class ParamFilterComponent {
 
   isFilterOpen(val: boolean) {
     if(window.innerWidth <= 992){
-      this.zIndex = val ? 6 : 1
+      this.zIndex = val ? 7 : 1
       console.log(this.zIndex)
     }
   }
