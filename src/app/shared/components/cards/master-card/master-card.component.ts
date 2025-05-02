@@ -1,11 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {NgClass} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'master-card',
   standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './master-card.component.html',
   styleUrl: './master-card.component.scss'
