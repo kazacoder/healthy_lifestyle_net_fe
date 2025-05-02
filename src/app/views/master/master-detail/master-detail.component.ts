@@ -22,10 +22,16 @@ export class MasterDetailComponent implements AfterViewInit {
 
   masterSlider: SwiperContainer | null = null;
   masterSliderParams = {
-    spaceBetween: 0,
     slidesPerView: "auto",
-    freeMode: true,
+    spaceBetween: 0,
     watchSlidesProgress: true,
+    preventClicks :true,
+    a11y: false,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
+    mousewheel: false,
+    loop: true,
     pagination: {
       el: `.swiper-pagination`,
       type: 'bullets',
