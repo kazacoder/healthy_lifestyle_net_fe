@@ -1,5 +1,14 @@
+@use "@angular/material" as mat;
 @import "../../../../assets/styles/vars";
 @import "../../../../assets/styles/mixins";
+
+
+* {
+  @include mat.menu-overrides((
+    item-label-text-color: $black,
+
+  ));
+}
 
 .header{
   padding: 1.875em 0;

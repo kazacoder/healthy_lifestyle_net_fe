@@ -6,6 +6,8 @@ import {WindowsUtils} from '../../utils/windows-utils';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../../core/auth/auth.service';
 import {UserService} from '../../services/user.service';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +17,8 @@ import {UserService} from '../../services/user.service';
     NgOptimizedImage,
     RouterLink,
     RouterLinkActive,
-    LoginModalComponent
+    LoginModalComponent,
+    MatMenuModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -29,7 +32,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userName: string | null = null;
 
   constructor(private authService: AuthService,
-              private userService: UserService,) {
+              private userService: UserService,
+              private _snackBar: MatSnackBar,) {
   }
 
   toggleLoginModal(value: boolean) {
@@ -55,6 +59,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.isLoggedSubscription?.unsubscribe();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.userService.removeUserInfo();
+    this._snackBar.open('Вы вышли из системы')
   }
 
 }

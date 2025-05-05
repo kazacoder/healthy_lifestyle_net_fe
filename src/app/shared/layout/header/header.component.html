@@ -92,9 +92,14 @@
               2
             </div>
           </a>
-          <a class="header-action__login m-btn m-btn-primary m-btn-bounce">
+          <a [matMenuTriggerFor]="userMenu"
+             class="header-action__login m-btn m-btn-primary m-btn-bounce">
             <img src="assets/img/user.svg" alt="">
             <span>{{ userName }}</span>
+            <mat-menu #userMenu="matMenu">
+              <a routerLink="/profile" mat-menu-item>Профиль</a>
+              <a (click)="logout()" mat-menu-item>Выйти</a>
+            </mat-menu>
             <div class="header-user__count">
               2
             </div>
