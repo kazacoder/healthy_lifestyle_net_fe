@@ -90,3 +90,14 @@
         transition: all ease .4s;
     }
 }
+
+.m-btn {
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #f6f6f6;
+    color: $black;
+    &:hover{
+
+    }
+  }
+}

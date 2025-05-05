@@ -5,6 +5,7 @@ import {MastersListComponent} from './views/master/masters-list/masters-list.com
 import {EventsListComponent} from './views/event/events-list/events-list.component';
 import {BlogComponent} from './views/article/blog/blog.component';
 import {MasterDetailComponent} from './views/master/master-detail/master-detail.component';
+import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,7 @@ export const routes: Routes = [
       {path: 'master', component: MasterDetailComponent, title: 'Мастер',},
       {path: 'events', component: EventsListComponent, title: 'Мероприятия',},
       {path: 'articles', component: BlogComponent, title: 'Статьи',},
+      {path: '**', component: PageNotFoundComponent, title: 'Страница не найдена'},
     ]
   },
 ];

@@ -10,21 +10,44 @@
         Вход
       </div>
     </div>
-    <form action="" class="modal-form modal-form2">
-      <div class="fg _error">
-        <label>E-mail или номер телефона</label>
-        <input type="text" placeholder="pochta@mail.ru">
+    <section class="modal-form modal-form2" [formGroup]="loginForm">
+      <div class="fg"
+           [ngClass]="{'_error': loginForm.get('username')?.invalid &&
+           (loginForm.get('username')?.dirty || loginForm.get('username')?.touched)}">
+        <label>E-mail или имя пользователя</label>
+        <input type="text" placeholder="Имя пользователя" formControlName="username">
         <div class="fg__error-text">
-          <div class="text12">Ошибка</div>
+          <div class="text12">Обязательное поле</div>
         </div>
       </div>
       <div class="modal-form__pass">
-        <pass-field label="Пароль"></pass-field>
+        <!--        <pass-field label="Пароль"></pass-field>-->
+        <fieldset class="fg">
+          <label>Пароль</label>
+          <div class="fg" [ngClass]="{'_error': loginForm.get('password')?.invalid &&
+           (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)}">
+            <div class="fg__field">
+              <input [type]="isPasswordShowed ? 'text' : 'password'"
+                     placeholder="Пароль" formControlName="password">
+              <button type="button" class="pass-toggle"
+                      [ngClass]="{'_active': isPasswordShowed}"
+                      (click)="togglePasswordShow()">
+                <img src="assets/img/pass.svg" alt="" class="_view1">
+                <img src="assets/img/pass2.svg" alt="" class="_view2">
+              </button>
+            </div>
+            <div class="fg__error-text">
+              <div class="text12">Обязательное поле</div>
+            </div>
+          </div>
+        </fieldset>
         <div class="modal-form__pass-nav">
           <a href="" class="modal-form__pass-link m-link">Забыли пароль?</a>
         </div>
       </div>
-      <button type="button" class="m-btn m-btn-primary m-btn-bounce" (click)="login()">
+      <button type="button" class="m-btn m-btn-primary"
+              [ngClass]="{'m-btn-bounce': loginForm.valid}"
+              [disabled]="loginForm.invalid" (click)="login()">
         <span>Войти</span>
       </button>
       <div class="modal-form__bottom text-center">
@@ -32,6 +55,6 @@
           Еще нет аккаунта? <a href="" class="m-link">Зарегистрироваться</a>
         </div>
       </div>
-    </form>
+    </section>
   </div>
 </div>

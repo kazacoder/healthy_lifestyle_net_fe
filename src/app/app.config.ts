@@ -7,7 +7,9 @@ import {
 } from '@angular/router';
 
 import { routes } from './app.routes';
-import {provideHttpClient} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar';
+import {AuthInterceptor} from './core/auth/auth.interceptor';
 
 
 const scrollConfig: InMemoryScrollingOptions = {
@@ -20,8 +22,13 @@ const inMemoryScrollingFeature: InMemoryScrollingFeature =
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(withInterceptorsFromDi()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, inMemoryScrollingFeature),
     provideHttpClient(),
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500,}},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ]
 };
+
+
