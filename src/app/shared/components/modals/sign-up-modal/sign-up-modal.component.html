@@ -1,0 +1,106 @@
+<div class="modal" [ngClass]="isOpen ? '_active _active2' : ''" id="regModal">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top text-center">
+      <div class="text30 text24-tablet semi-bold-text">
+        Регистрация
+      </div>
+    </div>
+    <div class="modal__scroll">
+      <section class="modal-form modal-form3" [formGroup]="signUpForm">
+        <div class="fg"
+             [ngClass]="{'_error': signUpForm.get('email')?.invalid &&
+             (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched)}">
+          <label>E-mail</label>
+          <input type="email" placeholder="pochta@mail.ru" formControlName="email">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
+        </div>
+        <div class="fg"
+             [ngClass]="{'_error': signUpForm.get('phone')?.invalid &&
+             (signUpForm.get('phone')?.dirty || signUpForm.get('phone')?.touched)}">
+          <label>Номер телефона</label>
+          <input type="tel" placeholder="+7" formControlName="phone">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
+        </div>
+        <div class="fg"
+             [ngClass]="{'_error': signUpForm.get('username')?.invalid &&
+             (signUpForm.get('username')?.dirty || signUpForm.get('username')?.touched)}">
+          <label>Имя пользователя</label>
+          <input type="text" placeholder="Например: Иван" formControlName="username">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
+        </div>
+        <div class="modal-form__pass">
+          <fieldset class="fg">
+            <label>Пароль</label>
+            <div class="fg" [ngClass]="{'_error': signUpForm.get('password')?.invalid &&
+           (signUpForm.get('password')?.dirty || signUpForm.get('password')?.touched)}">
+              <div class="fg__field">
+                <input [type]="isPasswordShowed ? 'text' : 'password'"
+                       placeholder="Пароль" formControlName="password">
+                <button type="button" class="pass-toggle"
+                        [ngClass]="{'_active': isPasswordShowed}"
+                        (click)="togglePasswordShow('isPasswordShowed')">
+                  <img src="assets/img/pass.svg" alt="" class="_view1">
+                  <img src="assets/img/pass2.svg" alt="" class="_view2">
+                </button>
+              </div>
+              <div class="fg__error-text">
+                <div class="text12">Обязательное поле</div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="modal-form__pass">
+          <fieldset class="fg">
+            <label>Повторите пароль</label>
+            <div class="fg" [ngClass]="{'_error': signUpForm.get('confirmPassword')?.invalid &&
+           (signUpForm.get('confirmPassword')?.dirty || signUpForm.get('confirmPassword')?.touched)}">
+              <div class="fg__field">
+                <input [type]="isConfirmPasswordShowed ? 'text' : 'password'"
+                       placeholder="Повторите пароль" formControlName="confirmPassword">
+                <button type="button" class="pass-toggle"
+                        [ngClass]="{'_active': isConfirmPasswordShowed}"
+                        (click)="togglePasswordShow('isConfirmPasswordShowed')">
+                  <img src="assets/img/pass.svg" alt="" class="_view1">
+                  <img src="assets/img/pass2.svg" alt="" class="_view2">
+                </button>
+              </div>
+              <div class="fg__error-text">
+                <div class="text12">Обязательное поле</div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="m-check">
+          <input type="checkbox" formControlName="agree">
+          <label>
+            <span>
+                При регистрации и входе вы соглашаетесь с <a href="">условиями использования</a> и
+                <a href="">политикой обработки данных.</a>
+            </span>
+          </label>
+        </div>
+        <button class="m-btn m-btn-primary m-btn-bounce"
+                [ngClass]="{'m-btn-bounce': signUpForm.valid}"
+                [disabled]="signUpForm.invalid" (click)="signUp()">
+          <span>Зарегистрироваться</span>
+        </button>
+        <div class="modal-form__bottom text-center">
+          <div class="text18 text14-mob">
+            Уже есть аккаунт? <a (click)="loginOpen()" class="m-link">Войти</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

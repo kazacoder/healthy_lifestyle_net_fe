@@ -117,4 +117,9 @@
     </div>
   </div>
 </header>
-<login-modal (onCloseModal)="toggleLoginModal($event)" [isOpen]="isOpenLoginModal"></login-modal>
+<login-modal (onCloseModal)="toggleLoginModal($event)"
+             (onSignUpOpen)="toggleSignUpModal($event)"
+             [isOpen]="isOpenLoginModal"></login-modal>
+<sign-up-modal (onCloseModal)="toggleSignUpModal($event)"
+               (onLoginOpen)="toggleLoginModal($event)"
+               [isOpen]="isOpenSignUpModal"></sign-up-modal>

@@ -8,6 +8,7 @@ import {AuthService} from '../../../core/auth/auth.service';
 import {UserService} from '../../services/user.service';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {SignUpModalComponent} from '../../components/modals/sign-up-modal/sign-up-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     RouterLinkActive,
     LoginModalComponent,
     MatMenuModule,
+    SignUpModalComponent,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -26,6 +28,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   isOpenLoginModal: boolean = false;
+  isOpenSignUpModal: boolean = false;
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   userNameSubscription: Subscription | null = null;
@@ -38,6 +41,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleLoginModal(value: boolean) {
     this.isOpenLoginModal = value;
+    WindowsUtils.fixBody(value);
+  }
+
+  toggleSignUpModal(value: boolean) {
+    this.isOpenSignUpModal = value;
     WindowsUtils.fixBody(value);
   }
 

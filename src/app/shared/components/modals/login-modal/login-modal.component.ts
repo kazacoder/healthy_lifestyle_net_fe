@@ -29,6 +29,7 @@ export class LoginModalComponent implements OnDestroy {
   isOpen: boolean = true;
 
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
+  @Output() onSignUpOpen: EventEmitter<boolean> = new EventEmitter(false);
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
@@ -113,6 +114,12 @@ export class LoginModalComponent implements OnDestroy {
 
   togglePasswordShow() {
     this.isPasswordShowed = !this.isPasswordShowed;
+  }
+
+  singUpOpen() {
+    this.closeModal();
+    this.onSignUpOpen.emit(true)
+    // open sign up
   }
 
   ngOnDestroy() {
