@@ -150,6 +150,10 @@
       top: .5em;
       right: 1.25em;
     }
+    &._active {
+      background-color: $primary;
+      pointer-events: none;
+    }
   }
 }
 
