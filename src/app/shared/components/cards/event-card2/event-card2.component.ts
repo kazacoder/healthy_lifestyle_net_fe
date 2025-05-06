@@ -1,11 +1,13 @@
-import {Component, HostListener, Input, ViewEncapsulation} from '@angular/core';
+import {Component, HostListener, Input} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'event-card2',
   imports: [
     NgIf,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './event-card2.component.html',

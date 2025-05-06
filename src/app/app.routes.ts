@@ -17,11 +17,14 @@ export const routes: Routes = [
     children: [
       {path: '', component: MainComponent, title: 'Главная',},
       {path: 'masters', component: MastersListComponent, title: 'Мастера',},
-      {path: 'master', component: MasterDetailComponent, title: 'Мастер',},
+      {path: 'masters/:url', component: MasterDetailComponent, title: 'Мастер',},
       {path: 'events', component: EventsListComponent, title: 'Мероприятия',},
+      {path: 'events/:url', component: PageUnderConstructionComponent, title: 'Мероприятие',},
       {path: 'articles', component: BlogComponent, title: 'Статьи',},
+      {path: 'articles/:url', component: PageUnderConstructionComponent, title: 'Статья',},
       {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
       {path: 'notification', component: PageUnderConstructionComponent, title: 'Уведомления'},
+      {path: 'profile', component: PageUnderConstructionComponent, title: 'Профиль'},
       {path: '**', component: PageNotFoundComponent, title: '404'},
     ]
   },

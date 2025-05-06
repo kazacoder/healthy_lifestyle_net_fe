@@ -1,8 +1,11 @@
 import {Component, Input} from '@angular/core';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'event-card',
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   standalone: true,
   templateUrl: './event-card.component.html',
   styleUrl: './event-card.component.scss'

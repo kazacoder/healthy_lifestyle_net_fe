@@ -27,13 +27,17 @@
               </svg>
             </a>
           </li>
-          <li class="menu-item" routerLinkActive="current-menu-item">
+          <li class="menu-item" [routerLinkActiveOptions]="{exact: true}"
+              routerLinkActive="current-menu-item">
             <a routerLink="/events">Мероприятия</a>
           </li>
-          <li class="menu-item" routerLinkActive="current-menu-item">
+          <li class="menu-item" [routerLinkActiveOptions]="{exact: true}"
+              routerLinkActive="current-menu-item">
             <a routerLink="/masters">Мастера</a>
           </li>
-          <li class="menu-item" routerLinkActive="current-menu-item">
+          <li class="menu-item"
+              [routerLinkActiveOptions]="{exact: true}"
+              routerLinkActive="current-menu-item">
             <a routerLink="/articles">Статьи</a>
           </li>
         </ul>
