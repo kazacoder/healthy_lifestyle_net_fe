@@ -4,7 +4,6 @@ import {Observable, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {LoginResponseType} from '../../../types/login-response.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
-import {UserFullInfoType} from '../../../types/user-full-info.type';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +20,17 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  login(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
+  get_tokens(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
     return this.http.post<LoginResponseType | DefaultResponseType>(environment.api + 'token/', {username, password})
   }
 
+  login(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
+    return this.http.post<LoginResponseType | DefaultResponseType>(environment.api + 'auth/login/', {username, password})
+  }
+
   signup(user: { password: string; phone: string | null | undefined; email: string; username: string }):
-    Observable<UserFullInfoType | DefaultResponseType> {
-    return this.http.post<UserFullInfoType | DefaultResponseType>(environment.api + 'auth/signup/', user)
+    Observable<LoginResponseType | DefaultResponseType> {
+    return this.http.post<LoginResponseType | DefaultResponseType>(environment.api + 'auth/signup/', user)
   }
 
   logout(): void {

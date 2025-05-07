@@ -7,7 +7,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {NgClass} from '@angular/common';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
-import {UserFullInfoType} from '../../../../../types/user-full-info.type';
+import {LoginResponseType} from '../../../../../types/login-response.type';
 
 @Component({
   selector: 'sign-up-modal',
@@ -37,7 +37,6 @@ export class SignUpModalComponent implements OnDestroy {
   })
 
   signUpSubscription: Subscription | null = null;
-  userInfoSubscription: Subscription | null = null;
   isPasswordShowed: boolean = false;
   isConfirmPasswordShowed: boolean = false;
 
@@ -58,7 +57,6 @@ export class SignUpModalComponent implements OnDestroy {
   signUp () {
     if (this.signUpForm.valid && this.signUpForm.value.password
       && this.signUpForm.value.username && this.signUpForm.value.confirmPassword && this.signUpForm.value.email) {
-      //ToDO request and logic
       const user  = {
         username: this.signUpForm.value.username,
         password: this.signUpForm.value.password,
@@ -69,8 +67,27 @@ export class SignUpModalComponent implements OnDestroy {
         user.phone = this.signUpForm.value.phone
       }
       this.signUpSubscription = this.authService.signup(user).subscribe({
-        next: (data: UserFullInfoType | DefaultResponseType) => {
-          console.log(data)
+        next: (data: LoginResponseType | DefaultResponseType) => {
+          let error = null;
+          if ((data as DefaultResponseType).detail !== undefined) {
+            error = (data as DefaultResponseType).detail;
+          }
+
+          const loginResponse = data as LoginResponseType;
+          if (!loginResponse.access || !loginResponse.refresh) {
+            error = 'Ошибка авторизации'
+          }
+
+          if (error) {
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+
+          this.authService.setTokens(loginResponse.access, loginResponse.refresh);
+          this.userService.setUserInfo(
+            loginResponse.userId,
+            loginResponse.firstName ? loginResponse.firstName : loginResponse.username
+          );
           this._snackBar.open('Пользователь успешно зарегистрирован')
           this.closeModal()
         },
@@ -93,6 +110,5 @@ export class SignUpModalComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.signUpSubscription?.unsubscribe();
-    this.userInfoSubscription?.unsubscribe;
   }
 }

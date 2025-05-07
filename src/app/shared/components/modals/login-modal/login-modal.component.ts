@@ -10,7 +10,6 @@ import {Subscription} from 'rxjs';
 import {LoginResponseType} from '../../../../../types/login-response.type';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {UserService} from '../../../services/user.service';
-import {UserInfoType} from '../../../../../types/user-info.type';
 
 @Component({
   selector: 'login-modal',
@@ -37,7 +36,6 @@ export class LoginModalComponent implements OnDestroy {
   })
 
   loginSubscription: Subscription | null = null;
-  userInfoSubscription: Subscription | null = null;
   isPasswordShowed: boolean = false;
 
   constructor(private authService: AuthService,
@@ -52,6 +50,7 @@ export class LoginModalComponent implements OnDestroy {
     this.isPasswordShowed = false;
     this.onCloseModal.emit(false)
   }
+
 
   login() {
 
@@ -74,32 +73,12 @@ export class LoginModalComponent implements OnDestroy {
           }
 
           this.authService.setTokens(loginResponse.access, loginResponse.refresh);
-
-
-          this.userInfoSubscription = this.userService.getUserInfo().subscribe({
-            next: data => {
-              if ((data as DefaultResponseType).detail !== undefined) {
-                this.authService.logout();
-                this.userService.removeUserInfo();
-                throw new Error((data as DefaultResponseType).detail);
-              }
-              const userInfo = data as UserInfoType;
-              this.userService.setUserInfo(
-                userInfo.userId,
-                userInfo.firstName ? userInfo.firstName : userInfo.username
-              );
-              this._snackBar.open('Вы успешно авторизовались');
-              this.closeModal();
-
-            },
-            error: (errorResponse: HttpErrorResponse) => {
-              this.authService.logout();
-              console.error(errorResponse.error.detail);
-              this._snackBar.open('Ошибка авторизации');
-              this.userService.removeUserInfo();
-            }
-          });
-
+          this.userService.setUserInfo(
+            loginResponse.userId,
+            loginResponse.firstName ? loginResponse.firstName : loginResponse.username
+          );
+          this._snackBar.open('Вы успешно авторизовались');
+          this.closeModal();
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
@@ -119,11 +98,9 @@ export class LoginModalComponent implements OnDestroy {
   singUpOpen() {
     this.closeModal();
     this.onSignUpOpen.emit(true)
-    // open sign up
   }
 
   ngOnDestroy() {
     this.loginSubscription?.unsubscribe();
-    this.userInfoSubscription?.unsubscribe;
   }
 }
