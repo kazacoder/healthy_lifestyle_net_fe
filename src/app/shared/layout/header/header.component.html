@@ -100,7 +100,7 @@
               2
             </div>
           </a>
-          <a [matMenuTriggerFor]="userMenu"
+          <a routerLink="/profile"
              class="header-action__login m-btn m-btn-primary m-btn-bounce">
             <img src="assets/img/user.svg" alt="">
             <span>{{ userName }}</span>
@@ -123,3 +123,4 @@
 <sign-up-modal (onCloseModal)="toggleSignUpModal($event)"
                (onLoginOpen)="toggleLoginModal($event)"
                [isOpen]="isOpenSignUpModal"></sign-up-modal>
+<!--[matMenuTriggerFor]="userMenu"-->

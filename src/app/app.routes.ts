@@ -9,6 +9,8 @@ import {PageNotFoundComponent} from './shared/components/page-not-found/page-not
 import {
   PageUnderConstructionComponent
 } from './shared/components/page-under-construction/page-under-construction.component';
+import {UserProfileComponent} from './views/user/user-profile/user-profile.component';
+import {UserProfileLayoutComponent} from './views/user/user-profile-layout.component';
 
 export const routes: Routes = [
   {
@@ -24,7 +26,18 @@ export const routes: Routes = [
       {path: 'articles/:url', component: PageUnderConstructionComponent, title: 'Статья',},
       {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
       {path: 'notification', component: PageUnderConstructionComponent, title: 'Уведомления'},
-      {path: 'profile', component: PageUnderConstructionComponent, title: 'Профиль'},
+      {path: 'profile',
+        component: UserProfileLayoutComponent,
+        children: [
+          {path: '', component: UserProfileComponent, title: 'Профиль'},
+          {path: 'notifications', component: UserProfileComponent, title: 'Уведомления'},
+          {path: 'messages', component: PageUnderConstructionComponent, title: 'Сообщения'},
+          {path: 'publication', component: PageUnderConstructionComponent, title: 'Публикации'},
+          {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},
+          {path: 'notes', component: PageUnderConstructionComponent, title: 'Записи'},
+          {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
+        ]
+      },
       {path: '**', component: PageNotFoundComponent, title: '404'},
     ]
   },

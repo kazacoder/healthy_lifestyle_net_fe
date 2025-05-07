@@ -1,0 +1,73 @@
+<div class="user-type">
+  <div class="user-type__items">
+    <div class="user-type__item" [ngClass]="{'_loading': true}">
+      <div class="user-type__item-inner">
+        <div class="m-check">
+          <input type="radio" name="userType">
+          <label>
+            <span>
+                Пользователь
+            </span>
+          </label>
+        </div>
+        <div class="hint">
+          <button class="hint__btn">
+            <img src="assets/img/info-icon2.svg" alt="">
+          </button>
+          <div class="hint__tooltip">
+            <div class="hint__inner _triangle">
+              <div class="hint__text">
+                Польвателю доступны все функции сайта, за исключением возможности взымать предоплату за бронирование
+                мероприятий
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <spinner></spinner>
+      <div class="user-type__item-hint">
+        <div class="text12">
+          Идет проверка для смены типа профиля
+        </div>
+      </div>
+    </div>
+    <div class="user-type__item" [ngClass]="{'_loading': true}">
+      <div class="user-type__item-inner">
+        <div class="m-check">
+          <input type="radio" name="userType">
+          <label>
+            <img src="assets/img/crone.svg" alt="">
+            <span>
+                Мастер
+            </span>
+          </label>
+        </div>
+        <div class="hint">
+          <button class="hint__btn">
+            <img src="assets/img/info-icon2.svg" alt="">
+          </button>
+          <div class="hint__tooltip">
+            <div class="hint__inner _triangle">
+              <div class="hint__text">
+                Мастер получает свою страницу в разделе мастеров и возможность принимать предоплату за бронирование
+                мероприятий
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <spinner></spinner>
+      <div class="user-type__item-hint">
+        <div class="text12">
+          Идет проверка для смены типа профиля
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="user-type__nav">
+    <button class="user-type__btn m-btn m-btn-primary-outline m-btn-bounce">
+      <span>Сменить тип профиля</span>
+    </button>
+  </div>
+</div>
+

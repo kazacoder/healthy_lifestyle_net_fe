@@ -1,0 +1,64 @@
+<div class="profile-nav" [ngClass]="{'_open': isOpened}">
+  <div class="profile-nav__show" (click)="toggleNav()">
+    <div class="profile-nav__current" [innerHTML]="activeMenuItem">
+
+    </div>
+  </div>
+  <div class="profile-nav__hidden" (click)="toggleNav()">
+    <div class="profile-nav__links">
+      <a routerLink="/profile"
+         [routerLinkActiveOptions]="{exact: true}"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Мой профиль</span>
+      </a>
+      <a routerLink="/profile/notifications"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Уведомления</span>
+        <span class="profile-nav__link-count">
+            2
+        </span>
+      </a>
+      <a routerLink="/profile/messages"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Сообщения</span>
+      </a>
+      <a routerLink="/profile/publication"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Мои публикации</span>
+      </a>
+      <a routerLink="/profile/payment"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Оплата</span>
+      </a>
+      <a routerLink="/profile/notes"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Мои записи</span>
+      </a>
+      <a routerLink="/profile/favorite"
+         routerLinkActive="_active"
+         class="profile-nav__link m-btn-bounce">
+        <span class="profile-nav__link-title">Избранное</span>
+      </a>
+      <a (click)="logout()" class="profile-nav__link m-btn-bounce _logout">
+        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.26975 1.41681L12.4429 1.41681C13.5771 1.41681 14.4973 2.34041 14.4973 3.47114L14.4973 13.5289C14.4973 14.663 13.5737 15.5832 12.4429 15.5832L8.20184 15.5832C7.94717 15.5832 7.74343 15.7869 7.74343 16.0416C7.74343 16.2963 7.94717 16.5 8.20184 16.5L12.4429 16.5C14.083 16.5 15.4141 15.1655 15.4141 13.5289L15.4141 3.47114C15.4141 1.83107 14.0796 0.500001 12.4429 0.500001L8.26975 0.500001C8.01508 0.500001 7.81135 0.703736 7.81135 0.958405C7.81135 1.21307 8.01848 1.41681 8.26975 1.41681Z" fill="#424242" />
+          <path d="M0.717794 8.82271L3.63121 11.7361C3.81117 11.9161 4.0998 11.9161 4.27976 11.7361C4.45973 11.5562 4.45973 11.2675 4.27976 11.0876L2.14734 8.95513L11.4478 8.95514C11.7025 8.95514 11.9063 8.7514 11.9063 8.49673C11.9063 8.24206 11.7025 8.03833 11.4478 8.03833L2.14734 8.03833L4.27976 5.9059C4.45973 5.72593 4.45973 5.43731 4.27976 5.25734C4.19148 5.16906 4.07263 5.12152 3.95718 5.12152C3.84173 5.12152 3.72289 5.16566 3.6346 5.25734L0.721189 8.17075C0.537827 8.35412 0.537828 8.64614 0.717794 8.82271Z" fill="#424242" />
+        </svg>
+        <span class="profile-nav__link-title">Выйти</span>
+      </a>
+    </div>
+    <div class="profile-nav__bottom">
+      <button class="profile-nav__btn m-btn m-btn-black m-btn-bounce">
+        <img src="assets/img/message.svg" alt="">
+        <span>Обратная связь</span>
+      </button>
+    </div>
+  </div>
+</div>
+
