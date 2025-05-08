@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {NotificationMatch, NotificationsType} from '../../../../../types/notifications.type';
@@ -25,8 +25,6 @@ export class UserSettingsComponent implements OnInit, OnChanges, OnDestroy {
   notifications: NotificationsType | null = null;
   @Input()
   userId: string | null = null;
-
-  @Output() onFormSubmit: EventEmitter<NotificationsType> = new EventEmitter();
 
   notificationsForm = this.fb.group({
     receiveNotificationsSite: [false],
