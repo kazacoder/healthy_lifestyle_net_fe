@@ -11,6 +11,7 @@ import {
 } from './shared/components/page-under-construction/page-under-construction.component';
 import {UserProfileComponent} from './views/user/user-profile/user-profile.component';
 import {UserProfileLayoutComponent} from './views/user/user-profile-layout.component';
+import {AuthForwardGuard} from './core/auth/auth-forward.guard';
 
 export const routes: Routes = [
   {
@@ -28,9 +29,10 @@ export const routes: Routes = [
       {path: 'notification', component: PageUnderConstructionComponent, title: 'Уведомления'},
       {path: 'profile',
         component: UserProfileLayoutComponent,
+        canActivate: [AuthForwardGuard],
         children: [
           {path: '', component: UserProfileComponent, title: 'Профиль'},
-          {path: 'notifications', component: UserProfileComponent, title: 'Уведомления'},
+          {path: 'notifications', component: PageUnderConstructionComponent, title: 'Уведомления'},
           {path: 'messages', component: PageUnderConstructionComponent, title: 'Сообщения'},
           {path: 'publication', component: PageUnderConstructionComponent, title: 'Публикации'},
           {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},

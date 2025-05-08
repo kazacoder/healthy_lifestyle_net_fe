@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {LoginResponseType} from '../../../types/login-response.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {UserService} from '../../shared/services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,11 @@ export class AuthService {
   public isLogged$: Subject<boolean> = new Subject<boolean>();
   private isLogged: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private _snackBar: MatSnackBar,
+              private userService: UserService,) {
+    this.isLogged = !!localStorage.getItem(this.accessTokenKey);
+    this.isLogged$.next(this.isLogged);
   }
 
   get_tokens(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
@@ -25,7 +31,10 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
-    return this.http.post<LoginResponseType | DefaultResponseType>(environment.api + 'auth/login/', {username, password})
+    return this.http.post<LoginResponseType | DefaultResponseType>(environment.api + 'auth/login/', {
+      username,
+      password
+    })
   }
 
   signup(user: { password: string; phone: string | null | undefined; email: string; username: string }):
@@ -43,6 +52,19 @@ export class AuthService {
     // this.userId = null;
   }
 
+
+  refresh(): Observable<DefaultResponseType | LoginResponseType> {
+    const tokens = this.getTokens();
+    if (tokens && tokens.refreshToken) {
+      return this.http.post<DefaultResponseType | LoginResponseType>(environment.api + 'refresh', {
+        refreshToken: tokens.refreshToken,
+      });
+    }
+    this.logout();
+    this.userService.removeUserInfo();
+    this._snackBar.open('Что-то пошло не так. Авторизуйтесь заново.');
+    throw throwError(() => "Can't find the tokens" );
+  }
 
   public getIsLoggedIn() {
     return this.isLogged;
