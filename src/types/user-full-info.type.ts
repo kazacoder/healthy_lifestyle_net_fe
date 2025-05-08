@@ -1,6 +1,7 @@
 import {SpecialityType} from './speciality.type';
 
 export type UserFullInfoType = {
+  id: number,
   url: string,
   specialities: SpecialityType[],
   lastLogin: string | null,
@@ -19,10 +20,10 @@ export type UserFullInfoType = {
   instagram: string,
   phone: string,
   about_me: string,
-  receiveNotificationsSite: boolean,
-  receiveNotificationsEmail: boolean,
-  receiveNotificationsEvents: boolean,
-  receiveNotificationsNews: boolean,
-  receiveNotificationsBooks: boolean,
-  receiveNotificationsQuestions: boolean
+  receive_notifications_site: boolean,
+  receive_notifications_email: boolean,
+  receive_notifications_events: boolean,
+  receive_notifications_news: boolean,
+  receive_notifications_books: boolean,
+  receive_notifications_questions: boolean
 }

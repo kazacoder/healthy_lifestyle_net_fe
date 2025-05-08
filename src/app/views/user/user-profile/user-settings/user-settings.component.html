@@ -1,10 +1,10 @@
-<div class="user-settings">
+<div class="user-settings" [formGroup]="notificationsForm">
   <div class="user-settings__item">
     <div class="user-settings__title">
       Получать уведомления <br> на сайте?
     </div>
     <div class="m-switch">
-      <input type="checkbox">
+      <input type="checkbox" formControlName="receiveNotificationsSite">
       <label></label>
     </div>
   </div>
@@ -13,7 +13,7 @@
       Получать уведомления <br> на почту?
     </div>
     <div class="m-switch">
-      <input type="checkbox">
+      <input type="checkbox" formControlName="receiveNotificationsEmail">
       <label></label>
     </div>
   </div>
@@ -23,7 +23,7 @@
       о мастерах и мероприятиях?
     </div>
     <div class="m-switch">
-      <input type="checkbox">
+      <input type="checkbox" formControlName="receiveNotificationsEvents">
       <label></label>
     </div>
   </div>
@@ -33,7 +33,7 @@
       о новостях и нововведениях сайта?
     </div>
     <div class="m-switch">
-      <input type="checkbox">
+      <input type="checkbox" formControlName="receiveNotificationsNews">
       <label></label>
     </div>
   </div>
@@ -43,7 +43,7 @@
       о бронировании мероприятий?
     </div>
     <div class="m-switch">
-      <input type="checkbox">
+      <input type="checkbox" formControlName="receiveNotificationsBooks">
       <label></label>
     </div>
   </div>
@@ -53,7 +53,7 @@
       о вопросах к мероприятиям?
     </div>
     <div class="m-switch">
-      <input type="checkbox">
+      <input type="checkbox" formControlName="receiveNotificationsQuestions">
       <label></label>
     </div>
   </div>

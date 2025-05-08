@@ -21,8 +21,6 @@ export class AuthForwardGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): MaybeAsync<GuardResult> {
-    console.log('test guard')
-    console.log(this.authService.getIsLoggedIn())
     if (!this.authService.getIsLoggedIn()) {
       this.router.navigate(['/']).then();
       return false;

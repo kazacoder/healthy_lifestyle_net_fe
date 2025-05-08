@@ -4,6 +4,7 @@ import {Observable, Subject} from 'rxjs';
 import {UserInfoType} from '../../../types/user-info.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
+import {UserFullInfoType} from '../../../types/user-full-info.type';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,16 @@ export class UserService {
 
   getUserInfo(): Observable<UserInfoType | DefaultResponseType> {
     return this.http.get<UserInfoType | DefaultResponseType>(environment.api + 'user-info/');
+  }
+
+
+  getProfileInfo(user_id: string): Observable<UserFullInfoType | DefaultResponseType> {
+    return this.http.get<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/');
+  }
+
+  updateProfileInfo(user_id: string, value: {[key: string]: boolean | null}):
+    Observable<UserFullInfoType | DefaultResponseType> {
+    return this.http.patch<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/', value);
   }
 
   setUserInfo(user_id: string, username: string): void {

@@ -6,6 +6,7 @@ import {LoginResponseType} from '../../../types/login-response.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../../shared/services/user.service';
+import {TokensResponseType} from '../../../types/tokens-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -49,15 +50,15 @@ export class AuthService {
       //   {refreshToken: tokens.refreshToken},);
     }
     this.removeTokens();
-    // this.userId = null;
+    this.userService.removeUserInfo();
   }
 
 
-  refresh(): Observable<DefaultResponseType | LoginResponseType> {
+  refresh(): Observable<DefaultResponseType | TokensResponseType> {
     const tokens = this.getTokens();
     if (tokens && tokens.refreshToken) {
-      return this.http.post<DefaultResponseType | LoginResponseType>(environment.api + 'refresh', {
-        refreshToken: tokens.refreshToken,
+      return this.http.post<DefaultResponseType | TokensResponseType>(environment.api + 'token/refresh/', {
+        refresh: tokens.refreshToken,
       });
     }
     this.logout();
@@ -70,9 +71,11 @@ export class AuthService {
     return this.isLogged;
   }
 
-  public setTokens(accessToken: string, refreshToken: string): void {
+  public setTokens(accessToken: string, refreshToken?: string): void {
     localStorage.setItem(this.accessTokenKey, accessToken);
-    localStorage.setItem(this.refreshTokenKey, refreshToken);
+    if (refreshToken) {
+      localStorage.setItem(this.refreshTokenKey, refreshToken);
+    }
     this.isLogged$.next(true);
     this.isLogged = true;
   }
