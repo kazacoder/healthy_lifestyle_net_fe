@@ -6,18 +6,15 @@
     <div class="user__col">
       <div class="user__top">
         <img-field></img-field>
-        <user-type></user-type>
+        <user-type [userStatus]="profileInfo.status"></user-type>
       </div>
-      <user-settings [notifications]="notifications" [userId]="profileInfo.id.toString()"></user-settings>
-      <!--              @@include('components/profile/_user-settings.html',{-->
-      <!--              "master":"true"-->
-      <!--              })-->
+      <user-settings [notifications]="notifications"
+                     [isMaster]="isMaster"
+                     [userId]="profileInfo.id.toString()"></user-settings>
     </div>
     <div class="user__col">
-      <user-form [userInfo]="profileInfo"></user-form>
-      <!--              @@include('components/profile/_user-form.html',{-->
-      <!--              "master":"true"-->
-      <!--              })-->
+      <user-form [userInfo]="profileInfo"
+                 [isMaster]="isMaster"></user-form>
     </div>
   </div>
 </div>

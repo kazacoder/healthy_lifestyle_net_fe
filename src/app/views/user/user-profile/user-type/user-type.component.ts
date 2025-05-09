@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {SpinnerComponent} from '../../../../shared/components/ui/spinner/spinner.component';
 import {NgClass} from '@angular/common';
 
@@ -12,6 +12,11 @@ import {NgClass} from '@angular/common';
   templateUrl: './user-type.component.html',
   styleUrl: './user-type.component.scss'
 })
-export class UserTypeComponent {
+export class UserTypeComponent implements OnInit {
+  @Input()
+  userStatus: number = 1
 
+  ngOnInit() {
+
+  }
 }

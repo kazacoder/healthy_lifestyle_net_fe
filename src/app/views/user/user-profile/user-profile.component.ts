@@ -34,6 +34,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   userId: string | null = null;
   getProfileInfoSubscription: Subscription | null = null;
   notifications: NotificationsType | null = null;
+  isMaster: boolean = false;
+
 
   constructor(private userService: UserService,
               private _snackBar: MatSnackBar,) {
@@ -53,6 +55,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           console.log(data);
           const receivedProfileData = data as UserFullInfoType;
           this.profileInfo = receivedProfileData;
+          this.isMaster = receivedProfileData.status === 3;
           this.notifications = {
             receiveNotificationsSite: receivedProfileData.receive_notifications_site,
             receiveNotificationsEmail: receivedProfileData.receive_notifications_email,

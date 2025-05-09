@@ -25,6 +25,9 @@ export class UserSettingsComponent implements OnInit, OnChanges, OnDestroy {
   notifications: NotificationsType | null = null;
   @Input()
   userId: string | null = null;
+  @Input()
+  isMaster: boolean = false;
+
 
   notificationsForm = this.fb.group({
     receiveNotificationsSite: [false],

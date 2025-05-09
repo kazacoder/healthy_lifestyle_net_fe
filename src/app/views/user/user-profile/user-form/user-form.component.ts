@@ -22,6 +22,8 @@ export class UserFormComponent implements OnInit{
   userInfo: UserFullInfoType | null | any = null;
   @Input()
   userId: string | null = null;
+  @Input()
+  isMaster: boolean = false;
 
   specialityCount: number[] = [0];
 

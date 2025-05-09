@@ -37,24 +37,26 @@
       <label></label>
     </div>
   </div>
-  <div class="user-settings__item" *ngIf="true">
-    <div class="user-settings__title">
-      Получать уведомления <br>
-      о бронировании мероприятий?
+  <div *ngIf="isMaster">
+    <div class="user-settings__item">
+      <div class="user-settings__title">
+        Получать уведомления <br>
+        о бронировании мероприятий?
+      </div>
+      <div class="m-switch">
+        <input type="checkbox" formControlName="receiveNotificationsBooks">
+        <label></label>
+      </div>
     </div>
-    <div class="m-switch">
-      <input type="checkbox" formControlName="receiveNotificationsBooks">
-      <label></label>
-    </div>
-  </div>
-  <div class="user-settings__item">
-    <div class="user-settings__title">
-      Получать уведомления <br>
-      о вопросах к мероприятиям?
-    </div>
-    <div class="m-switch">
-      <input type="checkbox" formControlName="receiveNotificationsQuestions">
-      <label></label>
+    <div class="user-settings__item">
+      <div class="user-settings__title">
+        Получать уведомления <br>
+        о вопросах к мероприятиям?
+      </div>
+      <div class="m-switch">
+        <input type="checkbox" formControlName="receiveNotificationsQuestions">
+        <label></label>
+      </div>
     </div>
   </div>
 </div>
