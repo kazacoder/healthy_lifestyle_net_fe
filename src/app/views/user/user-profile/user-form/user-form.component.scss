@@ -1,0 +1,27 @@
+@import "../../../../../assets/styles/vars";
+
+.user-form-actions {
+  display: flex;
+  gap: 1rem;
+
+  .user-form__btn {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+
+.modal-form__pass-link {
+  &:hover {
+    color: $primary;
+    text-decoration: none;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    color: $gray3;
+    &:hover {
+      color: $gray3;
+      text-decoration: none;
+
+    }
+  }
+}

@@ -51,8 +51,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             this._snackBar.open(error);
             throw new Error(error);
           }
-
-          console.log(data);
           const receivedProfileData = data as UserFullInfoType;
           this.profileInfo = receivedProfileData;
           this.isMaster = receivedProfileData.status === 3;

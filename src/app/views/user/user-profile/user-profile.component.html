@@ -16,6 +16,7 @@
     </div>
     <div class="user__col">
       <user-form [userInfo]="profileInfo"
+                 [userId]="profileInfo.id.toString()"
                  [isMaster]="isMaster"></user-form>
     </div>
   </div>

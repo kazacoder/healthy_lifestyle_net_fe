@@ -61,6 +61,15 @@
       fill: $black;
     }
   }
+
+  &:disabled{
+    cursor: not-allowed;
+    background: $gray3;
+    path{
+      fill: gray;
+    }
+  }
+
   svg{
     width: 1em;
     margin-right: .625em;

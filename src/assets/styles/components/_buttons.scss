@@ -45,11 +45,29 @@
 }
 
 .m-btn-primary-outline{
-    color: $black;
+    color: $text-day;
     border: 1px solid $primary;
     &:hover{
         background-color: $primary;
-        color: $black;
+        color: $text-day;
+    }
+}
+
+.m-btn-danger{
+    background-color: $danger;
+    color: $text-day;
+    &:hover{
+        background-color: darken($danger,5%);
+        color: $text-day;
+    }
+}
+
+.m-btn-danger-outline{
+    color: $text-day;
+    border: 1px solid $danger;
+    &:hover{
+        background-color: $danger;
+        color: $text-day;
     }
 }
 
