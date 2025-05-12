@@ -6,7 +6,9 @@
     <div class="user__col">
       <div class="user__top">
         <img-field></img-field>
-        <user-type [userStatus]="profileInfo.status"></user-type>
+        <user-type
+          [userId]="profileInfo.id.toString()"
+          [userStatus]="profileInfo.status"></user-type>
       </div>
       <user-settings [notifications]="notifications"
                      [isMaster]="isMaster"

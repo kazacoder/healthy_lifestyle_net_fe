@@ -25,7 +25,7 @@ export class UserService {
     return this.http.get<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/');
   }
 
-  updateProfileInfo(user_id: string, value: {[key: string]: boolean | null}):
+  updateProfileInfo(user_id: string, value: {[key: string]: boolean | null | number | string}):
     Observable<UserFullInfoType | DefaultResponseType> {
     return this.http.patch<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/', value);
   }

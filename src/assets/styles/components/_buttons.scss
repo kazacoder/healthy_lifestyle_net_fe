@@ -95,7 +95,8 @@
   &:disabled {
     cursor: not-allowed;
     background-color: #f6f6f6;
-    color: $black;
+    color: gray;
+    border: none;
     &:hover{
 
     }
