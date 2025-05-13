@@ -1,9 +1,9 @@
-import {SpecialityType} from './speciality.type';
+import {UserSpecialityType} from './speciality.type';
 
 export type UserFullInfoType = {
   id: number,
   url: string,
-  specialities: SpecialityType[],
+  specialities: UserSpecialityType[],
   lastLogin: string | null,
   username: string,
   first_name: string,

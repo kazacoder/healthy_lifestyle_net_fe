@@ -15,11 +15,16 @@
       <ng-container *ngFor="let speciality of specialityCount; index as i">
         <div class="fg">
           <label>Специализация</label>
-          <input type="text" placeholder="Например: мануальный терапевт" [formControlName]="'speciality' + i">
+          <select name="" id="" [formControlName]="'speciality_' + i">
+            <option style="display: none">Выберите специальность</option>
+            <option *ngFor="let speciality of specialityList" [value]="speciality.id">{{ speciality.title }}</option>
+          </select>
+          <input type="hidden" [formControlName]="'userSpecialityId_' + i">
+<!--          <input type="text" placeholder="Например: мануальный терапевт" [formControlName]="'speciality' + i">-->
         </div>
         <div class="fg">
           <label>Стаж с</label>
-          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experience_since' + i">
+          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experienceSince_' + i">
           <div class="fg__bottom _flex" *ngIf="specialityCount.length === i + 1 && specialityCount.length < maxSpecialityCount">
             <button type="button" class="add-btn"
                     [ngClass]="{'m-btn-bounce': !userFormDisabled}"

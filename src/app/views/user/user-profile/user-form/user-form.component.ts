@@ -3,11 +3,12 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {UserService} from '../../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {SpecialityType} from '../../../../../types/speciality.type';
+import {SpecialityType, UserSpecialityType, UserSpecialityUpdateType} from '../../../../../types/speciality.type';
 import {UserFullInfoType} from '../../../../../types/user-full-info.type';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
+import {SpecialityService} from '../../../../shared/services/speciality.service';
 
 @Component({
   selector: 'user-form',
@@ -34,6 +35,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   userFormDisabled: boolean = true
   oldState: null | { [key: string]: string | {} } = null;
   getProfileInfoSubscription: Subscription | null = null;
+  getSpecialityListSubscription: Subscription | null = null;
+  specialityList: SpecialityType[] = [];
 
   userInfoForm: any = this.fb.group({
     first_name: [{value: '', disabled: true,}],
@@ -47,19 +50,38 @@ export class UserFormComponent implements OnInit, OnDestroy {
     phone: [{value: '', disabled: true,}],
     about_me: [{value: '', disabled: true,}],
     specialities: this.fb.group({
-      speciality0: {value: '', disabled: true,},
-      experience_since0: {value: '', disabled: true,}
+      speciality_0: {value: '', disabled: true,},
+      experienceSince_0: {value: '', disabled: true,},
+      userSpecialityId_0: {value: '', disabled: true,}
     })
   })
 
   constructor(private fb: FormBuilder,
               private userService: UserService,
+              private specialityService: SpecialityService,
               private _snackBar: MatSnackBar) {
 
   }
 
   ngOnInit() {
     this.fillForm()
+    this.getSpecialityListSubscription = this.specialityService.getSpecialityList().subscribe({
+      next: (data: SpecialityType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        this.specialityList = data as SpecialityType[];
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    })
   }
 
   fillForm() {
@@ -70,25 +92,36 @@ export class UserFormComponent implements OnInit, OnDestroy {
           this.userInfoForm.get(control)?.setValue(this.userInfo[control])
         }
       }
-      this.userInfo.specialities.forEach((speciality: SpecialityType, index: number) => {
-        if (index === 0) {
-          this.userInfoForm.get('specialities').get('speciality0').setValue(speciality.speciality)
-          this.userInfoForm.get('specialities').get('experience_since0').setValue(speciality.experience_since)
-        } else {
-          this.userInfoForm.get('specialities').addControl('speciality' + index, this.fb.control({
-            value: '',
-            disabled: true,
-          }));
-          this.userInfoForm.get('specialities').get('speciality' + index).setValue(speciality.speciality);
-          this.userInfoForm.get('specialities').addControl('experience_since' + index, this.fb.control({
-            value: '',
-            disabled: true,
-          }));
-          this.userInfoForm.get('specialities').get('experience_since' + index).setValue(speciality.experience_since);
-          this.specialityCount.push(index)
-        }
-      });
+      this.fillSpecialitySelect();
     }
+  }
+
+  fillSpecialitySelect() {
+    this.userInfo.specialities.forEach((speciality: UserSpecialityType, index: number) => {
+      if (index === 0) {
+        this.userInfoForm.get('specialities').get('speciality_0').setValue(speciality.speciality_id.toString())
+        this.userInfoForm.get('specialities').get('experienceSince_0').setValue(speciality.experience_since)
+        this.userInfoForm.get('specialities').get('userSpecialityId_0').setValue(speciality.id.toString())
+      } else {
+        const specialitiesGroup = this.userInfoForm.get('specialities');
+        specialitiesGroup.addControl('speciality_' + index, this.fb.control({
+          value: '',
+          disabled: true,
+        }));
+        specialitiesGroup.get('speciality_' + index).setValue(speciality.speciality_id.toString());
+        specialitiesGroup.addControl('experienceSince_' + index, this.fb.control({
+          value: '',
+          disabled: true,
+        }));
+        specialitiesGroup.get('experienceSince_' + index).setValue(speciality.experience_since);
+        specialitiesGroup.addControl('userSpecialityId_' + index, this.fb.control({
+          value: '',
+          disabled: true,
+        }));
+        specialitiesGroup.get('userSpecialityId_' + index).setValue(speciality.id.toString());
+        this.specialityCount.push(index)
+      }
+    });
   }
 
   allowEdit() {
@@ -102,6 +135,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.userFormDisabled = true;
     this.userInfoForm.disable();
     let changes: { [key: string]: string | {} | number | boolean } = {}
+    let userSpecialities: { [key: string]: string | number  } = {}
     let hasChanged: boolean = false
     const newState = this.userInfoForm.value
     if (this.oldState) {
@@ -113,13 +147,41 @@ export class UserFormComponent implements OnInit, OnDestroy {
           }
         } else {
           if (JSON.stringify(this.oldState[key]) !== JSON.stringify(newState[key])) {
-            changes[key] = newState[key];
+            userSpecialities = newState[key];
             hasChanged = true;
           }
         }
       }
     }
-    if (hasChanged && this.userId) {
+    if (hasChanged && Object.keys(changes).length > 0) {
+      this.updateUserInfo(changes)
+    }
+    const userSpecialitiesKeys = Object.keys(userSpecialities)
+
+    if (hasChanged && userSpecialitiesKeys.length > 0 && this.userId) {
+      const userSpecialityUpdateList: UserSpecialityUpdateType = {user: this.userId, specialities: []}
+      for (let i = 0; i < userSpecialitiesKeys.length / 3; i++) {
+        userSpecialityUpdateList.specialities.push({
+          experience_since: userSpecialities['experienceSince_' + i] as string,
+          speciality_id: userSpecialities['speciality_' + i] as number,
+          id: userSpecialities['userSpecialityId_' + i] as number,
+        })
+      }
+      this.updateUserSpeciality(userSpecialityUpdateList)
+    }
+    if (!hasChanged) {
+      this._snackBar.open('Отсутствуют изменения для обновления')
+    }
+
+  }
+
+  updateUserSpeciality(userSpecialities: {}) {
+    // ToDo request update user spec
+    console.log(userSpecialities)
+  }
+
+  updateUserInfo(changes: { [key: string]: string | {} | number | boolean }) {
+    if (this.userId) {
       this.userService.updateProfileInfo(this.userId, changes).subscribe({
         next: (data: UserFullInfoType | DefaultResponseType) => {
           if ((data as DefaultResponseType).detail !== undefined) {
@@ -140,10 +202,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
           }
         }
       })
-    } else {
-      this._snackBar.open('Отсутствуют изменения для обновления')
     }
-
   }
 
   discardChanges() {
@@ -200,5 +259,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getProfileInfoSubscription?.unsubscribe()
+    this.getSpecialityListSubscription?.unsubscribe()
   }
 }
