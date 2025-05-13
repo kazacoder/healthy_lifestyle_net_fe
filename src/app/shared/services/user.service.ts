@@ -5,6 +5,7 @@ import {UserInfoType} from '../../../types/user-info.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {UserFullInfoType} from '../../../types/user-full-info.type';
+import {SpecialityType, UserSpecialityUpdateType} from '../../../types/speciality.type';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,10 @@ export class UserService {
   updateProfileInfo(user_id: string, value: {[key: string]: boolean | null | number | string | {}}):
     Observable<UserFullInfoType | DefaultResponseType> {
     return this.http.patch<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/', value);
+  }
+
+  updateUserSpecialityList(data: UserSpecialityUpdateType): Observable<SpecialityType[] | DefaultResponseType> {
+    return this.http.post<SpecialityType[] | DefaultResponseType>(environment.api + 'user/specialities/', data);
   }
 
   setUserInfo(user_id: string, username: string): void {

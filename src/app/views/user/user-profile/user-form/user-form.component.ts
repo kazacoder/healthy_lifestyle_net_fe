@@ -36,6 +36,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   oldState: null | { [key: string]: string | {} } = null;
   getProfileInfoSubscription: Subscription | null = null;
   getSpecialityListSubscription: Subscription | null = null;
+  updateUserSpecialityListSubscription: Subscription | null = null;
   specialityList: SpecialityType[] = [];
 
   userInfoForm: any = this.fb.group({
@@ -175,9 +176,28 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   }
 
-  updateUserSpeciality(userSpecialities: {}) {
-    // ToDo request update user spec
-    console.log(userSpecialities)
+  updateUserSpeciality(userSpecialityUpdateList: UserSpecialityUpdateType) {
+    this.updateUserSpecialityListSubscription = this.userService.updateUserSpecialityList(userSpecialityUpdateList)
+      .subscribe({
+        next: (data: SpecialityType[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.userInfo.specialities = data as SpecialityType[];
+          this.fillSpecialitySelect();
+          this._snackBar.open('Данные специализаций успешно обновлены');
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      })
+
   }
 
   updateUserInfo(changes: { [key: string]: string | {} | number | boolean }) {
@@ -258,7 +278,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getProfileInfoSubscription?.unsubscribe()
-    this.getSpecialityListSubscription?.unsubscribe()
+    this.getProfileInfoSubscription?.unsubscribe();
+    this.getSpecialityListSubscription?.unsubscribe();
+    this.updateUserSpecialityListSubscription?.unsubscribe();
   }
 }
