@@ -25,3 +25,21 @@
     }
   }
 }
+
+.label-flex {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+
+.fg {
+  label{
+      .del-btn{
+        span {
+          color: black;
+        }
+    }
+  }
+}
+

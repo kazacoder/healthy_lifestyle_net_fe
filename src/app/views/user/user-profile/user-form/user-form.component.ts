@@ -86,7 +86,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   fillForm() {
-    this.specialityCount = [0]
     if (this.userInfo) {
       for (let control of Object.keys(this.userInfoForm.controls)) {
         if (!control.includes('specialit')) {
@@ -98,6 +97,16 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   fillSpecialitySelect() {
+    this.specialityCount = [0]
+    this.userInfoForm.removeControl('specialities')
+    this.userInfoForm.addControl('specialities', this.fb.group({
+      speciality_0: {value: '', disabled: true,},
+      experienceSince_0: {value: '', disabled: true,},
+      userSpecialityId_0: {value: '', disabled: true,}
+    }))
+    console.log(this.userInfo.specialities)
+    const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
+    console.log(userInfoFormSpecialitiesControl)
     this.userInfo.specialities.forEach((speciality: UserSpecialityType, index: number) => {
       if (index === 0) {
         this.userInfoForm.get('specialities').get('speciality_0').setValue(speciality.speciality_id.toString())
@@ -136,7 +145,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.userFormDisabled = true;
     this.userInfoForm.disable();
     let changes: { [key: string]: string | {} | number | boolean } = {}
-    let userSpecialities: { [key: string]: string | number  } = {}
+    let userSpecialities: { [key: string]: string | number } = {}
     let hasChanged: boolean = false
     const newState = this.userInfoForm.value
     if (this.oldState) {
@@ -263,18 +272,31 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   addSpeciality() {
+    console.log('add speciality')
     const newSpecialityIndex = this.specialityCount[this.specialityCount.length - 1] + 1;
-    this.userInfoForm.get('specialities').addControl('speciality' + newSpecialityIndex, this.fb.control({
+    const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
+    console.log(userInfoFormSpecialitiesControl)
+    userInfoFormSpecialitiesControl.addControl('speciality_' + newSpecialityIndex, this.fb.control({
       value: '',
       disabled: false,
     }));
-    this.userInfoForm.get('specialities').get('speciality' + newSpecialityIndex).setValue('');
-    this.userInfoForm.get('specialities').addControl('experience_since' + newSpecialityIndex, this.fb.control({
+    userInfoFormSpecialitiesControl.get('speciality_' + newSpecialityIndex).setValue('');
+    userInfoFormSpecialitiesControl.addControl('experienceSince_' + newSpecialityIndex, this.fb.control({
       value: '',
       disabled: false,
     }));
-    this.userInfoForm.get('specialities').get('experience_since' + newSpecialityIndex).setValue('');
+    userInfoFormSpecialitiesControl.get('experienceSince_' + newSpecialityIndex).setValue('');
     this.specialityCount.push(newSpecialityIndex)
+  }
+
+  delSpeciality(specialityId: number) {
+    const updatedSpecialityList = this.userInfo.specialities.filter((speciality: UserSpecialityType) => {
+        return speciality.id !== specialityId;
+      }
+    )
+    this.userInfo.specialities = [...updatedSpecialityList]
+    this.fillSpecialitySelect()
+    console.log(this.specialityCount)
   }
 
   ngOnDestroy() {

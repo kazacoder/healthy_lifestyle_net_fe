@@ -162,6 +162,9 @@
     .add-btn{
       margin-right: .625em;
     }
+    .del-btn{
+      margin-right: .625em;
+    }
   }
   &__hint{
     font-size: .75em;
@@ -207,6 +210,7 @@
 .img-field__input .m-link,
 .radio-btn,
 .add-btn,
+.del-btn,
 .m-switch,
 .m-radio,
 .m-check{

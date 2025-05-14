@@ -79,6 +79,39 @@
   }
 }
 
+.del-btn{
+  height: 1.75em;
+  padding: 0 .8125em;
+  background: #efc4c9;
+  border-radius: .5em;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: black;
+  &:hover{
+    background: $danger;
+    path{
+      fill: $black;
+    }
+  }
+
+  &:disabled{
+    cursor: not-allowed;
+    background: $gray3;
+    path{
+      fill: gray;
+    }
+  }
+
+  svg{
+    width: 1em;
+    margin-right: .625em;
+  }
+  span{
+    font-size: .875em;
+  }
+}
+
 .phone-fields{
   &__nav{
     display: flex;

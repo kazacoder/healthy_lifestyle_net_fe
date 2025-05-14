@@ -16,6 +16,9 @@
   .add-btn{
     margin-bottom: .625em;
   }
+  .del-btn{
+    margin-bottom: .625em;
+  }
   &__hint{
     font-size: .875em;
     line-height: 130%;
@@ -70,6 +73,9 @@
   }
   .fg{
     .add-btn{
+      margin-top: .75em;
+    }
+    .del-btn{
       margin-top: .75em;
     }
   }
@@ -299,6 +305,14 @@
       margin: 0 .625em 0 0;
     }
     .add-btn{
+      width: 100%;
+      justify-content: center;
+    }
+    .del-btn{
+      width: 100%;
+      justify-content: center;
+    }
+    .del-btn{
       width: 100%;
       justify-content: center;
     }
