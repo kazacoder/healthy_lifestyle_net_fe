@@ -9,7 +9,7 @@
   <div class="user" *ngIf="profileInfo" [ngClass]="{'_disabled': checkingProfile}">
     <div class="user__col">
       <div class="user__top">
-        <img-field></img-field>
+        <img-field [userPhotoUrl]="profileInfo.photo"></img-field>
         <user-type
           (onCheckingIsTrue)="setChecking($event)"
           [userId]="profileInfo.id.toString()"
