@@ -158,14 +158,17 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
       if (hasChanged && userSpecialitiesArray.length > 0 && this.userId) {
         const userSpecialityUpdateList: UserSpecialityUpdateType = {user: this.userId, specialities: []}
-        userSpecialitiesArray.forEach((userSpeciality: FormGroup) => {
-          console.log(userSpeciality.value)
-          userSpecialityUpdateList.specialities.push({
-            experience_since: userSpeciality.value.experienceSince,
-            speciality_id: userSpeciality.value.speciality,
-            id: userSpeciality.value.userSpecialityId,
+
+        if (userSpecialitiesArray.length > 1 || (userSpecialitiesArray[0].value.experienceSince !== ''
+          && userSpecialitiesArray[0].value.speciality !== '')) {
+          userSpecialitiesArray.forEach((userSpeciality: FormGroup) => {
+            userSpecialityUpdateList.specialities.push({
+              experience_since: userSpeciality.value.experienceSince,
+              speciality_id: userSpeciality.value.speciality,
+              id: userSpeciality.value.userSpecialityId,
+            })
           })
-        })
+        }
         this.updateUserSpeciality(userSpecialityUpdateList)
       }
       if (!hasChanged) {
@@ -272,7 +275,17 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
 
   delSpeciality(controlIndex: number) {
-    this.userInfoForm.get('specialities').removeAt(controlIndex);
+    const specialityCtrl = this.userInfoForm.get('specialities')
+    if (specialityCtrl.controls.length > 1) {
+      specialityCtrl.removeAt(controlIndex);
+    } else {
+      specialityCtrl.clear()
+      specialityCtrl.push(this.fb.group({
+        speciality: '',
+        experienceSince: '',
+        userSpecialityId: null
+      }))
+    }
   }
 
   getSpecialityValidity(arrIndex: number, ctrlName: string) {
