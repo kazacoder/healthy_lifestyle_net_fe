@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SpecialityType, UserSpecialityType, UserSpecialityUpdateType} from '../../../../../types/speciality.type';
@@ -31,30 +31,36 @@ export class UserFormComponent implements OnInit, OnDestroy {
   isMaster: boolean = false;
 
   maxSpecialityCount: number = 3;
-  specialityCount: number[] = [0];
   userFormDisabled: boolean = true
   oldState: null | { [key: string]: string | {} } = null;
   getProfileInfoSubscription: Subscription | null = null;
   getSpecialityListSubscription: Subscription | null = null;
   updateUserSpecialityListSubscription: Subscription | null = null;
   specialityList: SpecialityType[] = [];
+  specialityObj: { [key: number]: string } = {};
 
+
+  // ToDO add validation
+  // ToDO change password logic
+  // ToDO realize phone adding
   userInfoForm: any = this.fb.group({
-    first_name: [{value: '', disabled: true,}],
+    first_name: [{value: '', disabled: true,}, Validators.required],
     last_name: [{value: '', disabled: true,}],
-    email: [{value: '', disabled: true,}],
+    email: [{value: '', disabled: true,}, [Validators.required, Validators.email]],
     city: [{value: '', disabled: true,}],
     youtube: [{value: '', disabled: true,}],
     telegram: [{value: '', disabled: true,}],
     vk: [{value: '', disabled: true,}],
     instagram: [{value: '', disabled: true,}],
-    phone: [{value: '', disabled: true,}],
+    phone: [{value: '', disabled: true,}, Validators.required],
     about_me: [{value: '', disabled: true,}],
-    specialities: this.fb.group({
-      speciality_0: {value: '', disabled: true,},
-      experienceSince_0: {value: '', disabled: true,},
-      userSpecialityId_0: {value: '', disabled: true,}
-    })
+    specialities: this.fb.array([
+      this.fb.group({
+        speciality: {value: '', disabled: true,},
+        experienceSince: {value: '', disabled: true,},
+        userSpecialityId: {value: null, disabled: true,}
+      })
+    ])
   })
 
   constructor(private fb: FormBuilder,
@@ -73,7 +79,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
           this._snackBar.open(error);
           throw new Error(error);
         }
-        this.specialityList = data as SpecialityType[];
+        const receivedSpecialityList = data as SpecialityType[]
+        this.specialityList = receivedSpecialityList;
+        receivedSpecialityList.forEach(item => {
+          this.specialityObj[item.id] = item.title
+        })
+
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
@@ -96,42 +107,18 @@ export class UserFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  fillSpecialitySelect() {
-    this.specialityCount = [0]
-    this.userInfoForm.removeControl('specialities')
-    this.userInfoForm.addControl('specialities', this.fb.group({
-      speciality_0: {value: '', disabled: true,},
-      experienceSince_0: {value: '', disabled: true,},
-      userSpecialityId_0: {value: '', disabled: true,}
-    }))
-    console.log(this.userInfo.specialities)
-    const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
-    console.log(userInfoFormSpecialitiesControl)
-    this.userInfo.specialities.forEach((speciality: UserSpecialityType, index: number) => {
-      if (index === 0) {
-        this.userInfoForm.get('specialities').get('speciality_0').setValue(speciality.speciality_id.toString())
-        this.userInfoForm.get('specialities').get('experienceSince_0').setValue(speciality.experience_since)
-        this.userInfoForm.get('specialities').get('userSpecialityId_0').setValue(speciality.id.toString())
-      } else {
-        const specialitiesGroup = this.userInfoForm.get('specialities');
-        specialitiesGroup.addControl('speciality_' + index, this.fb.control({
-          value: '',
-          disabled: true,
-        }));
-        specialitiesGroup.get('speciality_' + index).setValue(speciality.speciality_id.toString());
-        specialitiesGroup.addControl('experienceSince_' + index, this.fb.control({
-          value: '',
-          disabled: true,
-        }));
-        specialitiesGroup.get('experienceSince_' + index).setValue(speciality.experience_since);
-        specialitiesGroup.addControl('userSpecialityId_' + index, this.fb.control({
-          value: '',
-          disabled: true,
-        }));
-        specialitiesGroup.get('userSpecialityId_' + index).setValue(speciality.id.toString());
-        this.specialityCount.push(index)
-      }
-    });
+  fillSpecialitySelect(disableControls: boolean = true) {
+    if (this.userInfo.specialities.length > 0) {
+      const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
+      userInfoFormSpecialitiesControl.clear()
+      this.userInfo.specialities.forEach((speciality: UserSpecialityType) => {
+          userInfoFormSpecialitiesControl.push(this.fb.group({
+            speciality: [{value: speciality.speciality_id.toString(), disabled: disableControls,}, Validators.required],
+            experienceSince: [{value: speciality.experience_since, disabled: disableControls,}, Validators.required],
+            userSpecialityId: {value: speciality.id.toString(), disabled: disableControls,}
+          }))
+      });
+    }
   }
 
   allowEdit() {
@@ -142,50 +129,53 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   saveChanges() {
 
-    this.userFormDisabled = true;
-    this.userInfoForm.disable();
-    let changes: { [key: string]: string | {} | number | boolean } = {}
-    let userSpecialities: { [key: string]: string | number } = {}
-    let hasChanged: boolean = false
-    const newState = this.userInfoForm.value
-    if (this.oldState) {
-      for (let key of Object.keys(this.oldState)) {
-        if (key !== 'specialities') {
-          if (this.oldState[key] !== newState[key]) {
-            changes[key] = newState[key];
-            hasChanged = true;
-          }
-        } else {
-          if (JSON.stringify(this.oldState[key]) !== JSON.stringify(newState[key])) {
-            userSpecialities = newState[key];
-            hasChanged = true;
+    if (this.userInfoForm.valid) {
+      this.userFormDisabled = true;
+      this.userInfoForm.disable();
+      let changes: { [key: string]: string | {} | number | boolean } = {}
+      let userSpecialities: { [key: string]: string | number } = {}
+      let hasChanged: boolean = false
+      const newState = this.userInfoForm.value
+      if (this.oldState) {
+        for (let key of Object.keys(this.oldState)) {
+          if (key !== 'specialities') {
+            if (this.oldState[key] !== newState[key]) {
+              changes[key] = newState[key];
+              hasChanged = true;
+            }
+          } else {
+            if (JSON.stringify(this.oldState[key]) !== JSON.stringify(newState[key])) {
+              userSpecialities = newState[key];
+              hasChanged = true;
+            }
           }
         }
       }
-    }
-    if (hasChanged && Object.keys(changes).length > 0) {
-      this.updateUserInfo(changes)
-    }
-    const userSpecialitiesKeys = Object.keys(userSpecialities)
-
-    if (hasChanged && userSpecialitiesKeys.length > 0 && this.userId) {
-      const userSpecialityUpdateList: UserSpecialityUpdateType = {user: this.userId, specialities: []}
-      for (let i = 0; i < userSpecialitiesKeys.length / 3; i++) {
-        userSpecialityUpdateList.specialities.push({
-          experience_since: userSpecialities['experienceSince_' + i] as string,
-          speciality_id: userSpecialities['speciality_' + i] as number,
-          id: userSpecialities['userSpecialityId_' + i] as number,
-        })
+      if (hasChanged && Object.keys(changes).length > 0) {
+        this.updateUserInfo(changes)
       }
-      this.updateUserSpeciality(userSpecialityUpdateList)
-    }
-    if (!hasChanged) {
-      this._snackBar.open('Отсутствуют изменения для обновления')
-    }
+      const userSpecialitiesArray = this.userInfoForm.get('specialities').controls
 
+      if (hasChanged && userSpecialitiesArray.length > 0 && this.userId) {
+        const userSpecialityUpdateList: UserSpecialityUpdateType = {user: this.userId, specialities: []}
+        userSpecialitiesArray.forEach((userSpeciality: FormGroup) => {
+          console.log(userSpeciality.value)
+          userSpecialityUpdateList.specialities.push({
+            experience_since: userSpeciality.value.experienceSince,
+            speciality_id: userSpeciality.value.speciality,
+            id: userSpeciality.value.userSpecialityId,
+          })
+        })
+        this.updateUserSpeciality(userSpecialityUpdateList)
+      }
+      if (!hasChanged) {
+        this._snackBar.open('Отсутствуют изменения для обновления')
+      }
+    }
   }
 
   updateUserSpeciality(userSpecialityUpdateList: UserSpecialityUpdateType) {
+    console.log('test')
     this.updateUserSpecialityListSubscription = this.userService.updateUserSpecialityList(userSpecialityUpdateList)
       .subscribe({
         next: (data: SpecialityType[] | DefaultResponseType) => {
@@ -272,31 +262,27 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   addSpeciality() {
-    console.log('add speciality')
-    const newSpecialityIndex = this.specialityCount[this.specialityCount.length - 1] + 1;
     const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
-    console.log(userInfoFormSpecialitiesControl)
-    userInfoFormSpecialitiesControl.addControl('speciality_' + newSpecialityIndex, this.fb.control({
-      value: '',
-      disabled: false,
-    }));
-    userInfoFormSpecialitiesControl.get('speciality_' + newSpecialityIndex).setValue('');
-    userInfoFormSpecialitiesControl.addControl('experienceSince_' + newSpecialityIndex, this.fb.control({
-      value: '',
-      disabled: false,
-    }));
-    userInfoFormSpecialitiesControl.get('experienceSince_' + newSpecialityIndex).setValue('');
-    this.specialityCount.push(newSpecialityIndex)
+        userInfoFormSpecialitiesControl.push(this.fb.group({
+          speciality: ['', Validators.required],
+          experienceSince: ['', Validators.required],
+          userSpecialityId: null
+        }))
   }
 
-  delSpeciality(specialityId: number) {
-    const updatedSpecialityList = this.userInfo.specialities.filter((speciality: UserSpecialityType) => {
-        return speciality.id !== specialityId;
-      }
-    )
-    this.userInfo.specialities = [...updatedSpecialityList]
-    this.fillSpecialitySelect()
-    console.log(this.specialityCount)
+
+  delSpeciality(controlIndex: number) {
+    this.userInfoForm.get('specialities').removeAt(controlIndex);
+  }
+
+  getSpecialityValidity(arrIndex: number, ctrlName: string) {
+    const ctrl = this.userInfoForm.get('specialities').controls[arrIndex].get([ctrlName])
+    return ctrl.invalid && (ctrl?.dirty || ctrl?.touched)
+  }
+
+  getControlValidity(ctrlName: string) {
+    const ctrl = this.userInfoForm.get([ctrlName])
+    return ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ? ctrl.errors : null
   }
 
   ngOnDestroy() {

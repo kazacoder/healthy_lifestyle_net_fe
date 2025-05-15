@@ -1,25 +1,29 @@
 <section class="user-form" [formGroup]="userInfoForm">
-  <div class="fg">
+  <div class="fg" [ngClass]="{'_error': getControlValidity('first_name')}">
     <label><span>*</span>Имя</label>
     <input type="text" placeholder="Например: Иван" formControlName="first_name">
+    <div class="fg__error-text">
+      <div class="text12">Обязательное поле</div>
+    </div>
   </div>
   <div class="fg">
     <label>Фамилия</label>
     <input type="text" placeholder="Например: Иванов" formControlName="last_name">
   </div>
   <ng-container *ngIf="isMaster">
-    <div class="text18 semi-bold-text font2" *ngIf="true">
+    <div class="text18 semi-bold-text font2">
       Направление работы
     </div>
-    <ng-container formGroupName="specialities">
-      <ng-container *ngFor="let speciality of userInfo.specialities; index as i">
+    <ng-container formArrayName="specialities">
+      <ng-container *ngFor="let speciality of userInfoForm.get('specialities').controls; index as i"
+                    [formGroupName]="i">
         <div class="fg">
           <label class="label-flex">
             Специализация
             <button type="button" class="del-btn"
                     [ngClass]="{'m-btn-bounce': !userFormDisabled}"
                     [disabled]="userFormDisabled"
-                    (click)="delSpeciality(speciality.id)">
+                    (click)="delSpeciality(i)">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M4.0013 15.1668H12.0013C12.8408 15.1658 13.6457 14.8318 14.2393 14.2382C14.8329 13.6445 15.1669 12.8397 15.168 12.0002V4.00016C15.1669 3.16064 14.8329 2.3558 14.2393 1.76216C13.6457 1.16852 12.8408 0.834555 12.0013 0.833496H4.0013C3.16177 0.834555 2.35693 1.16852 1.7633 1.76216C1.16966 2.3558 0.835693 3.16064 0.834635 4.00016V12.0002C0.835693 12.8397 1.16966 13.6445 1.7633 14.2382C2.35693 14.8318 3.16177 15.1658 4.0013 15.1668ZM12.0013 1.8335C12.5757 1.8342 13.1264 2.0627 13.5326 2.46888C13.9388 2.87505 14.1673 3.42574 14.168 4.00016V12.0002C14.1673 12.5746 13.9388 13.1253 13.5326 13.5314C13.1264 13.9376 12.5757 14.1661 12.0013 14.1668H4.0013C3.42688 14.1661 2.87619 13.9376 2.47002 13.5314C2.06384 13.1253 1.83534 12.5746 1.83464 12.0002V4.00016C1.83534 3.42574 2.06384 2.87505 2.47002 2.46888C2.87619 2.0627 3.42688 1.8342 4.0013 1.8335H12.0013Z"
@@ -31,16 +35,23 @@
               <span>Удалить</span>
             </button>
           </label>
-          <select name="" id="" [formControlName]="'speciality_' + i">
+          <select [formControlName]="'speciality'">
             <option style="display: none">Выберите специальность</option>
             <option *ngFor="let speciality of specialityList" [value]="speciality.id">{{ speciality.title }}</option>
           </select>
-          <input type="hidden" [formControlName]="'userSpecialityId_' + i">
+          <input type="hidden" [formControlName]="'userSpecialityId'">
         </div>
-        <div class="fg">
-          <label>Стаж с</label>
-          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experienceSince_' + i">
-          <div class="fg__bottom _flex" *ngIf="userInfo.specialities.length === i + 1 && userInfo.specialities.length < maxSpecialityCount">
+        <div class="fg" [ngClass]="{'_error': getSpecialityValidity(i, 'experienceSince')}">
+          <label>
+            Стаж с
+          </label>
+          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experienceSince'">
+          <div class="fg__error-text">
+            <div class="text12">Укажите дату</div>
+          </div>
+          <div class="fg__bottom _flex"
+               *ngIf="userInfoForm.get('specialities').controls.length === i + 1 &&
+               userInfoForm.get('specialities').controls.length < maxSpecialityCount">
             <button type="button" class="add-btn"
                     [ngClass]="{'m-btn-bounce': !userFormDisabled}"
                     [disabled]="userFormDisabled"
@@ -90,9 +101,12 @@
     </div>
   </ng-container>
   <div class="phone-fields">
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('phone')}">
       <label><span>*</span>Номер телефона</label>
       <input type="tel" placeholder="+7" formControlName="phone">
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
     </div>
     <div class="phone-fields__nav">
       <button type="button" class="phone-fields__add add-btn"
@@ -114,9 +128,15 @@
       </button>
     </div>
   </div>
-  <div class="fg">
+  <div class="fg" [ngClass]="{'_error': getControlValidity('email')}">
     <label><span>*</span>E-mail</label>
     <input type="email" placeholder="pochta@mail.ru" formControlName="email">
+    <div class="fg__error-text" *ngIf="getControlValidity('email')?.required">
+      <div class="text12">Обязательное поле</div>
+    </div>
+    <div class="fg__error-text" *ngIf="getControlValidity('email')?.email">
+      <div class="text12">Введите корректный адрес электронной почты</div>
+    </div>
   </div>
   <div class="modal-form__pass">
     <!--    @@include('../ui/_pass-field.html',{-->
@@ -125,8 +145,8 @@
     <!--    })-->
     <div class="modal-form__pass-nav">
       <button (click)="changePassword()"
-         [disabled]="userFormDisabled"
-         class="modal-form__pass-link m-link">
+              [disabled]="userFormDisabled"
+              class="modal-form__pass-link m-link">
         Сменить пароль
       </button>
     </div>
@@ -147,6 +167,7 @@
   <ng-container *ngIf="!userFormDisabled">
     <div class="user-form-actions">
       <button class="user-form__btn m-btn m-btn-primary m-btn-bounce"
+              [disabled]="userInfoForm.invalid"
               (click)="saveChanges()">
         <span>Сохранить</span>
       </button>
