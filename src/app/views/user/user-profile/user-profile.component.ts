@@ -10,7 +10,7 @@ import {Subscription} from 'rxjs';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {NgIf} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {NotificationsType} from '../../../../types/notifications.type';
 
 
@@ -22,7 +22,8 @@ import {NotificationsType} from '../../../../types/notifications.type';
     UserTypeComponent,
     UserSettingsComponent,
     UserFormComponent,
-    NgIf
+    NgIf,
+    NgClass
   ],
   standalone: true,
   templateUrl: './user-profile.component.html',
@@ -35,6 +36,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   getProfileInfoSubscription: Subscription | null = null;
   notifications: NotificationsType | null = null;
   isMaster: boolean = false;
+  checkingProfile: boolean = false;
 
 
   constructor(private userService: UserService,
@@ -54,6 +56,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           const receivedProfileData = data as UserFullInfoType;
           this.profileInfo = receivedProfileData;
           this.isMaster = receivedProfileData.status === 3;
+          this.checkingProfile = receivedProfileData.status === 4 || receivedProfileData.status === 2;
           this.notifications = {
             receiveNotificationsSite: receivedProfileData.receive_notifications_site,
             receiveNotificationsEmail: receivedProfileData.receive_notifications_email,
@@ -76,6 +79,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getProfileInfoSubscription?.unsubscribe()
+  }
+
+  setChecking(val: boolean): void {
+    this.checkingProfile = val;
   }
 
 }

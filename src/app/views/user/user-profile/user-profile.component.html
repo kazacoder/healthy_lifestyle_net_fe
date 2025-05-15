@@ -2,11 +2,16 @@
   <h1 class="h1">
     Мой профиль
   </h1>
-  <div class="user" *ngIf="profileInfo">
+  <div class="warning _mt30" *ngIf="checkingProfile">
+    <img src="assets/img/info-icon.svg" alt="">
+    <span>Редактирование недоступно. Идет проверка профиля</span>
+  </div>
+  <div class="user" *ngIf="profileInfo" [ngClass]="{'_disabled': checkingProfile}">
     <div class="user__col">
       <div class="user__top">
         <img-field></img-field>
         <user-type
+          (onCheckingIsTrue)="setChecking($event)"
           [userId]="profileInfo.id.toString()"
           [userStatus]="profileInfo.status"></user-type>
       </div>

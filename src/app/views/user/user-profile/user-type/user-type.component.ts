@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {SpinnerComponent} from '../../../../shared/components/ui/spinner/spinner.component';
 import {NgClass} from '@angular/common';
 import {Subscription} from 'rxjs';
@@ -26,6 +26,8 @@ export class UserTypeComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   userId: string | null = null;
 
+  @Output() onCheckingIsTrue: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+
   buttonChangeTypeDisabled = false;
   formChangeSubscription: Subscription | null = null;
   changeUserStatusSubscription: Subscription | null = null;
@@ -43,10 +45,6 @@ export class UserTypeComponent implements OnInit, OnDestroy, OnChanges {
 
   changeUserType() {
 
-    console.log(this.userId)
-    console.log(this.userStatus)
-    console.log(this.userTypeForm.value.userType)
-
     if (this.userId) {
       if (this.userStatus === 1 && this.userTypeForm.value.userType === 3) {
       console.log('upgrade')
@@ -61,6 +59,7 @@ export class UserTypeComponent implements OnInit, OnDestroy, OnChanges {
               this.userStatus = (data as UserFullInfoType).status
               this.userTypeForm.get('userType')?.disable();
               this.buttonChangeTypeDisabled = true;
+              this.onCheckingIsTrue.emit(true);
             },
             error: (errorResponse: HttpErrorResponse) => {
               if (errorResponse.error && errorResponse.error.detail) {
@@ -71,7 +70,6 @@ export class UserTypeComponent implements OnInit, OnDestroy, OnChanges {
             }
           })
       } else if (this.userStatus === 3 && this.userTypeForm.value.userType === 1) {
-        console.log('downgrade')
         this.changeUserStatusSubscription = this.userService.updateProfileInfo(this.userId, {status: 4})
           .subscribe({
             next: (data: UserFullInfoType | DefaultResponseType) => {
@@ -83,6 +81,7 @@ export class UserTypeComponent implements OnInit, OnDestroy, OnChanges {
               this.userStatus = (data as UserFullInfoType).status
               this.userTypeForm.get('userType')?.disable();
               this.buttonChangeTypeDisabled = true;
+              this.onCheckingIsTrue.emit(true);
             },
             error: (errorResponse: HttpErrorResponse) => {
               if (errorResponse.error && errorResponse.error.detail) {
