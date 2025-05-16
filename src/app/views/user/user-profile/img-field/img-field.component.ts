@@ -99,7 +99,7 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
         }
       },
     })
-    this.deletePhotoSubscription.add(() => {return this.isOpenConfirmModal = false})
+    this.deletePhotoSubscription.add(() => {return this.toggleDeleteModal(false)})
 
   }
 
