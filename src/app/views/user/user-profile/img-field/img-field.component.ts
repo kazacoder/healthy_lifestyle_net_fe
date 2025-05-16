@@ -6,12 +6,15 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserPhotoDeleteType, UserPhotoType} from '../../../../../types/user-photo.type';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
+import {ConfirmModalComponent} from '../../../../shared/components/modals/confirm-modal/confirm-modal.component';
+import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'img-field',
   imports: [
     NgOptimizedImage,
-    NgStyle
+    NgStyle,
+    ConfirmModalComponent
   ],
   standalone: true,
   templateUrl: './img-field.component.html',
@@ -24,6 +27,7 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
   userPhoto: string = 'assets/img/img.svg'
   uploadPhotoSubscription: Subscription | null = null;
   deletePhotoSubscription: Subscription | null = null;
+  isOpenConfirmModal: boolean = false
 
   constructor(private userService: UserService,
               private _snackBar: MatSnackBar,) {
@@ -70,8 +74,11 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
     input.value = ''
   }
 
+  toggleDeleteModal(val: boolean) {
+    this.isOpenConfirmModal = val;
+    WindowsUtils.fixBody(val);
+  }
 
-  //ToDO add confirmation when deleting
   deleteUserPhoto() {
     this.deletePhotoSubscription = this.userService.deleteUserPhoto().subscribe({
       next: (data: UserPhotoDeleteType | DefaultResponseType) => {
@@ -92,6 +99,7 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
         }
       },
     })
+    this.deletePhotoSubscription.add(() => {return this.isOpenConfirmModal = false})
 
   }
 

@@ -8,8 +8,13 @@
     </button>
   </div>
   <div class="img-field__delete">
-    <button class="m-link" (click)="deleteUserPhoto()">
+    <button class="m-link" (click)="toggleDeleteModal(true)">
       Удалить
     </button>
   </div>
 </div>
+<confirm-modal
+  (onCloseModal)="toggleDeleteModal($event)"
+  (onConfirmClick)="deleteUserPhoto()"
+  [isOpen]="isOpenConfirmModal"
+  [text]="'Вы действительно хотите удалить фотографию?'"></confirm-modal>

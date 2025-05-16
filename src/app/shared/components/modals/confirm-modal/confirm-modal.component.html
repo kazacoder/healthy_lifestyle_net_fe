@@ -1,0 +1,22 @@
+<div class="modal delete-confirm" id="confirmDeleteModal" [ngClass]="{'_active _active2': isOpen}">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top text-center">
+      <div class="text30 text24-tablet semi-bold-text">
+        {{ text }}
+      </div>
+    </div>
+    <div class="delete-confirm__nav">
+      <button class="delete-confirm__btn m-btn m-btn-primary m-btn-bounce" (click)="confirmAction()">
+        <span>Да</span>
+      </button>
+      <button class="delete-confirm__btn m-btn m-btn-gray m-btn-bounce" (click)="closeModal()">
+        <span>Нет</span>
+      </button>
+    </div>
+  </div>
+</div>
