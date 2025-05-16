@@ -6,6 +6,7 @@ import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {UserFullInfoType} from '../../../types/user-full-info.type';
 import {SpecialityType, UserSpecialityUpdateType} from '../../../types/speciality.type';
+import {UserPhotoDeleteType, UserPhotoType} from '../../../types/user-photo.type';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,14 @@ export class UserService {
 
   updateUserSpecialityList(data: UserSpecialityUpdateType): Observable<SpecialityType[] | DefaultResponseType> {
     return this.http.post<SpecialityType[] | DefaultResponseType>(environment.api + 'user/specialities/', data);
+  }
+
+  uploadUserPhoto(data: FormData): Observable<UserPhotoType | DefaultResponseType> {
+    return this.http.post<UserPhotoType | DefaultResponseType>(environment.api + 'user/upload-photo/', data);
+  }
+
+  deleteUserPhoto(): Observable<UserPhotoDeleteType | DefaultResponseType> {
+    return this.http.delete<UserPhotoDeleteType | DefaultResponseType>(environment.api + 'user/upload-photo/');
   }
 
   setUserInfo(user_id: string, username: string): void {

@@ -4,11 +4,11 @@
   <div class="img-field__input">
     <button class="m-link">
       Изменить фото
-      <input type="file">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)">
     </button>
   </div>
   <div class="img-field__delete">
-    <button class="m-link">
+    <button class="m-link" (click)="deleteUserPhoto()">
       Удалить
     </button>
   </div>
