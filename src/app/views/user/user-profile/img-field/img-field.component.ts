@@ -38,7 +38,7 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
   }
 
 
-  onFileSelected(event: Event) {
+  onFileSelected(event: Event, input: HTMLInputElement) {
     const filesList = (event.target as HTMLInputElement).files
     if (filesList) {
       const photo = filesList[0]
@@ -67,6 +67,7 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
         })
       }
     }
+    input.value = ''
   }
 
 
