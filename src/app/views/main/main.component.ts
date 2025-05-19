@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {PosterInfoComponent} from '../../shared/components/events/poster-info/poster-info.component';
 import {DateFeedComponent} from '../../shared/components/page-blocks/date-feed/date-feed.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
@@ -12,6 +12,12 @@ import {RouterLink} from '@angular/router';
 import {CityModalComponent} from '../../shared/components/modals/city-modal/city-modal.component';
 import {WindowsUtils} from '../../shared/utils/windows-utils';
 import {ParamModalComponent} from '../../shared/components/modals/param-modal/param-modal.component';
+import {MasterInfoType} from '../../../types/master-info.type';
+import {Subscription} from 'rxjs';
+import {MasterService} from '../../shared/services/master.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {DefaultResponseType} from '../../../types/default-response.type';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-main',
@@ -22,12 +28,13 @@ import {ParamModalComponent} from '../../shared/components/modals/param-modal/pa
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
-export class MainComponent implements AfterViewInit {
+export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   //ToDo
   eventsTempData = events
   eventsTempData2 = events2
-  mastersTempData = masters
+  mastersList: MasterInfoType[] = [];
+  mastersListSubscription: Subscription | null = null;
 
   isCityModalOpened:boolean = false;
   isParamModalOpened:boolean = false;
@@ -75,6 +82,32 @@ export class MainComponent implements AfterViewInit {
     (event.target as Window).innerWidth;
   }
 
+  constructor(private masterService: MasterService,
+              private _snackBar: MatSnackBar) {
+  }
+
+  ngOnInit() {
+    this.mastersListSubscription = this.masterService.getMastersList()
+      .subscribe({
+        next: (data: MasterInfoType[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.mastersList = data as MasterInfoType[]
+          console.log(this.mastersList)
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      })
+  }
+
   ngAfterViewInit() {
     this.eventSwiper = document.querySelector('.event-swiper');
     if (this.eventSwiper) {
@@ -111,6 +144,10 @@ export class MainComponent implements AfterViewInit {
 
   chooseCity(value: string) {
     this.chosenCity = value;
+  }
+
+  ngOnDestroy() {
+    this.mastersListSubscription?.unsubscribe();
   }
 }
 
@@ -246,32 +283,5 @@ const events2 = [
     desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
     time: "2 дня",
     many: "true",
-  }
-]
-
-const masters = [
-  {
-    img: "master",
-    city: "Москва",
-    title: "Притула Ирина",
-    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
-  },
-  {
-    img: "master2",
-    city: "Москва",
-    title: "Филименко Андрей",
-    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
-  },
-  {
-    img: "master3",
-    city: "Москва",
-    title: "Марченко Елена",
-    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
-  },
-  {
-    img: "master3",
-    city: "Москва",
-    title: "Марченко Елена",
-    desc: "Описание основной сферы деятельности мастера в 2х предложениях",
   }
 ]

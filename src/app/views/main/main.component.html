@@ -121,7 +121,7 @@
       <div class="master-slider slider">
         <div class="slider__wrap">
           <swiper-container class="master-swiper" init="false">
-            <swiper-slide class="swiper-slide" *ngFor="let master of mastersTempData">
+            <swiper-slide class="swiper-slide" *ngFor="let master of mastersList">
               <master-card [master]="master" class="master-card"></master-card>
             </swiper-slide>
           </swiper-container>

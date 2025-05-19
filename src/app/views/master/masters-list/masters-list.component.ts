@@ -56,7 +56,7 @@ export class MastersListComponent implements OnInit, OnDestroy {
           if (errorResponse.error && errorResponse.error.detail) {
             this._snackBar.open(errorResponse.error.detail)
           } else {
-            this._snackBar.open('Ошибка обновления данных')
+            this._snackBar.open('Ошибка получения данных')
           }
         }
       })
