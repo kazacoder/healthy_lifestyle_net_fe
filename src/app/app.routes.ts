@@ -41,6 +41,7 @@ export const routes: Routes = [
         ]
       },
       {path: '**', component: PageNotFoundComponent, title: '404'},
+      {path: '404', component: PageNotFoundComponent, title: '404'},
     ]
   },
 ];

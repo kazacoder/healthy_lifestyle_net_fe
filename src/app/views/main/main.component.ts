@@ -96,7 +96,6 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
             throw new Error(error);
           }
           this.mastersList = data as MasterInfoType[]
-          console.log(this.mastersList)
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {

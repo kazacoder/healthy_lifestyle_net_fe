@@ -1,4 +1,4 @@
-<main class="content">
+<main class="content" *ngIf="true">
 
   <div class="master-item">
     <div class="container">
@@ -8,7 +8,7 @@
             <swiper-container class="master-swiper" init="false">
               <swiper-slide class="swiper-slide">
                 <div class="master-slider2__img">
-                  <img src="assets/img/master4.jpg" alt="">
+                  <img src="{{ master?.photo }}" alt="">
                 </div>
               </swiper-slide>
               <swiper-slide class="swiper-slide">
@@ -54,7 +54,7 @@
           <div class="master-item__subcol">
             <div class="master-top">
               <div class="master-top__name h1">
-                Дарья Солодаева
+                {{ master?.full_name }}
               </div>
               <div class="master-badge">
                 <img src="assets/img/crone2.svg" alt="">
@@ -91,15 +91,7 @@
               <div class="h4">
                 Информация о мастере
               </div>
-              <div class="text">
-                <p>Биопсия сигнального лимфоузла при меланоме радиоизотопным методом</p>
-                <p>Биопсия сигнального лимфоузла при раке молочной железы флуоресцентным и радиоизотопным методом</p>
-                <p>Эндоскопические операции на щитовидной железе</p>
-                <p>Резекция молочной железы при раке и доброкачественных опухолях</p>
-                <p>Профилактическая мастэктомия при генных мутациях</p>
-                <p>Лимфодиссекции при метастазах рака молочной железы</p>
-                <p>Тиреоидэктомии с центральной лимфодиссекцией</p>
-              </div>
+              <div class="text" [innerHTML]="master?.about_me"></div>
             </div>
           </div>
           <div class="master-item__subcol2">
@@ -111,7 +103,7 @@
                 <div class="contact-item__desc">
                   <div class="contact-item__place medium-text">
                     <img src="assets/img/marker2.svg" alt="">
-                    <span>Москва</span>
+                    <span>{{ master?.city }}</span>
                   </div>
                 </div>
               </div>
