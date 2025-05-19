@@ -1,5 +1,6 @@
-<a routerLink="/masters/1" class="master-card__img m-backdrop _scale-img">
-  <img src="assets/img/{{ master?.img }}.jpg" alt="">
+<a [routerLink]="'/masters/' + master?.id" class="master-card__img m-backdrop _scale-img">
+  <img src="assets/img/profile-default-img.svg" alt="" *ngIf="!master?.photo">
+  <img src="{{master?.photo}}" alt="Фото мастера" *ngIf="master?.photo">
 </a>
 <button class="favourite-btn _absolute m-btn-bounce">
   <img src="assets/img/favourite.svg" alt="" class="_view1">
@@ -10,7 +11,7 @@
 <div class="master-card__content">
   <div class="master-card__wrap _flex-between">
     <div class="font2 text20 text16-tablet bold-text">
-      <a routerLink="/masters/1">{{ master?.title }}</a>
+      <a [routerLink]="'/masters/' + master?.id">{{ master?.full_name }}</a>
     </div>
     <div class="event-city _flex">
       <img src="assets/img/marker.svg" alt="">
@@ -20,13 +21,10 @@
     </div>
   </div>
   <div class="master-card__tags _flex">
-    <div class="m-badge">
-      <span>Эндокринолог</span>
+    <div class="m-badge" *ngFor="let spec of master?.specialities?.slice(0, 2)">
+      <span>{{ spec.speciality }}</span>
     </div>
-    <div class="m-badge">
-      <span>Терапевт</span>
-    </div>
-    <div class="tags" [ngClass]="tagsOpen ? '_open' : ''">
+    <div class="tags" [ngClass]="tagsOpen ? '_open' : ''" *ngIf="master?.specialities?.length && master?.specialities?.length! > 2">
       <div class="tags__show">
         <button class="tags__btn m-btn-bounce" (click)="tagButtonProceed()">
           <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,11 +34,8 @@
       </div>
       <div class="tags__hidden _triangle">
         <div class="tags__items">
-          <div class="m-badge">
-            <span>Эндокринолог</span>
-          </div>
-          <div class="m-badge">
-            <span>Терапевт</span>
+          <div class="m-badge" *ngFor="let spec of master?.specialities?.slice(2)">
+            <span>{{ spec.speciality }}</span>
           </div>
         </div>
       </div>
@@ -48,7 +43,7 @@
   </div>
   <div class="master-card__text font2">
     <div class="master-card__desc text14">
-      {{ master?.desc }}
+      {{ master?.short_description }}
     </div>
   </div>
 </div>

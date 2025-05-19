@@ -1,13 +1,16 @@
 import {Component, Input} from '@angular/core';
-import {NgClass} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
+import {MasterInfoType} from '../../../../../types/master-info.type';
 
 @Component({
   selector: 'master-card',
   standalone: true,
   imports: [
     NgClass,
-    RouterLink
+    RouterLink,
+    NgIf,
+    NgForOf
   ],
   templateUrl: './master-card.component.html',
   styleUrl: './master-card.component.scss'
@@ -16,12 +19,7 @@ export class MasterCardComponent {
   tagsOpen: boolean = false;
 
   @Input()
-  master: {
-    img: string,
-    city: string,
-    title: string,
-    desc: string,
-  } | null = null;
+  master: MasterInfoType | null = null;
 
   tagButtonProceed() {
     this.tagsOpen = !this.tagsOpen;
