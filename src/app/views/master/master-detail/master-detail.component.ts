@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 import {MasterInfoType} from '../../../../types/master-info.type';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ParagraphTextPipe} from '../../../shared/directives/paragraph-text.pipe';
+import {ParagraphTextPipe} from '../../../shared/pipes/paragraph-text.pipe';
 
 @Component({
   selector: 'app-master-detail',

@@ -8,6 +8,7 @@ import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.compone
 import {NgClass} from '@angular/common';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {LoginResponseType} from '../../../../../types/login-response.type';
+import {CommonUtils} from '../../../utils/common-utils';
 
 @Component({
   selector: 'sign-up-modal',
@@ -27,14 +28,19 @@ export class SignUpModalComponent implements OnDestroy {
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
   @Output() onLoginOpen: EventEmitter<boolean> = new EventEmitter(false);
 
-  signUpForm = this.fb.group({
-    username: ['', Validators.required],
-    email: ['', Validators.required],
-    phone: ['', Validators.required],
-    password: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
-    agree: [false, Validators.requiredTrue],
-  })
+  signUpForm = this.fb.group(
+    {
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      phone: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: '',
+      agree: [false, Validators.requiredTrue],
+    },
+    {
+      validators: CommonUtils.matchValidator('password', 'confirmPassword')
+    }
+  )
 
   signUpSubscription: Subscription | null = null;
   isPasswordShowed: boolean = false;
@@ -54,10 +60,10 @@ export class SignUpModalComponent implements OnDestroy {
     this.onCloseModal.emit(false)
   }
 
-  signUp () {
+  signUp() {
     if (this.signUpForm.valid && this.signUpForm.value.password
       && this.signUpForm.value.username && this.signUpForm.value.confirmPassword && this.signUpForm.value.email) {
-      const user  = {
+      const user = {
         username: this.signUpForm.value.username,
         password: this.signUpForm.value.password,
         email: this.signUpForm.value.email,

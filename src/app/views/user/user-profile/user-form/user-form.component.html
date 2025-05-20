@@ -144,7 +144,7 @@
     <!--    "placeholder":"",-->
     <!--    })-->
     <div class="modal-form__pass-nav">
-      <button (click)="changePassword()"
+      <button (click)="togglePasswordModal(true)"
               [disabled]="userFormDisabled"
               class="modal-form__pass-link m-link">
         Сменить пароль
@@ -155,8 +155,11 @@
     <div class="text18 semi-bold-text font2">
       Информация о вас
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('about_me')}">
       <textarea placeholder="Например опишите ваш опыт и специализацию" formControlName="about_me"></textarea>
+      <div class="fg__error-text">
+        <div class="text12">Максимальная длина текста 500 символов</div>
+      </div>
     </div>
     <div class="text18 semi-bold-text font2">
       Краткое описание
@@ -187,3 +190,6 @@
     </div>
   </ng-container>
 </section>
+<change-password
+  (onCloseModal)="togglePasswordModal($event)"
+  [isOpen]="isOpenPasswordModal"></change-password>

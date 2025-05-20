@@ -9,6 +9,8 @@ import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 import {SpecialityService} from '../../../../shared/services/speciality.service';
+import {ChangePasswordComponent} from './change-password/change-password.component';
+import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'user-form',
@@ -16,7 +18,8 @@ import {SpecialityService} from '../../../../shared/services/speciality.service'
     NgIf,
     ReactiveFormsModule,
     NgForOf,
-    NgClass
+    NgClass,
+    ChangePasswordComponent
   ],
   standalone: true,
   templateUrl: './user-form.component.html',
@@ -38,6 +41,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   updateUserSpecialityListSubscription: Subscription | null = null;
   specialityList: SpecialityType[] = [];
   specialityObj: { [key: number]: string } = {};
+  isOpenPasswordModal: boolean = false;
 
 
   // ToDO add validation
@@ -53,7 +57,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     vk: [{value: '', disabled: true,}],
     instagram: [{value: '', disabled: true,}],
     phone: [{value: '', disabled: true,}, Validators.required],
-    about_me: [{value: '', disabled: true,}],
+    about_me: [{value: '', disabled: true,}, Validators.maxLength(500)],
     short_description: [{value: '', disabled: true,}, Validators.maxLength(75)],
     specialities: this.fb.array([
       this.fb.group({
@@ -95,6 +99,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
       }
     })
+  }
+
+  togglePasswordModal(value: boolean) {
+    this.isOpenPasswordModal = value;
+    WindowsUtils.fixBody(value);
   }
 
   fillForm() {
@@ -253,11 +262,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     }
     this.userFormDisabled = true;
     this.userInfoForm.disable();
-  }
-
-  changePassword() {
-    // ToDo request change password
-    console.log('change password')
   }
 
   addPhone() {

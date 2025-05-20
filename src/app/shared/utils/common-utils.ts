@@ -1,3 +1,5 @@
+import {AbstractControl, ValidatorFn} from '@angular/forms';
+
 export class CommonUtils {
 
   static formatYears(years: number): string {
@@ -69,5 +71,25 @@ export class CommonUtils {
     }
 
     return `${value} ${suffix}`;
+  }
+
+  static matchValidator(controlName: string, matchingControlName: string): ValidatorFn {
+    return (abstractControl: AbstractControl) => {
+      const control = abstractControl.get(controlName);
+      const matchingControl = abstractControl.get(matchingControlName);
+
+      if (matchingControl!.errors && !matchingControl!.errors?.['confirmedValidator']) {
+        return null;
+      }
+
+      if (control!.value !== matchingControl!.value) {
+        const error = { confirmedValidator: 'Passwords do not match.' };
+        matchingControl!.setErrors(error);
+        return error;
+      } else {
+        matchingControl!.setErrors(null);
+        return null;
+      }
+    }
   }
 }
