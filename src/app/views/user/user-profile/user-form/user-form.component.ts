@@ -54,6 +54,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     instagram: [{value: '', disabled: true,}],
     phone: [{value: '', disabled: true,}, Validators.required],
     about_me: [{value: '', disabled: true,}],
+    short_description: [{value: '', disabled: true,}, Validators.maxLength(75)],
     specialities: this.fb.array([
       this.fb.group({
         speciality: {value: '', disabled: true,},

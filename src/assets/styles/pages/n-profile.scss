@@ -44,6 +44,11 @@
     textarea{
       height: 21.75em;
     }
+    &.short-text{
+      textarea{
+        height: 5.75em;
+      }
+    }
   }
 }
 

@@ -91,7 +91,7 @@
               <div class="h4">
                 Информация о мастере
               </div>
-              <div class="text" [innerHTML]="master?.about_me"></div>
+              <div class="text" [innerHTML]="master?.about_me | paragraphText"></div>
             </div>
           </div>
           <div class="master-item__subcol2">

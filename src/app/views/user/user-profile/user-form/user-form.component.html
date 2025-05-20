@@ -158,6 +158,15 @@
     <div class="fg">
       <textarea placeholder="Например опишите ваш опыт и специализацию" formControlName="about_me"></textarea>
     </div>
+    <div class="text18 semi-bold-text font2">
+      Краткое описание
+    </div>
+    <div class="fg short-text" [ngClass]="{'_error': getControlValidity('short_description')}">
+      <textarea  rows="2" placeholder="Описание основной сферы деятельности в 2х предложениях" formControlName="short_description"></textarea>
+      <div class="fg__error-text">
+        <div class="text12">Максимальная длина текста 75 символов</div>
+      </div>
+    </div>
   </ng-container>
   <button class="user-form__btn m-btn m-btn-primary m-btn-bounce"
           *ngIf="userFormDisabled"

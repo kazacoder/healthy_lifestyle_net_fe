@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {MasterInfoType} from '../../../../types/master-info.type';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
+import {ParagraphTextPipe} from '../../../shared/directives/paragraph-text.pipe';
 
 @Component({
   selector: 'app-master-detail',
@@ -19,7 +20,8 @@ import {HttpErrorResponse} from '@angular/common/http';
     SocialsComponent,
     EventCardComponent,
     NgForOf,
-    NgIf
+    NgIf,
+    ParagraphTextPipe
   ],
   standalone: true,
   templateUrl: './master-detail.component.html',
@@ -62,7 +64,6 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      console.log(params);
       this.masterDetailSubscription = this.masterService.getMaster(params['url'])
         .subscribe({
           next: (data: MasterInfoType | DefaultResponseType) => {
@@ -72,7 +73,6 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               throw new Error(error);
             }
             this.master = data as MasterInfoType
-            console.log(this.master)
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.detail) {
