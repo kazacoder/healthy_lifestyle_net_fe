@@ -145,6 +145,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       let changes: { [key: string]: string | {} | number | boolean } = {}
       let userSpecialities: { [key: string]: string | number } = {}
       let hasChanged: boolean = false
+      let hasChangedSpec: boolean = false
       const newState = this.userInfoForm.value
       if (this.oldState) {
         for (let key of Object.keys(this.oldState)) {
@@ -156,7 +157,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
           } else {
             if (JSON.stringify(this.oldState[key]) !== JSON.stringify(newState[key])) {
               userSpecialities = newState[key];
-              hasChanged = true;
+              hasChangedSpec = true;
             }
           }
         }
@@ -166,7 +167,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       }
       const userSpecialitiesArray = this.userInfoForm.get('specialities').controls
 
-      if (hasChanged && userSpecialitiesArray.length > 0 && this.userId) {
+      if (hasChangedSpec && userSpecialitiesArray.length > 0 && this.userId) {
         const userSpecialityUpdateList: UserSpecialityUpdateType = {user: this.userId, specialities: []}
 
         if (userSpecialitiesArray.length > 1 || (userSpecialitiesArray[0].value.experienceSince !== ''
@@ -181,14 +182,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
         this.updateUserSpeciality(userSpecialityUpdateList)
       }
-      if (!hasChanged) {
+      if (!hasChanged && !hasChangedSpec) {
         this._snackBar.open('Отсутствуют изменения для обновления')
       }
     }
   }
 
   updateUserSpeciality(userSpecialityUpdateList: UserSpecialityUpdateType) {
-    console.log('test')
     this.updateUserSpecialityListSubscription = this.userService.updateUserSpecialityList(userSpecialityUpdateList)
       .subscribe({
         next: (data: SpecialityType[] | DefaultResponseType) => {

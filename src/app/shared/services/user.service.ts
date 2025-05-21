@@ -7,6 +7,7 @@ import {environment} from '../../../environments/environment';
 import {UserFullInfoType} from '../../../types/user-full-info.type';
 import {SpecialityType, UserSpecialityUpdateType} from '../../../types/speciality.type';
 import {UserPhotoDeleteType, UserPhotoType} from '../../../types/user-photo.type';
+import {UserChangePassType} from '../../../types/user-change-pass.type';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,10 @@ export class UserService {
 
   deleteUserPhoto(): Observable<UserPhotoDeleteType | DefaultResponseType> {
     return this.http.delete<UserPhotoDeleteType | DefaultResponseType>(environment.api + 'user/upload-photo/');
+  }
+
+  changePassword(data: {old_password: string, new_password: string}): Observable<UserChangePassType | DefaultResponseType> {
+    return this.http.put<UserChangePassType | DefaultResponseType>(environment.api + 'user/change-password/', data);
   }
 
   setUserInfo(user_id: string, username: string): void {

@@ -6,6 +6,9 @@ import {Subscription} from 'rxjs';
 import {NgClass} from '@angular/common';
 import {CloseBtnMobComponent} from '../../../../../shared/components/ui/close-btn-mob/close-btn-mob.component';
 import {CommonUtils} from '../../../../../shared/utils/common-utils';
+import {DefaultResponseType} from '../../../../../../types/default-response.type';
+import {HttpErrorResponse} from '@angular/common/http';
+import {UserChangePassType} from '../../../../../../types/user-change-pass.type';
 
 @Component({
   selector: 'change-password',
@@ -49,7 +52,31 @@ export class ChangePasswordComponent implements OnDestroy {
   }
 
   proceed() {
-    console.log(this.changePasswordForm.value)
+
+    if (this.changePasswordForm.valid) {
+      const data = {
+        old_password: this.changePasswordForm.get('oldPassword')?.value as string,
+        new_password: this.changePasswordForm.get('newPassword')?.value as string,
+      }
+      this.changePasswordSubscription = this.userService.changePassword(data).subscribe({
+        next: (data: UserChangePassType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this._snackBar.open('Пароль успешно изменен');
+          this.closeModal();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail);
+          } else {
+            this._snackBar.open("Ошибка обновления пароля");
+          }
+        }
+      });
+    }
   }
 
   closeModal() {
