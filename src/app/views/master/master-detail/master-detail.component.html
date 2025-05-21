@@ -13,35 +13,15 @@
               </swiper-slide>
               <swiper-slide class="swiper-slide">
                 <div class="master-slider2__img">
-                  <img src="assets/img/master4.jpg" alt="">
+                  <img src="{{ master?.photo }}" alt="">
                 </div>
               </swiper-slide>
               <swiper-slide class="swiper-slide">
                 <div class="master-slider2__img">
-                  <img src="assets/img/master4.jpg" alt="">
+                  <img src="{{ master?.photo }}" alt="">
                 </div>
               </swiper-slide>
             </swiper-container>
-
-<!--            <div class="swiper-container">-->
-<!--              <div class="swiper-wrapper">-->
-<!--                <div class="swiper-slide">-->
-<!--                  <div class="master-slider2__img">-->
-<!--                    <img src="assets/img/master4.jpg" alt="">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="swiper-slide">-->
-<!--                  <div class="master-slider2__img">-->
-<!--                    <img src="assets/img/master4.jpg" alt="">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="swiper-slide">-->
-<!--                  <div class="master-slider2__img">-->
-<!--                    <img src="assets/img/master4.jpg" alt="">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
             <swiper-nav></swiper-nav>
             <div class="swiper-pagination"></div>
           </div>
@@ -61,29 +41,13 @@
                 <span>Мастер</span>
               </div>
             </div>
-            <div class="master-prof">
-              <div class="prof-badge">
+            <div class="master-prof" *ngIf="specialityList.length > 0">
+              <div class="prof-badge" *ngFor="let speciality of specialityList">
                 <div class="prof-badge__title">
-                  Мануальный терапевт
+                  {{ speciality.speciality }}
                 </div>
-                <div class="prof-badge__years">
-                  <span>15 лет</span>
-                </div>
-              </div>
-              <div class="prof-badge">
-                <div class="prof-badge__title">
-                  Терапевт
-                </div>
-                <div class="prof-badge__years">
-                  <span>10 лет</span>
-                </div>
-              </div>
-              <div class="prof-badge">
-                <div class="prof-badge__title">
-                  Ортодонт
-                </div>
-                <div class="prof-badge__years">
-                  <span>5 лет</span>
+                <div class="prof-badge__years" *ngIf="speciality.experience">
+                  <span>{{ speciality.experience }}</span>
                 </div>
               </div>
             </div>
@@ -96,7 +60,7 @@
           </div>
           <div class="master-item__subcol2">
             <div class="master-contacts">
-              <div class="contact-item _last">
+              <div class="contact-item _last" *ngIf="master?.city">
                 <div class="h3">
                   Город
                 </div>
@@ -112,23 +76,26 @@
                   Контакты
                 </div>
                 <div class="contact-item__desc">
-                  <a href="tel:+73812353037" class="contact-item__link font2">
+                  <a href="tel:+7{{ master?.phone }}" class="contact-item__link font2">
                     <img src="assets/img/phone.svg" alt="">
-                    <span>+7 (3812) 35-30-37</span>
+                    <span>{{ master?.phone }}</span>
+<!--                    <span>+7 (3812) 35-30-37</span>-->
                   </a>
                 </div>
                 <div class="contact-item__desc">
-                  <a href="mailto:pochta@com" class="contact-item__link">
+                  <a href="mailto:{{ master?.email }}" class="contact-item__link">
                     <img src="assets/img/mail2.svg" alt="">
-                    <span>pochta&#64;com</span>
+                    <span>{{ master?.email }}</span>
                   </a>
                 </div>
               </div>
-              <div class="contact-item">
+              <div
+                *ngIf="socialObject?.youtube || socialObject?.instagram || socialObject?.vk || socialObject?.tg"
+                class="contact-item">
                 <div class="h3">
                   Ссылка на каналы
                 </div>
-                <socials></socials>
+                <socials [socialObject]="socialObject"></socials>
               </div>
             </div>
             <div class="event-action">

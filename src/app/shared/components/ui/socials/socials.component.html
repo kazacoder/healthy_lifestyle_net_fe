@@ -1,14 +1,14 @@
 <div class="socials">
-  <a href="" class="socials__item">
+  <a [href]="socialObject?.youtube" class="socials__item" *ngIf="socialObject?.youtube">
     <img src="assets/img/youtube.svg" alt="">
   </a>
-  <a href="" class="socials__item">
+  <a [href]="socialObject?.tg" class="socials__item" *ngIf="socialObject?.youtube">
     <img src="assets/img/tg2.svg" alt="">
   </a>
-  <a href="" class="socials__item">
+  <a [href]="socialObject?.vk" class="socials__item" *ngIf="socialObject?.vk">
     <img src="assets/img/vk.svg" alt="">
   </a>
-  <a href="" class="socials__item _ig">
+  <a [href]="socialObject?.instagram" class="socials__item _ig" *ngIf="socialObject?.instagram">
     <img src="assets/img/ig.svg" alt="">
   </a>
 </div>

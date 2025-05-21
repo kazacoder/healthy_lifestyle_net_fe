@@ -12,6 +12,8 @@ import {MasterInfoType} from '../../../../types/master-info.type';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ParagraphTextPipe} from '../../../shared/pipes/paragraph-text.pipe';
+import {SocialObjectType} from '../../../../types/social-object.type';
+import {CommonUtils} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'app-master-detail',
@@ -33,7 +35,9 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   activatedRouteSubscription: Subscription | null = null;
   masterDetailSubscription: Subscription | null = null;
   master: MasterInfoType | null = null;
+  socialObject: SocialObjectType | null = null
   masterSlider: SwiperContainer | null = null;
+  specialityList: {speciality: string, experience: string}[] = []
   masterSliderParams = {
     slidesPerView: "auto",
     spaceBetween: 0,
@@ -73,6 +77,27 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               throw new Error(error);
             }
             this.master = data as MasterInfoType
+            this.master.specialities.forEach(item => {
+              let experience;
+              const experienceYears = new Date().getFullYear() - new Date(item.experience_since).getFullYear()
+              if (experienceYears > 0) {
+                experience = CommonUtils.formatPeriod(experienceYears)
+              } else {
+                const experienceMonth = new Date().getMonth() - new Date(item.experience_since).getMonth()
+                if (experienceMonth > 0) {
+                  experience = CommonUtils.formatPeriod(experienceMonth, 'month')
+                } else {
+                  experience = ''
+                }
+              }
+              this.specialityList.push({speciality: item.speciality, experience: experience});
+            })
+            this.socialObject = {
+              youtube: this.master.youtube,
+              tg: this.master.telegram,
+              vk: this.master.vk,
+              instagram: this.master.instagram,
+            }
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.detail) {
