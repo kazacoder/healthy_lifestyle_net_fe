@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {SpecialityService} from '../../../../shared/services/speciality.service';
 import {ChangePasswordComponent} from './change-password/change-password.component';
 import {WindowsUtils} from '../../../../shared/utils/windows-utils';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 @Component({
   selector: 'user-form',
@@ -19,7 +20,8 @@ import {WindowsUtils} from '../../../../shared/utils/windows-utils';
     ReactiveFormsModule,
     NgForOf,
     NgClass,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    NgSelectModule,
   ],
   standalone: true,
   templateUrl: './user-form.component.html',
@@ -89,7 +91,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
         receivedSpecialityList.forEach(item => {
           this.specialityObj[item.id] = item.title
         })
-
+        console.log(this.specialityList)
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
@@ -99,6 +101,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
       }
     })
+
   }
 
   togglePasswordModal(value: boolean) {
@@ -122,11 +125,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
       const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
       userInfoFormSpecialitiesControl.clear()
       this.userInfo.specialities.forEach((speciality: UserSpecialityType) => {
-          userInfoFormSpecialitiesControl.push(this.fb.group({
-            speciality: [{value: speciality.speciality_id.toString(), disabled: disableControls,}, Validators.required],
-            experienceSince: [{value: speciality.experience_since, disabled: disableControls,}, Validators.required],
-            userSpecialityId: {value: speciality.id.toString(), disabled: disableControls,}
-          }))
+        userInfoFormSpecialitiesControl.push(this.fb.group({
+          speciality: [{value: speciality.speciality_id, disabled: disableControls,}, Validators.required],
+          experienceSince: [{value: speciality.experience_since, disabled: disableControls,}, Validators.required],
+          userSpecialityId: {value: speciality.id.toString(), disabled: disableControls,}
+        }))
       });
     }
   }
@@ -271,11 +274,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   addSpeciality() {
     const userInfoFormSpecialitiesControl = this.userInfoForm.get('specialities')
-        userInfoFormSpecialitiesControl.push(this.fb.group({
-          speciality: ['', Validators.required],
-          experienceSince: ['', Validators.required],
-          userSpecialityId: null
-        }))
+    userInfoFormSpecialitiesControl.push(this.fb.group({
+      speciality: ['', Validators.required],
+      experienceSince: ['', Validators.required],
+      userSpecialityId: null
+    }))
   }
 
 

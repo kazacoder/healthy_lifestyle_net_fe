@@ -18,8 +18,8 @@
       <ng-container *ngFor="let speciality of userInfoForm.get('specialities').controls; index as i"
                     [formGroupName]="i">
         <div class="fg">
-          <label class="label-flex">
-            Специализация
+          <div class="label-flex">
+            <label>Специализация</label>
             <button type="button" class="del-btn"
                     [ngClass]="{'m-btn-bounce': !userFormDisabled}"
                     [disabled]="userFormDisabled"
@@ -34,11 +34,20 @@
               </svg>
               <span>Удалить</span>
             </button>
-          </label>
-          <select [formControlName]="'speciality'">
-            <option style="display: none">Выберите специальность</option>
-            <option *ngFor="let speciality of specialityList" [value]="speciality.id">{{ speciality.title }}</option>
-          </select>
+          </div>
+          <ng-select
+            [items]="specialityList"
+            bindLabel="title"
+            bindValue="id"
+            [searchable]="true"
+            [clearable]="false"
+            [formControlName]="'speciality'"
+            placeholder="Выберите специальность">
+          </ng-select>
+<!--          <select [formControlName]="'speciality'">-->
+<!--            <option style="display: none">Выберите специальность</option>-->
+<!--            <option *ngFor="let speciality of specialityList" [value]="speciality.id">{{ speciality.title }}</option>-->
+<!--          </select>-->
           <input type="hidden" [formControlName]="'userSpecialityId'">
         </div>
         <div class="fg" [ngClass]="{'_error': getSpecialityValidity(i, 'experienceSince')}">

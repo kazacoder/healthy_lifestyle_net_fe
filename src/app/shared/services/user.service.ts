@@ -15,9 +15,15 @@ import {UserChangePassType} from '../../../types/user-change-pass.type';
 export class UserService {
   userNameKey: string = 'userName';
   userIdKey: string = 'userId';
+  userStatusKey: string = 'userStatus';
   userName$: Subject<string | null> = new Subject<string | null>();
+  isMaster: boolean = false;
+  isMaster$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.isMaster = localStorage.getItem(this.userStatusKey) === '3'
+    this.isMaster$.next(this.isMaster);
+  }
 
   getUserInfo(): Observable<UserInfoType | DefaultResponseType> {
     return this.http.get<UserInfoType | DefaultResponseType>(environment.api + 'user-info/');
@@ -49,14 +55,20 @@ export class UserService {
     return this.http.put<UserChangePassType | DefaultResponseType>(environment.api + 'user/change-password/', data);
   }
 
-  setUserInfo(user_id: string, username: string): void {
+  setUserInfo(user_id: string, username: string, userStatus: number): void {
     this.userName$.next(username);
+    this.isMaster$.next(userStatus === 3);
     localStorage.setItem(this.userIdKey, user_id);
     localStorage.setItem(this.userNameKey, username);
+    localStorage.setItem(this.userStatusKey, userStatus.toString());
   }
 
   getUserName(): string | null {
     return localStorage.getItem(this.userNameKey);
+  }
+
+  getIsMaster(): boolean {
+    return localStorage.getItem(this.userStatusKey) === '3';
   }
 
   getUserId(): string | null {
@@ -66,7 +78,9 @@ export class UserService {
   removeUserInfo(): void {
     localStorage.removeItem(this.userIdKey);
     localStorage.removeItem(this.userNameKey);
+    localStorage.removeItem(this.userStatusKey);
     this.userName$.next(null);
+    this.isMaster$.next(false);
   }
 
 }

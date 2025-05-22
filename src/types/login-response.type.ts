@@ -4,4 +4,5 @@ export type LoginResponseType = {
   userId: string;
   username: string;
   firstName: string;
+  status: number
 }

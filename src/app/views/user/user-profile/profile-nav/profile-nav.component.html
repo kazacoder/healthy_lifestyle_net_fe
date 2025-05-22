@@ -32,6 +32,7 @@
       </a>
       <a routerLink="/profile/payment"
          routerLinkActive="_active"
+         *ngIf="isMaster"
          class="profile-nav__link m-btn-bounce">
         <span class="profile-nav__link-title">Оплата</span>
       </a>

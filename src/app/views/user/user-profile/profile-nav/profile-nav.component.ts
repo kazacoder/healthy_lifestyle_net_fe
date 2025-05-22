@@ -3,14 +3,15 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from '../../../../core/auth/auth.service';
 import {UserService} from '../../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {NgClass} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 
 @Component({
   selector: 'profile-nav',
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgClass
+    NgClass,
+    NgIf
   ],
   standalone: true,
   templateUrl: './profile-nav.component.html',
@@ -18,6 +19,7 @@ import {NgClass} from '@angular/common';
 })
 export class ProfileNavComponent implements AfterContentChecked {
 
+  isMaster: boolean = false;
   isOpened: boolean = false;
   activeMenuItem: string | undefined = '';
 
@@ -25,6 +27,7 @@ export class ProfileNavComponent implements AfterContentChecked {
               private userService: UserService,
               private _snackBar: MatSnackBar,
               private router: Router,) {
+    this.isMaster = this.userService.isMaster;
   }
 
   //ToDO ngDoCheck: вызывается при каждой проверке изменений свойств компонента сразу после методов ngOnChanges и ngOnInit

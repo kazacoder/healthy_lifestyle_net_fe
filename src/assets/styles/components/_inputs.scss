@@ -1,22 +1,24 @@
 .fg {
   position: relative;
   margin: 0;
-  label{
+
+  label {
     display: block;
     font-size: 1em;
     line-height: 140%;
     margin-bottom: 1em;
     font-weight: 500;
     font-family: $font2;
-    span{
+
+    span {
       color: #f72f2f;
     }
   }
 
   select,
-  .nice-select,
+  ng-select,
   input,
-  textarea{
+  textarea {
     border-radius: 0.5em;
     border: 1px solid #f1f1f1;
     background-color: #ededed;
@@ -26,19 +28,85 @@
     width: 100%;
     font-size: 1em;
     font-family: $font2;
+
     &::placeholder {
       color: #929798;
     }
+
     &:focus {
       border-color: $primary;
     }
-    &:disabled{
+
+    &:disabled, &.ng-select-disabled {
       pointer-events: none;
       background: #F6F6F6 !important;
-      color: rgba(#000,.4);
+      color: rgba(#000, .4);
     }
   }
-  select{
+
+  .ng-select .ng-select-container, .ng-select .ng-value-container {
+    display: flex;
+    align-items: center; /* Выровнять всё по центру */
+    min-height: 100%; /* или желаемая высота */
+    .ng-input {
+      z-index: -1;
+    }
+  }
+
+  .ng-select.ng-select-focused {
+    border-color: $primary;
+  }
+
+  .ng-select .ng-arrow {
+    border-color: #111 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px 4px 0 4px;
+    display: block;
+    width: 0;
+    height: 0;
+  }
+
+  .ng-dropdown-panel {
+    margin-top: 4px; /* Отступ от поля */
+    border-radius: 0.5em; /* Скругление углов */
+    overflow: hidden; /* Чтобы не вылезал фокус */
+    background: #ededed;
+    left: 0 !important;
+    right: 0 !important;
+    width: calc(100% + 2px) !important; /* чтобы точно совпадал с контейнером */
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+  }
+
+  .ng-select.ng-select-opened .ng-dropdown-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .ng-dropdown-panel .ng-option {
+    transition: background 0.2s ease;
+    height: 3.125em;
+    font-size: 1em;
+    line-height: 157%;
+    padding: .5em 1.25em;
+  }
+
+  /* Цвет фона при наведении */
+  .ng-dropdown-panel .ng-option:hover {
+    background-color: rgba(189, 218, 19, .2) !important;
+    cursor: pointer;
+  }
+
+  /* Выбранный элемент */
+  .ng-dropdown-panel .ng-option-selected {
+    background-color: $primary;
+  }
+
+  select {
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
@@ -48,30 +116,36 @@
     background-repeat: no-repeat;
     background-position: right 1.25em center;
     background-size: .8125em auto;
+
     option {
       &:focus > option:checked,
-      &:focus{
+      &:focus {
         //box-shadow: 0 0 10px 100px red inset;
         //background-color: $primary;
       }
-      &:checked{
+
+      &:checked {
         background-color: $primary;
       }
     }
+
     &::-ms-expand {
       display: none; // IE
     }
   }
-  textarea{
+
+  textarea {
     padding-top: 1em;
     padding-bottom: 1em;
     height: 13.75em;
     resize: none;
   }
-  &__field{
+
+  &__field {
     position: relative;
   }
-  .nice-select{
+
+  .nice-select {
     border: 1px solid #f1f1f1 !important;
     background-color: #ededed !important;
     color: $black !important;
@@ -80,14 +154,17 @@
     justify-content: space-between;
     white-space: nowrap;
     padding: 0 0 0 1.25em;
-    &.disabled{
+
+    &.disabled {
       pointer-events: none;
       background: #F6F6F6 !important;
-      .current{
+
+      .current {
         opacity: 0.4;
       }
     }
-    &:before{
+
+    &:before {
       content: '';
       order: 3;
       border-left: $black;
@@ -98,11 +175,13 @@
       @include bgImgSize(.5em);
       margin-left: 1em;
     }
-    .current{
+
+    .current {
       font-size: 1em;
       line-height: 157%;
     }
-    .list{
+
+    .list {
       border-radius: .5em;
       width: calc(100% + 2px);
       left: -1px;
@@ -112,7 +191,8 @@
       z-index: 5;
       @include scroll;
     }
-    .option{
+
+    .option {
       height: 3.125em;
       font-size: 1em;
       line-height: 157%;
@@ -121,87 +201,104 @@
       align-items: center;
       color: #2B2B2B;
       border: none;
-      &:last-child{
+
+      &:last-child {
         border-bottom: none;
       }
-      &.disabled{
+
+      &.disabled {
         display: none;
       }
+
       &.focus,
-      &.selected.focus{
+      &.selected.focus {
         background-color: $primary;
         border-color: $primary;
         font-weight: 400;
         color: $black;
       }
-      &:hover{
-        background-color: rgba($primary,.2) !important;
+
+      &:hover {
+        background-color: rgba($primary, .2) !important;
       }
     }
   }
-  &._error{
+
+  &._error {
     input,
-    textarea{
+    textarea {
       border-color: $text-weekend;
       color: $text-weekend;
-      &::placeholder{
+
+      &::placeholder {
         color: $text-weekend;
       }
     }
-    .fg__error-text{
+
+    .fg__error-text {
       display: block;
     }
   }
-  &__error-text{
+
+  &__error-text {
     margin-top: .375em;
     color: $text-weekend;
     display: none;
   }
-  &__bottom{
+
+  &__bottom {
     margin-top: .625em;
-    .add-btn{
+
+    .add-btn {
       margin-right: .625em;
     }
-    .del-btn{
+
+    .del-btn {
       margin-right: .625em;
     }
   }
-  &__hint{
+
+  &__hint {
     font-size: .75em;
     line-height: 133%;
     color: rgba(0, 0, 0, 0.5);
     font-weight: 300;
     font-family: $font2;
-    span{
+
+    span {
       color: #f72f2f;
     }
   }
 }
 
-.highlight{
+.highlight {
   background-color: $primary !important;
 }
 
-.pass-toggle{
+.pass-toggle {
   position: absolute;
   bottom: .9375em;
   right: 1em;
   width: 1.25em;
   height: 1.25em;
   @include center;
+
   img,
-  svg{
+  svg {
     width: 100%;
     height: auto;
   }
-  ._view2{
+
+  ._view2 {
     display: none;
   }
-  &._active{
-    ._view1{
+
+  &._active {
+    ._view1 {
       display: none;
     }
-    ._view2{
+
+    ._view2 {
       display: block;
     }
   }
@@ -213,9 +310,10 @@
 .del-btn,
 .m-switch,
 .m-radio,
-.m-check{
+.m-check {
   position: relative;
-  input{
+
+  input {
     position: absolute;
     opacity: 0;
     width: 100%;
@@ -228,22 +326,25 @@
 }
 
 .m-check,
-.m-radio{
-  label{
+.m-radio {
+  label {
     position: relative;
     cursor: pointer;
     display: block;
     padding-left: 3em;
     min-height: 1.5em;
-    span{
+
+    span {
       font-size: 1.125em;
       line-height: 133%;
     }
+
     &:before,
-    &:after{
+    &:after {
       pointer-events: none;
     }
-    &:before{
+
+    &:before {
       content: '';
       position: absolute;
       z-index: 1;
@@ -255,7 +356,8 @@
       @include bgImgSize(0);
       transition: all .0s;
     }
-    a{
+
+    a {
       text-decoration: underline;
       position: relative;
       z-index: 2;
@@ -266,7 +368,7 @@
 
 .m-check {
   input {
-    &:checked+label {
+    &:checked + label {
       &::before {
         background-color: $black;
         border-radius: .25em;
@@ -275,32 +377,36 @@
       }
     }
   }
+
   label {
     &:before {
       border-radius: .125em;
       background-image: url(../../img/check.svg);
     }
   }
-  &._gray{
-    label{
+
+  &._gray {
+    label {
       color: #787878;
     }
   }
 }
 
-.m-radio{
-  input:checked~label{
-    &:before{
+.m-radio {
+  input:checked ~ label {
+    &:before {
       border: none;
       background-size: 100% auto;
     }
   }
-  label{
-    &:before{
+
+  label {
+    &:before {
       border-radius: 50%;
       //background-image: url(../../img/radio.svg);
     }
-    span{
+
+    span {
       display: block;
       line-height: 157%;
       color: #5B626C;
@@ -309,9 +415,10 @@
   }
 }
 
-.m-switch{
+.m-switch {
   display: flex;
-  label{
+
+  label {
     width: 3.125em;
     height: 1.5625em;
     border-radius: 3.125em;
@@ -320,7 +427,8 @@
     align-items: center;
     padding: 0 .125em;
     transition: all .3s;
-    &:before{
+
+    &:before {
       content: '';
       transition: inherit;
       width: 1.3125em;
@@ -329,29 +437,33 @@
       background-color: #fff;
     }
   }
-  input:checked~label{
+
+  input:checked ~ label {
     background-color: $primary;
-    &:before{
+
+    &:before {
       transform: translateX(1.5625em);
     }
   }
 }
 
 
-.cartcalc{
+.cartcalc {
   max-width: 100%;
   width: 7.5625rem;
   display: grid;
   grid-template-columns: 2.1875em calc(100% - 2.1875em * 2) 2.1875em;
   border: 1px solid #E9EDF2;
   height: 3.125em;
+
   button,
-  input{
+  input {
     height: 100%;
     width: 100%;
     min-height: 100%;
   }
-  input{
+
+  input {
     border: none;
     border-left: 1px solid #E9EDF2;
     border-right: 1px solid #E9EDF2;
@@ -360,27 +472,30 @@
     font-size: 1em;
     text-align: center;
   }
-  svg{
+
+  svg {
     width: .5em;
     height: auto;
   }
-  button{
+
+  button {
     @include center;
-    &:hover{
+
+    &:hover {
       background-color: #E6E6EC;
     }
   }
 }
 
 
-@media screen and (max-width: 992px){
+@media screen and (max-width: 992px) {
 
 }
 
 
-@media screen and (max-width: 576px){
-  .fg{
-    textarea{
+@media screen and (max-width: 576px) {
+  .fg {
+    textarea {
       height: 11em;
     }
   }
