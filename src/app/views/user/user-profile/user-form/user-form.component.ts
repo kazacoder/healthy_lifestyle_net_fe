@@ -91,7 +91,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
         receivedSpecialityList.forEach(item => {
           this.specialityObj[item.id] = item.title
         })
-        console.log(this.specialityList)
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {

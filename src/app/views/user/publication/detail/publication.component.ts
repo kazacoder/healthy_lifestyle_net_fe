@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import {FormComponent} from './form/form.component';
 import {UploadComponent} from './upload/upload.component';
+import {PublicationFormComponent} from './form/publication-form.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'publication',
   imports: [
-    FormComponent,
-    UploadComponent
+    PublicationFormComponent,
+    UploadComponent,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './publication.component.html',

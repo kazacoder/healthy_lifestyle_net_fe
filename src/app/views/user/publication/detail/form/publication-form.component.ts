@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserService} from '../../../../shared/services/user.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CategoryType} from '../../../../../types/category.type';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {PublicationService} from '../../../../shared/services/publication.service';
-import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
+import {CategoryType} from '../../../../../../types/category.type';
+import {UserService} from '../../../../../shared/services/user.service';
+import {PublicationService} from '../../../../../shared/services/publication.service';
+import {DefaultResponseType} from '../../../../../../types/default-response.type';
 
 @Component({
   selector: 'publication-form',
@@ -19,10 +19,10 @@ import {Subscription} from 'rxjs';
     NgForOf
   ],
   standalone: true,
-  templateUrl: './form.component.html',
-  styleUrl: './form.component.scss'
+  templateUrl: './publication-form.component.html',
+  styleUrl: './publication-form.component.scss'
 })
-export class FormComponent implements OnInit, OnDestroy {
+export class PublicationFormComponent implements OnInit, OnDestroy {
   isMaster: boolean = false;
   categories: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
@@ -78,5 +78,4 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe()
   }
-
 }

@@ -12,7 +12,8 @@ import {
 import {UserProfileComponent} from './views/user/user-profile/user-profile.component';
 import {UserProfileLayoutComponent} from './views/user/user-profile-layout.component';
 import {AuthForwardGuard} from './core/auth/auth-forward.guard';
-import {PublicationComponent} from './views/user/publication/publication.component';
+import {PublicationComponent} from './views/user/publication/detail/publication.component';
+import {PublicationsComponent} from './views/user/publication/list/publications/publications.component';
 
 export const routes: Routes = [
   {
@@ -35,7 +36,8 @@ export const routes: Routes = [
           {path: '', component: UserProfileComponent, title: 'Профиль'},
           {path: 'notifications', component: PageUnderConstructionComponent, title: 'Уведомления'},
           {path: 'messages', component: PageUnderConstructionComponent, title: 'Сообщения'},
-          {path: 'publication', component: PublicationComponent, title: 'Публикации'},
+          {path: 'publication', component: PublicationsComponent, title: 'Публикации'},
+          {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
           {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},
           {path: 'notes', component: PageUnderConstructionComponent, title: 'Записи'},
           {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
