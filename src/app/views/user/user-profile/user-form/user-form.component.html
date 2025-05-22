@@ -44,10 +44,6 @@
             [formControlName]="'speciality'"
             placeholder="Выберите специальность">
           </ng-select>
-<!--          <select [formControlName]="'speciality'">-->
-<!--            <option style="display: none">Выберите специальность</option>-->
-<!--            <option *ngFor="let speciality of specialityList" [value]="speciality.id">{{ speciality.title }}</option>-->
-<!--          </select>-->
           <input type="hidden" [formControlName]="'userSpecialityId'">
         </div>
         <div class="fg" [ngClass]="{'_error': getSpecialityValidity(i, 'experienceSince')}">
