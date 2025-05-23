@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -16,7 +16,8 @@ import {DefaultResponseType} from '../../../../../../types/default-response.type
     NgIf,
     NgSelectComponent,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   standalone: true,
   templateUrl: './publication-form.component.html',
@@ -28,8 +29,30 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
   getCategoriesSubscription: Subscription | null = null;
 
   publicationForm: any = this.fb.group({
+    title: ['', Validators.required],
+    phone: ['', Validators.required],
+    ticketAmount: [0, Validators.required],
+    pricing: ['_free', Validators.required],
+    price: [0],
+    prepayment: [0],
+    address: this.fb.group({
+      city: ['', Validators.required],
+      street: ['', Validators.required],
+      house: ['', Validators.required],
+      floor: ['', Validators.required],
+      office: ['', Validators.required],
+    }),
+    duration: this.fb.group({
+      amount: [null, Validators.required],
+      timePeriod: ['hours', Validators.required],
+    }),
+
     suit: [null, Validators.required],
     format: [null, Validators.required],
+    date: ['', Validators.required],
+    whatsapp: [null, Validators.required],
+    telegram: [null, Validators.required],
+    description: [null, Validators.required],
   })
 
   suitOpt = [
@@ -42,6 +65,11 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
     {id: '1', title: 'Онлайн'},
     {id: '2', title: 'Офлайн'},
     {id: '3', title: 'Комбинированный'},
+  ]
+
+  timePeriodOpt = [
+    {value: 'hours', title: 'часы'},
+    {value: 'days', title: 'дни'},
   ]
 
   constructor(private userService: UserService,
@@ -73,6 +101,14 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
 
   addCategory(id: number) {
     console.log(id)
+  }
+
+  setPricing(value: '_from' | '_free') {
+    this.publicationForm.get('pricing').setValue(value);
+  }
+
+  proceed () {
+    console.log(this.publicationForm.value)
   }
 
   ngOnDestroy() {
