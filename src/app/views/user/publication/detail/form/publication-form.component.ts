@@ -9,6 +9,7 @@ import {CategoryType} from '../../../../../../types/category.type';
 import {UserService} from '../../../../../shared/services/user.service';
 import {PublicationService} from '../../../../../shared/services/publication.service';
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
+import {Settings} from '../../../../../../settings/settings';
 
 @Component({
   selector: 'publication-form',
@@ -26,7 +27,9 @@ import {DefaultResponseType} from '../../../../../../types/default-response.type
 export class PublicationFormComponent implements OnInit, OnDestroy {
   isMaster: boolean = false;
   categories: CategoryType[] = [];
+  categoriesUnfiltered: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
+  maxCatCount = Settings.maxCategoryCount;
 
   publicationForm: any = this.fb.group({
     title: ['', Validators.required],
@@ -53,6 +56,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
     whatsapp: [null, Validators.required],
     telegram: [null, Validators.required],
     description: [null, Validators.required],
+    categories: [[]]
   })
 
   suitOpt = [
@@ -88,6 +92,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
           throw new Error(error);
         }
         this.categories = data as CategoryType[];
+        this.categoriesUnfiltered = data as CategoryType[];
+        console.log(this.categoriesUnfiltered)
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
@@ -99,19 +105,35 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
     })
   }
 
-  addCategory(id: number) {
-    console.log(id)
+  addCategory(category: CategoryType) {
+    const categoriesList = this.publicationForm.get('categories').value
+    if (!categoriesList.find((x: CategoryType) => x.id === category.id)
+      && categoriesList.length < Settings.maxCategoryCount) {
+      this.publicationForm.get('categories').value.push(category)
+      this.categories = [...this.categories.filter((x: CategoryType) => x.id !== category.id)]
+    } else {
+      this._snackBar.open('Максимальное количество категорий добавлено')
+    }
+  }
+
+  removeCategory(id: number) {
+    const categoriesList = this.publicationForm.get('categories').value.filter((x: CategoryType) => x.id !== id)
+    this.publicationForm.get('categories').setValue(categoriesList)
+    this.categories = [...this.categoriesUnfiltered.filter(
+      (item: CategoryType) => !categoriesList.some((ex: CategoryType) => ex.id === item.id)
+    )]
   }
 
   setPricing(value: '_from' | '_free') {
     this.publicationForm.get('pricing').setValue(value);
   }
 
-  proceed () {
+  proceed() {
     console.log(this.publicationForm.value)
   }
 
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe()
   }
+
 }

@@ -238,6 +238,7 @@
   }
   &__items{
     margin-top: .25em;
+    flex-wrap: wrap;
     .m-badge{
       margin: .75em .75em 0 0;
       border: 1px solid $primary;

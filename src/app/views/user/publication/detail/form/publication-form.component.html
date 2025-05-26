@@ -214,24 +214,15 @@
         Категории
       </div>
       <div class="publication-category__hint">
-        <span>*</span> Не более 5
+        <span>*</span> Не более {{ maxCatCount }}
       </div>
     </div>
     <div class="publication-category__items _flex">
-      <div class="m-badge">
-        <img src="assets/img/type-icon.svg" alt="">
-        <span>Йога</span>
-        <button class="m-badge__remove">
-          <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1.5 1L13.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round"/>
-            <path d="M13.5 1L1.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-      <div class="m-badge">
-        <img src="assets/img/type-icon2.svg" alt="">
-        <span>Баня</span>
-        <button class="m-badge__remove">
+      <div class="m-badge" *ngFor="let cat of publicationForm.get('categories').value">
+        <img src="assets/img/marker.svg" alt="" *ngIf="!cat.image">
+        <img src="{{ cat.image }}" alt="" *ngIf="cat.image">
+        <span>{{ cat.title }}</span>
+        <button class="m-badge__remove" (click)="removeCategory(cat.id)">
           <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.5 1L13.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round"/>
             <path d="M13.5 1L1.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round"/>
@@ -241,7 +232,7 @@
     </div>
     <div class="publication-category__items2 _flex">
       <div class="publication-category__item"
-           (click)="addCategory(category.id)"
+           (click)="addCategory(category)"
            *ngFor="let category of categories">
         <img src="assets/img/plus2.svg" alt="">
         <span>{{ category.title }}</span>
