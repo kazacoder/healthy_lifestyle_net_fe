@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {UploadComponent} from './upload/upload.component';
 import {PublicationFormComponent} from './form/publication-form.component';
 import {RouterLink} from '@angular/router';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'publication',
@@ -16,4 +17,9 @@ import {RouterLink} from '@angular/router';
 })
 export class PublicationComponent {
 
+  imageForm: FormGroup | null = null;
+
+  updateImageForm(form: FormGroup) {
+    this.imageForm = form;
+  }
 }

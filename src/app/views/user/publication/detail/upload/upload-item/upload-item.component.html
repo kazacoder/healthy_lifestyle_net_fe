@@ -1,8 +1,9 @@
 <div class="upload-group__item">
   <div class="upload-group__img m-backdrop">
-    <img src="../../../../../../../assets/img/publication2.webp" alt="">
+    <img src="{{ imagePreview }}" alt="" *ngIf="imagePreview">
+<!--    <img src="../../../../../../../assets/img/publication2.webp" alt="">-->
   </div>
-  <button class="upload-group__item-delete">
+  <button class="upload-group__item-delete" (click)="removeImage()" *ngIf="imagePreview">
     <img src="../../../../../../../assets/img/delete2.svg" alt="">
   </button>
 </div>

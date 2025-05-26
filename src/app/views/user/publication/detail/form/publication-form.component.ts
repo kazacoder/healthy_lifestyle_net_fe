@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {NgSelectComponent} from '@ng-select/ng-select';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
@@ -30,6 +30,9 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
   categoriesUnfiltered: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
+
+  @Input()
+  imageForm: FormGroup | null = null;
 
   publicationForm: any = this.fb.group({
     title: ['', Validators.required],
@@ -93,7 +96,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
         }
         this.categories = data as CategoryType[];
         this.categoriesUnfiltered = data as CategoryType[];
-        console.log(this.categoriesUnfiltered)
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
@@ -130,6 +132,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
 
   proceed() {
     console.log(this.publicationForm.value)
+    console.log(this.imageForm?.value)
+    console.log(this.imageForm?.valid)
   }
 
   ngOnDestroy() {
