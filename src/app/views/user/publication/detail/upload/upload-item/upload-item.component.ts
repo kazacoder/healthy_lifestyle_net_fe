@@ -24,5 +24,4 @@ export class UploadItemComponent {
     this.imagePreview = null;
     this.onImageRemove.emit(this.fileName);
   }
-
 }

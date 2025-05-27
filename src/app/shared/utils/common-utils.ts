@@ -92,4 +92,31 @@ export class CommonUtils {
       }
     }
   }
+
+  static getRussianMonthName(dateString: string): string {
+    const date = new Date(dateString);
+    const formatted = new Intl.DateTimeFormat('ru-RU', {
+      day: 'numeric',
+      month: 'long'
+    }).format(date);
+    const month = formatted.split(' ')[1];
+    return month.charAt(0).toUpperCase() + month.slice(1);
+  }
+
+  static getTicketWord(count: number): string {
+    const abs = Math.abs(count);       // учитываем возможный минус
+    const mod100 = abs % 100;
+    const mod10 = abs % 10;
+
+    if (mod100 >= 11 && mod100 <= 14) {
+      return  `${count.toString()} билетов`;
+    }
+    if (mod10 === 1) {
+      return `${count.toString()} билет`;
+    }
+    if (mod10 >= 2 && mod10 <= 4) {
+      return `${count.toString()} билета`;
+    }
+    return `${count.toString()} билетов`;
+  }
 }

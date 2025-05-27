@@ -11,7 +11,9 @@
     </div>
 
     <div class="publication__grid">
-      <publication-card></publication-card>
+      <publication-card
+        [publication] = publication
+        *ngFor="let publication of publications"></publication-card>
     </div>
   </div>
 </div>

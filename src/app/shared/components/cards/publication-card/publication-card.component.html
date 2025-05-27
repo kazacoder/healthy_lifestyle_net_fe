@@ -1,65 +1,70 @@
 <div class="publication-card publication-card--master">
   <div class="publication-card__top _flex-between">
     <div class="publication-card__badge">
-      <span>Платное</span>
+      <span *ngIf="!publication?.is_free">Платное</span>
+      <span *ngIf="publication?.is_free">Бесплатное</span>
     </div>
     <div class="publication-card__nav _flex">
-      <button class="publication-card__btn m-btn m-btn-primary m-btn-bounce">
+      <a routerLink="{{ publication?.id }}" class="publication-card__btn m-btn m-btn-primary m-btn-bounce">
         <img src="assets/img/edit.svg" alt="">
-      </button>
-      <button class="publication-card__btn publication-card__btn--delete m-btn m-btn-bounce">
+      </a>
+      <button (click)="toggleDeleteModal(true)"
+              class="publication-card__btn publication-card__btn--delete m-btn m-btn-bounce">
         <img src="assets/img/delete.svg" alt="">
       </button>
     </div>
   </div>
   <div class="publication-card__grid">
-    <a href="" class="publication-card__img m-backdrop _scale-img">
-      <img src="assets/img/publication.webp" alt="">
+    <a routerLink="{{ publication?.id }}" class="publication-card__img m-backdrop _scale-img">
+      <img src="{{ publication?.image }}" alt="" *ngIf="publication?.image">
+      <img src="assets/img/event_stub.svg" alt="" *ngIf="!publication?.image">
     </a>
     <div class="publication-card__content">
       <div class="publication-card__wrap">
         <div class="publication-card__title">
-          <a href="">title</a>
+          <a routerLink="{{ publication?.id }}">{{ publication?.title }}</a>
         </div>
         <div class="event-city _flex">
           <img src="assets/img/marker.svg" alt="">
-          <span class="text16 text14-tablet">
-                        Москва
-                    </span>
+          <span class="text16 text14-tablet">{{ publication?.city }}</span>
         </div>
       </div>
       <div class="publication-card__badges">
-        <div class="publication-card__free">
-          <span>от 1700₽</span>
+        <div class="publication-card__free" >
+          <span *ngIf="!publication?.is_free">от {{ +publication!.price }}₽</span>
+          <span *ngIf="publication?.is_free">Бесплатно</span>
         </div>
         <div class="publication-card__count">
-          <span>50 билетов</span>
+          <span>{{ tickets }}</span>
         </div>
       </div>
       <div class="publication-card__tags _flex">
-        <div class="event-card2__tag m-badge">
-          <img src="assets/img/type-icon4.svg" alt="">
-          <span>Йога</span>
-        </div>
-        <div class="event-card2__tag m-badge">
-          <img src="assets/img/type-icon5.svg" alt="">
-          <span>Баня</span>
+        <div class="event-card2__tag m-badge" *ngFor="let category of publication?.categories">
+          <img src="{{ category.image }}" alt="" *ngIf="category.image">
+          <img src="assets/img/marker.svg" alt="" *ngIf="!category.image">
+          <span>{{ category.title }}</span>
         </div>
       </div>
     </div>
     <div class="day-badge _big">
-      <div class="text24 bold-text font2">4</div>
-      <div class="text12">Марта</div>
+      <div class="text24 bold-text font2">{{ day }}</div>
+      <div class="text12">{{ month }}</div>
     </div>
   </div>
   <div class="publication-card__bottom">
-    <a href="" class="publication-card__answer m-btn-primary m-btn-bounce">
+    <a routerLink="{{ publication?.id }}/questions" class="publication-card__answer m-btn-primary m-btn-bounce">
       <div class="publication-card__answer-title">Вопросы/ответы</div>
       <div class="publication-card__answer-count">15 новых</div>
     </a>
-    <a href="" class="publication-card__answer _type2 m-btn-primary m-btn-bounce">
+    <a routerLink="{{ publication?.id }}/members" class="publication-card__answer _type2 m-btn-primary m-btn-bounce">
       <div class="publication-card__answer-title">Смотреть участников</div>
       <div class="publication-card__answer-count">15</div>
     </a>
   </div>
 </div>
+
+<confirm-modal
+  (onCloseModal)="toggleDeleteModal($event)"
+  (onConfirmClick)="deletePublication()"
+  [isOpen]="isOpenConfirmModal"
+  [text]="'Вы действительно хотите удалить публикацию?'"></confirm-modal>
