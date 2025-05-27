@@ -10,6 +10,7 @@ import {UserService} from '../../../../../shared/services/user.service';
 import {PublicationService} from '../../../../../shared/services/publication.service';
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
 import {Settings} from '../../../../../../settings/settings';
+import {PublicationType} from '../../../../../../types/publication.type';
 
 @Component({
   selector: 'publication-form',
@@ -29,6 +30,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
   categories: CategoryType[] = [];
   categoriesUnfiltered: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
+  createPublication: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
 
   @Input()
@@ -50,7 +52,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
     }),
     duration: this.fb.group({
       amount: [null, Validators.required],
-      timePeriod: ['hours', Validators.required],
+      timePeriod: ['1', Validators.required],
     }),
 
     suit: [null, Validators.required],
@@ -75,8 +77,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
   ]
 
   timePeriodOpt = [
-    {value: 'hours', title: 'часы'},
-    {value: 'days', title: 'дни'},
+    {value: '1', title: 'часы'},
+    {value: '2', title: 'дни'},
   ]
 
   constructor(private userService: UserService,
@@ -131,13 +133,73 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
   }
 
   proceed() {
-    console.log(this.publicationForm.value)
-    console.log(this.imageForm?.value)
-    console.log(this.imageForm?.valid)
+    console.log(this.publicationForm.valid)
+    if (this.publicationForm.valid && (!this.imageForm || this.imageForm?.valid)) {
+      const isFree = this.publicationForm.value.isFree === '_free' ? 'true' : 'false'
+
+      const formData = new FormData();
+      formData.append('title', this.publicationForm.value.title);
+      formData.append('phone',this.publicationForm.value.phone);
+      formData.append('ticket_amount', this.publicationForm.value.ticketAmount);
+      formData.append('is_free', isFree);
+      formData.append('price', this.publicationForm.value.price);
+      formData.append('prepayment', this.publicationForm.value.prepayment);
+      formData.append('city', this.publicationForm.value.address.city);
+      formData.append('street', this.publicationForm.value.address.street);
+      formData.append('house', this.publicationForm.value.address.house);
+      formData.append('floor', this.publicationForm.value.address.floor);
+      formData.append('office', this.publicationForm.value.address.office);
+      formData.append('duration', this.publicationForm.value.duration.amount);
+      formData.append('time_period', this.publicationForm.value.duration.timePeriod);
+      formData.append('suit', this.publicationForm.value.suit);
+      formData.append('format', this.publicationForm.value.format);
+      formData.append('date', this.publicationForm.value.date);
+      formData.append('whatsapp', this.publicationForm.value.whatsapp);
+      formData.append('telegram', this.publicationForm.value.telegram);
+      formData.append('description', this.publicationForm.value.description);
+
+      if (this.publicationForm.value.categories.length > 0) {
+        this.publicationForm.value.categories.forEach((category: CategoryType) => {
+          formData.append('categories', category.id.toString());
+        })
+      }
+      if (this.imageForm) {
+        if (this.imageForm.value.mainImage) {
+          formData.append('image', this.imageForm.value.mainImage);
+        }
+        if (this.imageForm.value.additionalImages.length > 0) {
+          this.imageForm.value.additionalImages.forEach((item: { image: File }) => {
+            formData.append('additional_images', item.image);
+          })
+        }
+      }
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+
+      this.createPublication = this.publicationService.createPublication(formData).subscribe({
+        next: (data: PublicationType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this._snackBar.open('Событие успешно создано');
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка создания события')
+          }
+        }
+      })
+    }
   }
 
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe()
+    this.createPublication?.unsubscribe()
   }
 
 }

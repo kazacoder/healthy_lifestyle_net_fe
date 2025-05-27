@@ -2,7 +2,7 @@ import {CategoryType} from './category.type';
 
 export type PublicationType = {
   id: number,
-  additional_images: AdditionalImage[],
+  additional_images: AdditionalImageType[],
   categories: CategoryType[],
   title: string,
   image: string,
@@ -27,7 +27,7 @@ export type PublicationType = {
   format: number
 }
 
-export type AdditionalImage = {
+export type AdditionalImageType = {
   id: number,
   file: string,
 }

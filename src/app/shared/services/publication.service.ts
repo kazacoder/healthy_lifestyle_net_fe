@@ -20,4 +20,8 @@ export class PublicationService {
   getPublicationsList (): Observable<PublicationType[] | DefaultResponseType> {
     return this.http.get<PublicationType[] | DefaultResponseType>(environment.api + 'event/');
   }
+
+  createPublication (formData: FormData): Observable<PublicationType | DefaultResponseType> {
+    return this.http.post<PublicationType | DefaultResponseType>(environment.api + 'event/', formData);
+  }
 }

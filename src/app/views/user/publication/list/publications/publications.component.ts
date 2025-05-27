@@ -42,7 +42,6 @@ export class PublicationsComponent implements OnInit, OnDestroy {
           throw new Error(error);
         }
         this.publications = data as PublicationType[];
-        console.log(this.publications);
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
