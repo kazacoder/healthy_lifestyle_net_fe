@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -10,7 +10,7 @@ import {UserService} from '../../../../../shared/services/user.service';
 import {PublicationService} from '../../../../../shared/services/publication.service';
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
 import {Settings} from '../../../../../../settings/settings';
-import {PublicationType} from '../../../../../../types/publication.type';
+import {publicationFormFieldsMatch, PublicationType} from '../../../../../../types/publication.type';
 import {Router} from '@angular/router';
 
 @Component({
@@ -26,16 +26,17 @@ import {Router} from '@angular/router';
   templateUrl: './publication-form.component.html',
   styleUrl: './publication-form.component.scss'
 })
-export class PublicationFormComponent implements OnInit, OnDestroy {
+export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   isMaster: boolean = false;
   categories: CategoryType[] = [];
   categoriesUnfiltered: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
   createPublication: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
+  edit: boolean = false;
 
-  @Input()
-  imageForm: FormGroup | null = null;
+  @Input() imageForm: FormGroup | null = null;
+  @Input() currentPublication: PublicationType | null = null;
 
   publicationForm: any = this.fb.group({
     title: ['', Validators.required],
@@ -111,6 +112,31 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
     })
   }
 
+  ngOnChanges() {
+    if (this.currentPublication) {
+      this.edit = true;
+      Object.entries(publicationFormFieldsMatch).forEach(([key, beKey]) => {
+        if (this.currentPublication) {
+          let value = this.currentPublication[beKey.field as keyof PublicationType]
+          if (key === 'pricing') {
+            value = value ? '_free' : '_from'
+          }
+          if (!beKey.group && key !== 'categories') {
+            this.publicationForm.get(key).setValue(value?.toString());
+          } else if (beKey.group) {
+            const group = this.publicationForm.get(beKey.group)
+            group.get(key).setValue(value?.toString())
+          } else if (key === 'categories') {
+            this.publicationForm.get(key).setValue(value);
+            this.categories = [...this.categoriesUnfiltered.filter(
+              (item: CategoryType) => (value as CategoryType[]).every((ex: CategoryType) => ex.id !== item.id)
+            )]
+          }
+        }
+      })
+    }
+  }
+
   addCategory(category: CategoryType) {
     const categoriesList = this.publicationForm.get('categories').value
     if (!categoriesList.find((x: CategoryType) => x.id === category.id)
@@ -141,7 +167,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
 
       const formData = new FormData();
       formData.append('title', this.publicationForm.value.title);
-      formData.append('phone',this.publicationForm.value.phone);
+      formData.append('phone', this.publicationForm.value.phone);
       formData.append('ticket_amount', this.publicationForm.value.ticketAmount);
       formData.append('is_free', isFree);
       formData.append('price', this.publicationForm.value.price);
@@ -198,6 +224,10 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
         }
       })
     }
+  }
+
+  save() {
+    console.log('save')
   }
 
   ngOnDestroy() {

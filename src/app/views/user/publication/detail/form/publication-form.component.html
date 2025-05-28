@@ -251,8 +251,11 @@
     </div>
   </div>
   <div class="publication-form__nav">
-    <button (click)="proceed()" class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
+    <button (click)="proceed()" *ngIf="!edit" class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
       <span>Разместить</span>
+    </button>
+    <button (click)="save()" *ngIf="edit" class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
+      <span>Сохранить</span>
     </button>
   </div>
 </div>

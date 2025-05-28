@@ -6,10 +6,13 @@
 
     <div class="publication-create__subtitle">
       <div class="text24 semi-bold-text">
-        Разместить мероприятие
+        {{ publicationTitle }}
       </div>
     </div>
-    <publication-upload (onImageChange)="updateImageForm($event)" class="publication-create__upload"></publication-upload>
-    <publication-form [imageForm]="imageForm"></publication-form>
+    <publication-upload
+      [currentPublicationImages]="currentPublicationImages"
+      (onImageChange)="updateImageForm($event)"
+      class="publication-create__upload"></publication-upload>
+    <publication-form [currentPublication]="currentPublication" [imageForm]="imageForm"></publication-form>
   </div>
 </div>
