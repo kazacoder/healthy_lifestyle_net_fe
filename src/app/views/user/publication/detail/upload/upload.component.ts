@@ -1,8 +1,9 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {UploadItemComponent} from './upload-item/upload-item.component';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {Settings} from '../../../../../../settings/settings';
+import {AdditionalImageType} from '../../../../../../types/publication.type';
 
 @Component({
   selector: 'publication-upload',
@@ -15,10 +16,10 @@ import {Settings} from '../../../../../../settings/settings';
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'
 })
-export class UploadComponent {
+export class UploadComponent implements OnChanges {
 
-  @Output()
-  onImageChange: EventEmitter<any> = new EventEmitter();
+  @Input() currentPublicationImages: {mainImage: string, additionalImages: AdditionalImageType[]} | null = null
+  @Output() onImageChange: EventEmitter<any> = new EventEmitter();
   imagePreview: string | ArrayBuffer | null = null;
   additionalImagePreview: { file: string | ArrayBuffer | null, name: string }[] = [];
   fileName: string | null = null;
@@ -31,14 +32,21 @@ export class UploadComponent {
 
   }
 
+  ngOnChanges() {
+    if (this.currentPublicationImages) {
+      this.imagePreview = this.currentPublicationImages.mainImage
+      this.currentPublicationImages.additionalImages.forEach(item => {
+        this.additionalImagePreview.push({file: item.file, name: item.file});
+      })
+
+    }
+  }
+
   onFileChange(event: Event, mainImage: boolean = true): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
     const file = input.files[0];
-
-
-
     const reader = new FileReader();
     if (mainImage) {
       this.fileName = file.name;

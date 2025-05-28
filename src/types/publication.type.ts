@@ -31,3 +31,26 @@ export type AdditionalImageType = {
   id: number,
   file: string,
 }
+
+export const publicationFormFieldsMatch = {
+  title: {group: null, field: 'title'},
+  phone: {group: null, field: 'phone'},
+  ticketAmount: {group: null, field: 'ticket_amount'},
+  pricing: {group: null, field: 'is_free'},
+  price: {group: null, field: 'price'},
+  prepayment: {group: null, field: 'prepayment'},
+  city: {group: 'address', field: 'city'},
+  street: {group: 'address', field: 'street'},
+  house: {group: 'address', field: 'house'},
+  floor: {group: 'address', field: 'floor'},
+  office: {group: 'address', field: 'office'},
+  amount: {group: 'duration', field: 'duration'},
+  timePeriod: {group: 'duration', field: 'time_period'},
+  suit: {group: null, field: 'suit'},
+  format: {group: null, field: 'format'},
+  date: {group: null, field: 'date'},
+  whatsapp: {group: null, field: 'whatsapp'},
+  telegram: {group: null, field: 'telegram'},
+  description: {group: null, field: 'description'},
+  categories: {group: null, field: 'categories'},
+}

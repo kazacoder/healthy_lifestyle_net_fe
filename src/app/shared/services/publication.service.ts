@@ -25,6 +25,10 @@ export class PublicationService {
     return this.http.post<PublicationType | DefaultResponseType>(environment.api + 'publication/', formData);
   }
 
+  getPublication (id: string): Observable<PublicationType | DefaultResponseType> {
+    return this.http.get<PublicationType | DefaultResponseType>(environment.api + 'publication/' + id + '/');
+  }
+
   removePublication (id: number): Observable<null | DefaultResponseType> {
     return this.http.delete<null | DefaultResponseType>(environment.api + 'publication/' + id.toString() + '/');
   }
