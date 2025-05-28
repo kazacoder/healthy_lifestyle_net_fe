@@ -10,7 +10,7 @@ import {UserService} from '../../../../../shared/services/user.service';
 import {PublicationService} from '../../../../../shared/services/publication.service';
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
 import {Settings} from '../../../../../../settings/settings';
-import {publicationFormFieldsMatch, PublicationType} from '../../../../../../types/publication.type';
+import {PubFormKey, publicationFormFieldsMatch, PublicationType} from '../../../../../../types/publication.type';
 import {Router} from '@angular/router';
 
 @Component({
@@ -31,11 +31,13 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   categories: CategoryType[] = [];
   categoriesUnfiltered: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
+  updatePublicationSubscription: Subscription | null = null;
   createPublication: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
   edit: boolean = false;
 
   @Input() imageForm: FormGroup | null = null;
+  @Input() imagesChanged: { main: boolean, additional: boolean } = {main: false, additional: false};
   @Input() currentPublication: PublicationType | null = null;
 
   publicationForm: any = this.fb.group({
@@ -137,11 +139,74 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  buildPublicationFormData(): FormData {
+    const formData = new FormData();
+    const form = this.publicationForm as FormGroup;
+
+    // Проходим по корневым контролам
+    Object.keys(form.controls).forEach(key => {
+      const control = form.get(key)!;
+      // Если это вложенный FormGroup (address, duration)
+      if (key !== 'categories' && key !== 'pricing') {
+        if (control instanceof FormGroup) {
+          const group = control as FormGroup;
+          Object.keys(group.controls).forEach(subKey => {
+            const subControl = group.get(subKey)!;
+            if (subControl.dirty) {
+              formData.append(publicationFormFieldsMatch[subKey as PubFormKey].field, subControl.value);
+            }
+          });
+        }
+        // Простые контролы
+        else if (control.dirty) {
+          formData.append(publicationFormFieldsMatch[key as PubFormKey].field, control.value);
+        }
+      } else if (key === 'pricing' && control.dirty) {
+        const value = control.value === '_free';
+        formData.append(publicationFormFieldsMatch[key as PubFormKey].field, value.toString());
+      } else if (key === 'categories' && control.dirty) {
+        if (control.value.length > 0) {
+          control.value.forEach((category: CategoryType) => {
+            formData.append('categories', category.id.toString());
+          })
+        } else {
+          formData.append('categories', 'null');
+        }
+      }
+    });
+
+    return formData;
+  }
+
+  buildImagesFormData(formData: FormData): void {
+    const imgForm = this.imageForm as FormGroup;
+
+    console.log(this.imageForm?.value.mainImage, this.imagesChanged.main)
+    console.log()
+
+    if (this.imageForm) {
+      if (this.imagesChanged.main) {
+        formData.append('image', this.imageForm.value.mainImage);
+      }
+      if (this.imagesChanged.additional) {
+        if (this.imageForm.value.additionalImages.length > 0) {
+          this.imageForm.value.additionalImages.forEach((item: { image: File }) => {
+            formData.append('additional_images', item.image);
+          })
+        }
+      }
+    }
+  }
+
+
   addCategory(category: CategoryType) {
-    const categoriesList = this.publicationForm.get('categories').value
+    const ctrl = this.publicationForm.get('categories')!;
+    const categoriesList = ctrl.value
     if (!categoriesList.find((x: CategoryType) => x.id === category.id)
       && categoriesList.length < Settings.maxCategoryCount) {
-      this.publicationForm.get('categories').value.push(category)
+      ctrl.value.push(category);
+      ctrl.markAsDirty();              // помечаем контрол как dirty
+      ctrl.updateValueAndValidity();   // пересчитываем валидацию
       this.categories = [...this.categories.filter((x: CategoryType) => x.id !== category.id)]
     } else {
       this._snackBar.open('Максимальное количество категорий добавлено')
@@ -149,8 +214,11 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   removeCategory(id: number) {
-    const categoriesList = this.publicationForm.get('categories').value.filter((x: CategoryType) => x.id !== id)
-    this.publicationForm.get('categories').setValue(categoriesList)
+    const ctrl = this.publicationForm.get('categories')!;
+    const categoriesList = ctrl.value.filter((x: CategoryType) => x.id !== id)
+    ctrl.setValue(categoriesList)
+    ctrl.markAsDirty();
+    ctrl.updateValueAndValidity();
     this.categories = [...this.categoriesUnfiltered.filter(
       (item: CategoryType) => !categoriesList.some((ex: CategoryType) => ex.id === item.id)
     )]
@@ -161,7 +229,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   proceed() {
-    console.log(this.publicationForm.valid)
     if (this.publicationForm.valid && (!this.imageForm || this.imageForm?.valid)) {
       const isFree = this.publicationForm.value.isFree === '_free' ? 'true' : 'false'
 
@@ -201,9 +268,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
           })
         }
       }
-      for (const pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-      }
 
       this.createPublication = this.publicationService.createPublication(formData).subscribe({
         next: (data: PublicationType | DefaultResponseType) => {
@@ -227,12 +291,38 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   save() {
-    console.log('save')
+    const formData = this.buildPublicationFormData();
+    this.buildImagesFormData(formData);
+
+    if (Array.from(formData.keys()).length > 0 && this.publicationForm.valid &&
+      (!this.imageForm || this.imageForm?.valid)) {
+      this.updatePublicationSubscription = this.publicationService.updatePublication(this.currentPublication!.id, formData)
+        .subscribe({
+          next: (data: PublicationType | DefaultResponseType) => {
+            if ((data as DefaultResponseType).detail !== undefined) {
+              const error = (data as DefaultResponseType).detail;
+              this._snackBar.open(error);
+              throw new Error(error);
+            }
+            this.router.navigate(['/profile/publication']).then();
+            this._snackBar.open('Событие успешно обновлено');
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.detail) {
+              this._snackBar.open(errorResponse.error.detail)
+            } else {
+              this._snackBar.open('Ошибка обновления события')
+            }
+          }
+        })
+    }
+
   }
 
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe()
     this.createPublication?.unsubscribe()
+    this.updatePublicationSubscription?.unsubscribe()
   }
 
 }

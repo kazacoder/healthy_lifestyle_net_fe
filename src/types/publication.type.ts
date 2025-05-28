@@ -54,3 +54,5 @@ export const publicationFormFieldsMatch = {
   description: {group: null, field: 'description'},
   categories: {group: null, field: 'categories'},
 }
+
+export type PubFormKey = keyof typeof publicationFormFieldsMatch;

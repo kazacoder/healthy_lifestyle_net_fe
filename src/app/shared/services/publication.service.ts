@@ -32,4 +32,8 @@ export class PublicationService {
   removePublication (id: number): Observable<null | DefaultResponseType> {
     return this.http.delete<null | DefaultResponseType>(environment.api + 'publication/' + id.toString() + '/');
   }
+
+  updatePublication (id: number, formData: FormData): Observable<PublicationType | DefaultResponseType> {
+    return this.http.patch<PublicationType | DefaultResponseType>(environment.api + 'publication/' + id.toString() + '/', formData);
+  }
 }

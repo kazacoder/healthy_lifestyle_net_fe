@@ -26,6 +26,7 @@ export class PublicationComponent implements OnInit, OnDestroy {
   publicationId: string | null = null;
   publicationTitle = 'Разместить мероприятие'
   imageForm: FormGroup | null = null;
+  imagesChanged: { main: boolean, additional: boolean } = { main: false, additional: false };
   currentPublication: PublicationType | null = null;
   currentPublicationImages: {mainImage: string, additionalImages: AdditionalImageType[]} | null = null;
   getCurrentPublicationSubscription: Subscription | null = null;
@@ -68,8 +69,9 @@ export class PublicationComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateImageForm(form: FormGroup) {
-    this.imageForm = form;
+  updateImageForm(data: [FormGroup, { main: boolean, additional: boolean }]) {
+    this.imageForm = data[0];
+    this.imagesChanged = data[1]
   }
 
   ngOnDestroy() {

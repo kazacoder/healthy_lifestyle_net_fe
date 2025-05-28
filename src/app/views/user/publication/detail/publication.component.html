@@ -13,6 +13,8 @@
       [currentPublicationImages]="currentPublicationImages"
       (onImageChange)="updateImageForm($event)"
       class="publication-create__upload"></publication-upload>
-    <publication-form [currentPublication]="currentPublication" [imageForm]="imageForm"></publication-form>
+    <publication-form [currentPublication]="currentPublication"
+                      [imagesChanged]="imagesChanged"
+                      [imageForm]="imageForm"></publication-form>
   </div>
 </div>

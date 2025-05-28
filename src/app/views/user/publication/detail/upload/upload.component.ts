@@ -21,6 +21,7 @@ export class UploadComponent implements OnChanges {
   @Input() currentPublicationImages: {mainImage: string, additionalImages: AdditionalImageType[]} | null = null
   @Output() onImageChange: EventEmitter<any> = new EventEmitter();
   imagePreview: string | ArrayBuffer | null = null;
+  imagesChanged: { main: boolean, additional: boolean } = { main: false, additional: false }
   additionalImagePreview: { file: string | ArrayBuffer | null, name: string }[] = [];
   fileName: string | null = null;
   publicationImagesForm: FormGroup = this.fb.group({
@@ -55,6 +56,7 @@ export class UploadComponent implements OnChanges {
       reader.onload = () => {
         this.imagePreview = reader.result;
       };
+      this.imagesChanged.main = true;
     } else {
       const imageArray = this.publicationImagesForm.get('additionalImages') as FormArray
       if (imageArray.length < Settings.maxAdditionEventPhotoCount &&
@@ -66,11 +68,12 @@ export class UploadComponent implements OnChanges {
           this.additionalImagePreview.push({file: reader.result, name: file.name});
         };
       }
+      this.imagesChanged.additional = true
     }
 
 
     reader.readAsDataURL(file);
-    this.onImageChange.emit(this.publicationImagesForm);
+    this.onImageChange.emit([this.publicationImagesForm, this.imagesChanged]);
     input.value = '';
   }
 
@@ -81,6 +84,7 @@ export class UploadComponent implements OnChanges {
       this.imagePreview = null;
       this.publicationImagesForm.patchValue({ mainImage: null });
       this.publicationImagesForm.get('mainImage')?.updateValueAndValidity();
+      this.imagesChanged.main = true
     } else {
       const imageArray = (this.publicationImagesForm.get('additionalImages') as FormArray);
       const index = imageArray.controls.findIndex(control => {
@@ -90,8 +94,9 @@ export class UploadComponent implements OnChanges {
       })
       imageArray.removeAt(index)
       this.additionalImagePreview = [...this.additionalImagePreview.filter(item => item.name !== fileName)];
+      this.imagesChanged.additional = true
     }
 
-    this.onImageChange.emit(this.publicationImagesForm);
+    this.onImageChange.emit([this.publicationImagesForm, this.imagesChanged]);
   }
 }
