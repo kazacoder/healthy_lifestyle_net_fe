@@ -53,6 +53,11 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     })
   }
 
+
+  onPublicationDeleted(deletedId: number) {
+    this.publications = this.publications.filter(publication => publication.id !== deletedId);
+  }
+
   ngOnDestroy() {
     this.getEventsListSubscription?.unsubscribe();
   }

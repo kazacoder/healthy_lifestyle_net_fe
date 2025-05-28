@@ -18,10 +18,14 @@ export class PublicationService {
   }
 
   getPublicationsList (): Observable<PublicationType[] | DefaultResponseType> {
-    return this.http.get<PublicationType[] | DefaultResponseType>(environment.api + 'event/');
+    return this.http.get<PublicationType[] | DefaultResponseType>(environment.api + 'publication/');
   }
 
   createPublication (formData: FormData): Observable<PublicationType | DefaultResponseType> {
-    return this.http.post<PublicationType | DefaultResponseType>(environment.api + 'event/', formData);
+    return this.http.post<PublicationType | DefaultResponseType>(environment.api + 'publication/', formData);
+  }
+
+  removePublication (id: number): Observable<null | DefaultResponseType> {
+    return this.http.delete<null | DefaultResponseType>(environment.api + 'publication/' + id.toString() + '/');
   }
 }

@@ -11,6 +11,7 @@ import {PublicationService} from '../../../../../shared/services/publication.ser
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
 import {Settings} from '../../../../../../settings/settings';
 import {PublicationType} from '../../../../../../types/publication.type';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'publication-form',
@@ -84,7 +85,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService,
               private fb: FormBuilder,
               private _snackBar: MatSnackBar,
-              private publicationService: PublicationService,) {
+              private publicationService: PublicationService,
+              private router: Router) {
     this.isMaster = this.userService.isMaster;
   }
 
@@ -184,6 +186,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy {
             this._snackBar.open(error);
             throw new Error(error);
           }
+          this.router.navigate(['/profile/publication']).then();
           this._snackBar.open('Событие успешно создано');
         },
         error: (errorResponse: HttpErrorResponse) => {

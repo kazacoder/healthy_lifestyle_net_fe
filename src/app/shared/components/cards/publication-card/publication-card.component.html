@@ -65,6 +65,6 @@
 
 <confirm-modal
   (onCloseModal)="toggleDeleteModal($event)"
-  (onConfirmClick)="deletePublication()"
+  (onConfirmClick)="deletePublication(publication?.id)"
   [isOpen]="isOpenConfirmModal"
   [text]="'Вы действительно хотите удалить публикацию?'"></confirm-modal>
