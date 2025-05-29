@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar';
 import {AuthInterceptor} from './core/auth/auth.interceptor';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 
 const scrollConfig: InMemoryScrollingOptions = {
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500,}},
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'}
   ]
 };
 

@@ -50,6 +50,40 @@ a {
     }
 }
 
+.mat-calendar {
+  background-color: #fff !important; // Цвет фона всего календаря
+  border-radius: 0.75em;
+  box-shadow: 0 4px 20px #00000026;
+}
+
+.mat-calendar-body-selected {
+  background-color: $primary !important; // Цвет круга
+}
+
+.mat-calendar-body-today {
+  color: #4eb5e6 !important; /* Любой цвет текста */
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border: none !important; /* Убирает круг */
+  background: transparent !important;
+}
+
+.mat-calendar-body-cell {
+  &.mat-calendar-body-disabled {
+    color: inherit !important; // Отключённые даты не перекрашиваем
+  }
+
+  // Воскресенье
+  &:nth-child(7n) .mat-calendar-body-cell-content {
+    color: red !important;
+  }
+
+  // Суббота
+  &:nth-child(7n - 1) .mat-calendar-body-cell-content {
+    color: red !important;
+  }
+}
 
 @media screen and (max-width: 992px){
     .m-page{

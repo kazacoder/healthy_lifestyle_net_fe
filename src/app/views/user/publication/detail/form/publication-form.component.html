@@ -183,7 +183,11 @@
     </div>
     <div class="fg date-input2">
       <label>Дата</label>
-      <input type="text" [formControlName]="'date'" placeholder="Дата">
+        <input type="text"
+               (click)="picker.open()"
+               [formControlName]="'date'" placeholder="Дата" id="date"
+               [matDatepicker]="picker">
+        <mat-datepicker #picker></mat-datepicker>
     </div>
     <div class="publication-social _full">
       <div class="publication-social__title">
@@ -205,7 +209,7 @@
     <div class="publication-form__text fg _full">
       <label>Описание</label>
       <textarea [formControlName]="'description'"
-        placeholder="Раскачаем межбровный центр, пообщаемся с единомышленниками. Вас ждет сырая еда, много энергетических практик, баня и тд"></textarea>
+                placeholder="Раскачаем межбровный центр, пообщаемся с единомышленниками. Вас ждет сырая еда, много энергетических практик, баня и тд"></textarea>
     </div>
   </div>
   <div class="publication-category">

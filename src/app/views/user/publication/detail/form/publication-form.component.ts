@@ -15,6 +15,14 @@ import {Router} from '@angular/router';
 import {SuitType} from '../../../../../../types/suit.type';
 import {FormatType} from '../../../../../../types/format.type';
 import {TimePeriodType} from '../../../../../../types/time-period.type';
+import {MatFormField, MatHint, MatInput, MatSuffix} from '@angular/material/input';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle
+} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @Component({
   selector: 'publication-form',
@@ -23,7 +31,19 @@ import {TimePeriodType} from '../../../../../../types/time-period.type';
     NgSelectComponent,
     ReactiveFormsModule,
     NgForOf,
-    NgClass
+    NgClass,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepicker,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatHint,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormField
+  ],
+  providers: [
+    MatDatepickerModule,
   ],
   standalone: true,
   templateUrl: './publication-form.component.html',
@@ -44,6 +64,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   createPublication: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
   edit: boolean = false;
+  dp: any = null;
 
   @Input() existingFilesIds: number[] = [];
   @Input() imageForm: FormGroup | null = null;
@@ -206,7 +227,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     Object.keys(form.controls).forEach(key => {
       const control = form.get(key)!;
       // Если это вложенный FormGroup (address, duration)
-      if (key !== 'categories' && key !== 'pricing') {
+      if (key !== 'categories' && key !== 'pricing' && key !== 'date') {
         if (control instanceof FormGroup) {
           const group = control as FormGroup;
           Object.keys(group.controls).forEach(subKey => {
@@ -223,6 +244,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       } else if (key === 'pricing' && control.dirty) {
         const value = control.value === '_free';
         formData.append(publicationFormFieldsMatch[key as PubFormKey].field, value.toString());
+      } else if (key === 'date' && control.dirty) {
+        formData.append('date', control.value);
       } else if (key === 'categories' && control.dirty) {
         if (control.value.length > 0) {
           control.value.forEach((category: CategoryType) => {
