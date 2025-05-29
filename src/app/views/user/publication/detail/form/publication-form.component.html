@@ -146,9 +146,9 @@
         </div>
         <div class="fg">
           <ng-select
-            [items]="timePeriodOpt"
+            [items]="timePeriod"
             bindLabel="title"
-            bindValue="value"
+            bindValue="id"
             [clearable]="false"
             [searchable]="false"
             [formControlName]="'timePeriod'"
@@ -159,7 +159,7 @@
       <div class="fg">
         <label>Формат</label>
         <ng-select
-          [items]="formatOpt"
+          [items]="format"
           bindLabel="title"
           bindValue="id"
           [clearable]="false"
@@ -172,7 +172,7 @@
     <div class="fg">
       <label>Подходит</label>
       <ng-select
-        [items]="suitOpt"
+        [items]="suit"
         bindLabel="title"
         bindValue="id"
         [clearable]="false"

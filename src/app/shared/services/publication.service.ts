@@ -5,6 +5,9 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {CategoryType} from '../../../types/category.type';
 import {PublicationType} from '../../../types/publication.type';
+import {SuitType} from '../../../types/suit.type';
+import {FormatType} from '../../../types/format.type';
+import {TimePeriodType} from '../../../types/time-period.type';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +18,16 @@ export class PublicationService {
 
   getCategoriesList (): Observable<CategoryType[] | DefaultResponseType> {
     return this.http.get<CategoryType[] | DefaultResponseType>(environment.api + 'category/');
+  }
+
+  getSuitsList (): Observable<SuitType[] | DefaultResponseType> {
+    return this.http.get<SuitType[] | DefaultResponseType>(environment.api + 'suit/');
+  }
+  getFormatList (): Observable<FormatType[] | DefaultResponseType> {
+    return this.http.get<SuitType[] | DefaultResponseType>(environment.api + 'format/');
+  }
+  getTimePeriodList (): Observable<TimePeriodType[] | DefaultResponseType> {
+    return this.http.get<SuitType[] | DefaultResponseType>(environment.api + 'timeperiod/');
   }
 
   getPublicationsList (): Observable<PublicationType[] | DefaultResponseType> {

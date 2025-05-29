@@ -12,6 +12,9 @@ import {DefaultResponseType} from '../../../../../../types/default-response.type
 import {Settings} from '../../../../../../settings/settings';
 import {PubFormKey, publicationFormFieldsMatch, PublicationType} from '../../../../../../types/publication.type';
 import {Router} from '@angular/router';
+import {SuitType} from '../../../../../../types/suit.type';
+import {FormatType} from '../../../../../../types/format.type';
+import {TimePeriodType} from '../../../../../../types/time-period.type';
 
 @Component({
   selector: 'publication-form',
@@ -29,8 +32,14 @@ import {Router} from '@angular/router';
 export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   isMaster: boolean = false;
   categories: CategoryType[] = [];
+  suit: SuitType[] = [];
+  format: FormatType[] = [];
+  timePeriod: TimePeriodType[] = [];
   categoriesUnfiltered: CategoryType[] = [];
   getCategoriesSubscription: Subscription | null = null;
+  getSuitsSubscription: Subscription | null = null;
+  getFormatsSubscription: Subscription | null = null;
+  getTimePeriodsSubscription: Subscription | null = null;
   updatePublicationSubscription: Subscription | null = null;
   createPublication: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
@@ -69,23 +78,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     categories: [[]]
   })
 
-  suitOpt = [
-    {id: '1', title: 'Всем'},
-    {id: '2', title: 'Только женщинам'},
-    {id: '3', title: 'Только мужчинам'},
-  ]
-
-  formatOpt = [
-    {id: '1', title: 'Онлайн'},
-    {id: '2', title: 'Офлайн'},
-    {id: '3', title: 'Комбинированный'},
-  ]
-
-  timePeriodOpt = [
-    {value: '1', title: 'часы'},
-    {value: '2', title: 'дни'},
-  ]
-
   constructor(private userService: UserService,
               private fb: FormBuilder,
               private _snackBar: MatSnackBar,
@@ -112,7 +104,73 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
           this._snackBar.open('Ошибка получения данных')
         }
       }
-    })
+    });
+
+    this.getSuitsSubscription = this.publicationService.getSuitsList().subscribe({
+      next: (data: SuitType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        const suitArray = data as SuitType[];
+        this.suit = suitArray.map(item => ({
+          ...item,
+          id: item.id.toString()
+        }));
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    });
+
+    this.getFormatsSubscription = this.publicationService.getFormatList().subscribe({
+      next: (data: FormatType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        const suitArray = data as FormatType[];
+        this.format = suitArray.map(item => ({
+          ...item,
+          id: item.id.toString()
+        }));
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    });
+
+    this.getTimePeriodsSubscription = this.publicationService.getTimePeriodList().subscribe({
+      next: (data: TimePeriodType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        const suitArray = data as TimePeriodType[];
+        this.timePeriod = suitArray.map(item => ({
+          ...item,
+          id: item.id.toString()
+        }));
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    });
   }
 
   ngOnChanges() {
@@ -315,9 +373,11 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.getCategoriesSubscription?.unsubscribe()
-    this.createPublication?.unsubscribe()
-    this.updatePublicationSubscription?.unsubscribe()
+    this.getCategoriesSubscription?.unsubscribe();
+    this.getFormatsSubscription?.unsubscribe();
+    this.getTimePeriodsSubscription?.unsubscribe();
+    this.getSuitsSubscription?.unsubscribe();
+    this.createPublication?.unsubscribe();
+    this.updatePublicationSubscription?.unsubscribe();
   }
-
 }
