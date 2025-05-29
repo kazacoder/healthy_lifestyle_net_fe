@@ -11,9 +11,10 @@
     </div>
     <publication-upload
       [currentPublicationImages]="currentPublicationImages"
-      (onImageChange)="updateImageForm($event)"
+      (onImageChange)="proceed($event)"
       class="publication-create__upload"></publication-upload>
     <publication-form [currentPublication]="currentPublication"
+                      [existingFilesIds]="existingFilesIds"
                       [imagesChanged]="imagesChanged"
                       [imageForm]="imageForm"></publication-form>
   </div>

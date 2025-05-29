@@ -36,6 +36,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   maxCatCount = Settings.maxCategoryCount;
   edit: boolean = false;
 
+  @Input() existingFilesIds: number[] = [];
   @Input() imageForm: FormGroup | null = null;
   @Input() imagesChanged: { main: boolean, additional: boolean } = {main: false, additional: false};
   @Input() currentPublication: PublicationType | null = null;
@@ -179,16 +180,12 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   buildImagesFormData(formData: FormData): void {
-    const imgForm = this.imageForm as FormGroup;
-
-    console.log(this.imageForm?.value.mainImage, this.imagesChanged.main)
-    console.log()
-
     if (this.imageForm) {
       if (this.imagesChanged.main) {
         formData.append('image', this.imageForm.value.mainImage);
       }
       if (this.imagesChanged.additional) {
+        formData.append('existing_images', JSON.stringify(this.existingFilesIds));
         if (this.imageForm.value.additionalImages.length > 0) {
           this.imageForm.value.additionalImages.forEach((item: { image: File }) => {
             formData.append('additional_images', item.image);
@@ -197,7 +194,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
   }
-
 
   addCategory(category: CategoryType) {
     const ctrl = this.publicationForm.get('categories')!;
@@ -286,7 +282,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             this._snackBar.open('Ошибка создания события')
           }
         }
-      })
+      });
     }
   }
 
@@ -314,9 +310,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
               this._snackBar.open('Ошибка обновления события')
             }
           }
-        })
+        });
     }
-
   }
 
   ngOnDestroy() {

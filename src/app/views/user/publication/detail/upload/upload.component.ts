@@ -4,6 +4,7 @@ import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {Settings} from '../../../../../../settings/settings';
 import {AdditionalImageType} from '../../../../../../types/publication.type';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'publication-upload',
@@ -22,14 +23,17 @@ export class UploadComponent implements OnChanges {
   @Output() onImageChange: EventEmitter<any> = new EventEmitter();
   imagePreview: string | ArrayBuffer | null = null;
   imagesChanged: { main: boolean, additional: boolean } = { main: false, additional: false }
-  additionalImagePreview: { file: string | ArrayBuffer | null, name: string }[] = [];
+  additionalImagePreview: { file: string | ArrayBuffer | null, name: string, id: number | null }[] = [];
+  maxAdditionEventPhotoCount = Settings.maxAdditionEventPhotoCount
   fileName: string | null = null;
   publicationImagesForm: FormGroup = this.fb.group({
     mainImage: [null],
     additionalImages: this.fb.array([])
   })
+  existingFilesIds: number[] = [];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private _snackBar: MatSnackBar,) {
 
   }
 
@@ -37,10 +41,10 @@ export class UploadComponent implements OnChanges {
     if (this.currentPublicationImages) {
       this.imagePreview = this.currentPublicationImages.mainImage
       this.currentPublicationImages.additionalImages.forEach(item => {
-        this.additionalImagePreview.push({file: item.file, name: item.file});
+        this.additionalImagePreview.push({file: item.file, name: item.file, id: item.id});
       })
-
     }
+    this.currentPublicationImages?.additionalImages.forEach(item => {this.existingFilesIds.push(item.id)})
   }
 
   onFileChange(event: Event, mainImage: boolean = true): void {
@@ -59,21 +63,22 @@ export class UploadComponent implements OnChanges {
       this.imagesChanged.main = true;
     } else {
       const imageArray = this.publicationImagesForm.get('additionalImages') as FormArray
-      if (imageArray.length < Settings.maxAdditionEventPhotoCount &&
+      if (this.additionalImagePreview.length < Settings.maxAdditionEventPhotoCount &&
         this.additionalImagePreview.findIndex(item => item.name === file.name) === -1) {
         imageArray.push(
           this.fb.control({image: file})
         );
         reader.onload = () => {
-          this.additionalImagePreview.push({file: reader.result, name: file.name});
+          this.additionalImagePreview.push({file: reader.result, name: file.name, id: null});
         };
+      } else {
+        this._snackBar.open(`Максимальное кольчество дополнительных фотографий ${Settings.maxAdditionEventPhotoCount}`)
       }
       this.imagesChanged.additional = true
     }
 
-
     reader.readAsDataURL(file);
-    this.onImageChange.emit([this.publicationImagesForm, this.imagesChanged]);
+    this.onImageChange.emit([this.publicationImagesForm, this.imagesChanged, this.existingFilesIds]);
     input.value = '';
   }
 
@@ -88,15 +93,19 @@ export class UploadComponent implements OnChanges {
     } else {
       const imageArray = (this.publicationImagesForm.get('additionalImages') as FormArray);
       const index = imageArray.controls.findIndex(control => {
-        console.log(control.value.image.name)
-        console.log(fileName)
         return control.value.image.name === fileName;
       })
       imageArray.removeAt(index)
+
+      this.existingFilesIds = []
+      this.additionalImagePreview.forEach(item => {
+        if (item.name !== fileName && item.id) {
+          this.existingFilesIds.push(item.id);
+        }
+      });
       this.additionalImagePreview = [...this.additionalImagePreview.filter(item => item.name !== fileName)];
       this.imagesChanged.additional = true
     }
-
-    this.onImageChange.emit([this.publicationImagesForm, this.imagesChanged]);
+    this.onImageChange.emit([this.publicationImagesForm, this.imagesChanged, this.existingFilesIds]);
   }
 }

@@ -70,6 +70,15 @@
     &:after{
       background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60.11%, rgba(0, 0, 0, 0.7) 88.5%);
     }
+    &.default_image {
+      img {
+        width: 80%;
+        height: 80%;
+        margin-top: 10%;
+        margin-left: 10%;
+        object-fit: contain;
+      }
+    }
   }
   &__content{
     padding: 1.25em 1.125em 1.25em 0;

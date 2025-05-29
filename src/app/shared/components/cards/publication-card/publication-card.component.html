@@ -15,7 +15,9 @@
     </div>
   </div>
   <div class="publication-card__grid">
-    <a routerLink="{{ publication?.id }}" class="publication-card__img m-backdrop _scale-img">
+    <a routerLink="{{ publication?.id }}"
+       [ngClass]="{default_image: !publication?.image}"
+       class="publication-card__img m-backdrop _scale-img">
       <img src="{{ publication?.image }}" alt="" *ngIf="publication?.image">
       <img src="assets/img/event_stub.svg" alt="" *ngIf="!publication?.image">
     </a>

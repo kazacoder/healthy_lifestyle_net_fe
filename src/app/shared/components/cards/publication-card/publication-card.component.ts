@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PublicationType} from '../../../../../types/publication.type';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {CommonUtils} from '../../../utils/common-utils';
-import {Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {WindowsUtils} from '../../../utils/windows-utils';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
@@ -17,7 +17,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     NgIf,
     NgForOf,
     RouterLink,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    NgClass
   ],
   standalone: true,
   templateUrl: './publication-card.component.html',
