@@ -185,6 +185,8 @@
       <label>Дата</label>
         <input type="text"
                (click)="picker.open()"
+               [readOnly]="true"
+               (keydown)="preventInput($event)"
                [formControlName]="'date'" placeholder="Дата" id="date"
                [matDatepicker]="picker">
         <mat-datepicker #picker></mat-datepicker>

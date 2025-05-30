@@ -12,6 +12,9 @@ import {SpecialityService} from '../../../../shared/services/speciality.service'
 import {ChangePasswordComponent} from './change-password/change-password.component';
 import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 import {NgSelectModule} from '@ng-select/ng-select';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {CommonUtils} from '../../../../shared/utils/common-utils';
 
 @Component({
   selector: 'user-form',
@@ -22,6 +25,13 @@ import {NgSelectModule} from '@ng-select/ng-select';
     NgClass,
     ChangePasswordComponent,
     NgSelectModule,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
+  providers: [
+    MatDatepickerModule,
   ],
   standalone: true,
   templateUrl: './user-form.component.html',
@@ -176,7 +186,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
           && userSpecialitiesArray[0].value.speciality !== '')) {
           userSpecialitiesArray.forEach((userSpeciality: FormGroup) => {
             userSpecialityUpdateList.specialities.push({
-              experience_since: userSpeciality.value.experienceSince,
+              experience_since: userSpeciality.get('experienceSince')?.dirty ? CommonUtils.formatDate(userSpeciality.value.experienceSince) : userSpeciality.value.experienceSince,
               speciality_id: userSpeciality.value.speciality,
               id: userSpeciality.value.userSpecialityId,
             })
@@ -303,6 +313,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   getControlValidity(ctrlName: string) {
     const ctrl = this.userInfoForm.get([ctrlName])
     return ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ? ctrl.errors : null
+  }
+
+  preventInput(event: KeyboardEvent): void {
+    event.preventDefault();
   }
 
   ngOnDestroy() {

@@ -50,7 +50,14 @@
           <label>
             Стаж с
           </label>
-          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experienceSince'">
+<!--          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experienceSince'">-->
+          <input type="text"
+                 (click)="picker.open()"
+                 [readOnly]="true"
+                 (keydown)="preventInput($event)"
+                 [formControlName]="'experienceSince'" placeholder="Дата" id="date"
+                 [matDatepicker]="picker">
+          <mat-datepicker #picker></mat-datepicker>
           <div class="fg__error-text">
             <div class="text12">Укажите дату</div>
           </div>

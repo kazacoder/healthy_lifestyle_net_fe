@@ -23,6 +23,7 @@ import {
   MatDatepickerToggle
 } from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import {CommonUtils} from '../../../../../shared/utils/common-utils';
 
 @Component({
   selector: 'publication-form',
@@ -217,6 +218,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
         }
       })
     }
+    console.log( this.publicationForm)
   }
 
   buildPublicationFormData(): FormData {
@@ -245,7 +247,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
         const value = control.value === '_free';
         formData.append(publicationFormFieldsMatch[key as PubFormKey].field, value.toString());
       } else if (key === 'date' && control.dirty) {
-        formData.append('date', control.value);
+        formData.append('date', CommonUtils.formatDate(control.value));
       } else if (key === 'categories' && control.dirty) {
         if (control.value.length > 0) {
           control.value.forEach((category: CategoryType) => {
@@ -393,6 +395,10 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
           }
         });
     }
+  }
+
+  preventInput(event: KeyboardEvent): void {
+    event.preventDefault();
   }
 
   ngOnDestroy() {

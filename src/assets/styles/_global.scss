@@ -69,7 +69,16 @@ a {
   background: transparent !important;
 }
 
+.mat-calendar-body-today.mat-calendar-body-selected {
+  border: none!important; // убираем обводку
+  box-shadow: none!important; // если есть тень, убираем
+}
+
+
 .mat-calendar-body-cell {
+  &-content {
+    border-radius: 0.25em!important;
+  }
   &.mat-calendar-body-disabled {
     color: inherit !important; // Отключённые даты не перекрашиваем
   }
