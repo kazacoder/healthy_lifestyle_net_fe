@@ -187,9 +187,9 @@
                (click)="picker.open()"
                [readOnly]="true"
                (keydown)="preventInput($event)"
-               [formControlName]="'date'" placeholder="Дата" id="date"
+               [formControlName]="'date'" placeholder="Дата"
                [matDatepicker]="picker">
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker #picker [dateClass]="highlightWeekend"></mat-datepicker>
     </div>
     <div class="publication-social _full">
       <div class="publication-social__title">

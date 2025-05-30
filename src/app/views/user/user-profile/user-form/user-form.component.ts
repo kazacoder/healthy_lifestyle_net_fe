@@ -14,7 +14,7 @@ import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
-import {CommonUtils} from '../../../../shared/utils/common-utils';
+import {CommonUtils, highlightWeekend} from '../../../../shared/utils/common-utils';
 
 @Component({
   selector: 'user-form',
@@ -324,4 +324,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.getSpecialityListSubscription?.unsubscribe();
     this.updateUserSpecialityListSubscription?.unsubscribe();
   }
+
+  protected readonly highlightWeekend = highlightWeekend;
 }

@@ -55,9 +55,9 @@
                  (click)="picker.open()"
                  [readOnly]="true"
                  (keydown)="preventInput($event)"
-                 [formControlName]="'experienceSince'" placeholder="Дата" id="date"
+                 [formControlName]="'experienceSince'" placeholder="Дата"
                  [matDatepicker]="picker">
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #picker [dateClass]="highlightWeekend"></mat-datepicker>
           <div class="fg__error-text">
             <div class="text12">Укажите дату</div>
           </div>

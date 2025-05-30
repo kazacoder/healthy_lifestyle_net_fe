@@ -79,19 +79,10 @@ a {
   &-content {
     border-radius: 0.25em!important;
   }
-  &.mat-calendar-body-disabled {
-    color: inherit !important; // Отключённые даты не перекрашиваем
-  }
+}
 
-  // Воскресенье
-  &:nth-child(7n) .mat-calendar-body-cell-content {
-    color: red !important;
-  }
-
-  // Суббота
-  &:nth-child(7n - 1) .mat-calendar-body-cell-content {
-    color: red !important;
-  }
+.mat-calendar-weekend .mat-calendar-body-cell-content {
+  color: $text-weekend !important;
 }
 
 @media screen and (max-width: 992px){

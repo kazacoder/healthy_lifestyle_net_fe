@@ -23,7 +23,7 @@ import {
   MatDatepickerToggle
 } from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
-import {CommonUtils} from '../../../../../shared/utils/common-utils';
+import {CommonUtils, highlightWeekend} from '../../../../../shared/utils/common-utils';
 
 @Component({
   selector: 'publication-form',
@@ -409,4 +409,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     this.createPublication?.unsubscribe();
     this.updatePublicationSubscription?.unsubscribe();
   }
+
+  protected readonly highlightWeekend = highlightWeekend;
 }

@@ -1,4 +1,5 @@
 import {AbstractControl, ValidatorFn} from '@angular/forms';
+import {MatCalendarCellClassFunction} from '@angular/material/datepicker';
 
 export class CommonUtils {
 
@@ -128,3 +129,11 @@ export class CommonUtils {
   }
 
 }
+
+export const highlightWeekend: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
+  if (view === 'month') {
+    const day = cellDate.getDay();
+    return (day === 0 || day === 6) ? 'mat-calendar-weekend' : '';
+  }
+  return '';
+};
