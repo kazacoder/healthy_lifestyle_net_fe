@@ -1,35 +1,49 @@
 <div class="publication-form" [formGroup]="publicationForm">
   <div class="publication-form__grid">
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('title')}">
       <label>Название</label>
       <input type="text" [formControlName]="'title'" placeholder="Например: Ретрит">
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('phone')}">
       <label>Номер телефона</label>
       <input type="tel" [formControlName]="'phone'" placeholder="+7">
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('ticketAmount')}">
       <label>Кол-во билетов</label>
       <input type="text" [formControlName]="'ticketAmount'">
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
     </div>
     <div class="pricing" *ngIf="!isMaster">
       <div class="pricing__title">Стоимость</div>
       <div class="pricing__grid">
-        <div class="pricing__free pricing__item">
+        <div [ngClass]="{_active: publicationForm.get('pricing').value === '_free'}"
+             class="pricing__free pricing__item">
           <div class="m-check">
-            <input checked type="checkbox" name="pricing" data-value="_free">
+            <input checked type="radio" name="pricing" value="_free" formControlName="pricing">
             <label>
               <span>Бесплатно</span>
             </label>
           </div>
         </div>
-        <div class="pricing__count pricing__item">
+        <div [ngClass]="{_active: publicationForm.get('pricing').value === '_from'}"
+             class="pricing__count pricing__item">
           <div class="text16">от</div>
           <div class="m-check">
-            <input type="checkbox" name="pricing" data-value="_from">
+            <input type="radio" name="pricing" value="_from" formControlName="pricing">
             <label></label>
           </div>
-          <input type="number" value="1800" class="pricing__value">
+          <input
+            (click)="setPricing('_from')"
+            formControlName="price"
+            type="number" value="1800" class="pricing__value">
           <div class="pricing__currency">
             <span>₽</span>
           </div>
@@ -97,9 +111,12 @@
       </div>
     </div>
     <ng-container formGroupName="address">
-      <div class="fg">
+      <div class="fg" [ngClass]="{'_error': getControlValidity('city', 'address')}">
         <label>Город</label>
         <input type="text" [formControlName]="'city'" placeholder="Например: Москва">
+        <div class="fg__error-text">
+          <div class="text12">Обязательное поле</div>
+        </div>
         <button type="button" class="add-btn m-btn-bounce">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -115,22 +132,34 @@
           <span>Указать на карте</span>
         </button>
       </div>
-      <div class="fg">
+      <div class="fg" [ngClass]="{'_error': getControlValidity('street', 'address')}">
         <label>Улица</label>
         <input type="text" [formControlName]="'street'" placeholder="Например: Волочаевская">
+        <div class="fg__error-text">
+          <div class="text12">Обязательное поле</div>
+        </div>
       </div>
       <div class="publication-form__group publication-form__group--col3">
-        <div class="fg">
+        <div class="fg" [ngClass]="{'_error': getControlValidity('house', 'address')}">
           <label>Дом/строение</label>
           <input type="text" [formControlName]="'house'" placeholder="34">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
         </div>
-        <div class="fg">
+        <div class="fg" [ngClass]="{'_error': getControlValidity('floor', 'address')}">
           <label>Этаж</label>
           <input type="text" [formControlName]="'floor'" placeholder="5">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
         </div>
-        <div class="fg">
+        <div class="fg" [ngClass]="{'_error': getControlValidity('office', 'address')}">
           <label>Кабинет</label>
           <input type="text" [formControlName]="'office'" placeholder="15">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -139,10 +168,13 @@
         <div class="fg col_span">
           <label>Длительность мероприятия</label>
         </div>
-        <div class="fg mb-1_5">
+        <div class="fg mb-1_5" [ngClass]="{'_error': getControlValidity('amount', 'duration')}">
           <input type="text"
                  [formControlName]="'amount'"
                  placeholder="кол-во">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
         </div>
         <div class="fg">
           <ng-select
@@ -156,7 +188,7 @@
           </ng-select>
         </div>
       </div>
-      <div class="fg">
+      <div class="fg" [ngClass]="{'_error': getControlValidity('format')}">
         <label>Формат</label>
         <ng-select
           [items]="format"
@@ -167,9 +199,12 @@
           [formControlName]="'format'"
           placeholder="Выберите формат">
         </ng-select>
+        <div class="fg__error-text">
+          <div class="text12">Обязательное поле</div>
+        </div>
       </div>
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('suit')}">
       <label>Подходит</label>
       <ng-select
         [items]="suit"
@@ -180,16 +215,22 @@
         [formControlName]="'suit'"
         placeholder="Выберите тип">
       </ng-select>
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
     </div>
-    <div class="fg date-input2">
+    <div class="fg date-input2" [ngClass]="{'_error': getControlValidity('date')}">
       <label>Дата</label>
-        <input type="text"
-               (click)="picker.open()"
-               [readOnly]="true"
-               (keydown)="preventInput($event)"
-               [formControlName]="'date'" placeholder="Дата"
-               [matDatepicker]="picker">
-        <mat-datepicker #picker [dateClass]="highlightWeekend"></mat-datepicker>
+      <input type="text"
+             (click)="picker.open()"
+             [readOnly]="true"
+             (keydown)="preventInput($event)"
+             [formControlName]="'date'" placeholder="Дата"
+             [matDatepicker]="picker">
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
+      <mat-datepicker #picker [dateClass]="highlightWeekend"></mat-datepicker>
     </div>
     <div class="publication-social _full">
       <div class="publication-social__title">
@@ -198,20 +239,29 @@
         </div>
       </div>
       <div class="publication-form__group publication-form__group--col2">
-        <div class="fg">
+        <div class="fg" [ngClass]="{'_error': getControlValidity('whatsapp')}">
           <label>WhatsApp</label>
           <input type="tel" [formControlName]="'whatsapp'" placeholder="+7">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
         </div>
-        <div class="fg">
+        <div class="fg" [ngClass]="{'_error': getControlValidity('telegram')}">
           <label>Telegram</label>
           <input type="text" [formControlName]="'telegram'" placeholder="Ваш ник или номер телефона">
+          <div class="fg__error-text">
+            <div class="text12">Обязательное поле</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="publication-form__text fg _full">
+    <div class="publication-form__text fg _full" [ngClass]="{'_error': getControlValidity('description')}">
       <label>Описание</label>
       <textarea [formControlName]="'description'"
                 placeholder="Раскачаем межбровный центр, пообщаемся с единомышленниками. Вас ждет сырая еда, много энергетических практик, баня и тд"></textarea>
+      <div class="fg__error-text">
+        <div class="text12">Обязательное поле</div>
+      </div>
     </div>
   </div>
   <div class="publication-category">
@@ -257,10 +307,12 @@
     </div>
   </div>
   <div class="publication-form__nav">
-    <button (click)="proceed()" *ngIf="!edit" class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
+    <button [disabled]="!areFormsValid" (click)="proceed()" *ngIf="!edit"
+            class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
       <span>Разместить</span>
     </button>
-    <button (click)="save()" *ngIf="edit" class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
+    <button [disabled]="!areFormsValid" (click)="save()" *ngIf="edit"
+            class="publication-form__btn m-btn m-btn-primary m-btn-bounce">
       <span>Сохранить</span>
     </button>
   </div>

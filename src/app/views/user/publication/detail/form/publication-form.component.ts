@@ -4,7 +4,7 @@ import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {HttpErrorResponse} from '@angular/common/http';
-import {Subscription} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
 import {CategoryType} from '../../../../../../types/category.type';
 import {UserService} from '../../../../../shared/services/user.service';
 import {PublicationService} from '../../../../../shared/services/publication.service';
@@ -66,6 +66,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   maxCatCount = Settings.maxCategoryCount;
   edit: boolean = false;
   dp: any = null;
+  areFormsValid: boolean = false
 
   @Input() existingFilesIds: number[] = [];
   @Input() imageForm: FormGroup | null = null;
@@ -109,6 +110,9 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
+    this.userService.isMasterObservable.subscribe(isMaster => {
+      this.isMaster = isMaster;
+    })
     this.getCategoriesSubscription = this.publicationService.getCategoriesList().subscribe({
       next: (data: CategoryType[] | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
@@ -193,6 +197,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
+    this.subscribeToForms();
   }
 
   ngOnChanges() {
@@ -218,7 +223,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
         }
       })
     }
-    console.log( this.publicationForm)
+    this.subscribeToForms();
   }
 
   buildPublicationFormData(): FormData {
@@ -327,7 +332,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       formData.append('time_period', this.publicationForm.value.duration.timePeriod);
       formData.append('suit', this.publicationForm.value.suit);
       formData.append('format', this.publicationForm.value.format);
-      formData.append('date', this.publicationForm.value.date);
+      formData.append('date', CommonUtils.formatDate(this.publicationForm.value.date));
       formData.append('whatsapp', this.publicationForm.value.whatsapp);
       formData.append('telegram', this.publicationForm.value.telegram);
       formData.append('description', this.publicationForm.value.description);
@@ -373,7 +378,9 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     const formData = this.buildPublicationFormData();
     this.buildImagesFormData(formData);
 
-    if (Array.from(formData.keys()).length > 0 && this.publicationForm.valid &&
+    const hasChanged = Array.from(formData.keys()).length > 0
+
+    if (hasChanged && this.publicationForm.valid &&
       (!this.imageForm || this.imageForm?.valid)) {
       this.updatePublicationSubscription = this.publicationService.updatePublication(this.currentPublication!.id, formData)
         .subscribe({
@@ -394,11 +401,31 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             }
           }
         });
+    } else if (!hasChanged) {
+      this.router.navigate(['/profile/publication']).then();
+      this._snackBar.open('Нет изменений');
     }
   }
 
   preventInput(event: KeyboardEvent): void {
     event.preventDefault();
+  }
+
+  private subscribeToForms(): void {
+    if (!this.publicationForm) return;
+
+    const formsToWatch = [this.publicationForm.statusChanges];
+
+    if (this.imageForm) {
+      formsToWatch.push(this.imageForm.statusChanges);
+    }
+
+    combineLatest(formsToWatch).subscribe(() => {
+      this.areFormsValid = this.publicationForm.valid && (this.imageForm?.valid ?? true);
+    });
+
+    // Инициализируем начальное состояние
+    this.areFormsValid = this.publicationForm.valid && (this.imageForm?.valid ?? true);
   }
 
   ngOnDestroy() {
@@ -408,6 +435,15 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     this.getSuitsSubscription?.unsubscribe();
     this.createPublication?.unsubscribe();
     this.updatePublicationSubscription?.unsubscribe();
+  }
+
+  getControlValidity(ctrlName: string, groupName: string | null = null) {
+    if (groupName) {
+      const ctrl = this.publicationForm.get(groupName).get([ctrlName])
+      return ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ? ctrl.errors : null
+    }
+    const ctrl = this.publicationForm.get([ctrlName])
+    return ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ? ctrl.errors : null
   }
 
   protected readonly highlightWeekend = highlightWeekend;

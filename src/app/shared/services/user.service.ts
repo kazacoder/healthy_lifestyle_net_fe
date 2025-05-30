@@ -18,11 +18,16 @@ export class UserService {
   userStatusKey: string = 'userStatus';
   userName$: Subject<string | null> = new Subject<string | null>();
   isMaster: boolean = false;
-  isMaster$: Subject<boolean> = new Subject<boolean>();
+  private isMaster$: Subject<boolean> = new Subject<boolean>();
+  isMasterObservable = this.isMaster$.asObservable();
 
   constructor(private http: HttpClient) {
     this.isMaster = localStorage.getItem(this.userStatusKey) === '3'
-    this.isMaster$.next(this.isMaster);
+    this.setIsMaster(this.isMaster);
+  }
+
+  setIsMaster(isMaster: boolean): void {
+    this.isMaster$.next(isMaster);
   }
 
   getUserInfo(): Observable<UserInfoType | DefaultResponseType> {
@@ -57,7 +62,8 @@ export class UserService {
 
   setUserInfo(user_id: string, username: string, userStatus: number): void {
     this.userName$.next(username);
-    this.isMaster$.next(userStatus === 3);
+    this.isMaster = userStatus === 3;
+    this.setIsMaster(userStatus === 3);
     localStorage.setItem(this.userIdKey, user_id);
     localStorage.setItem(this.userNameKey, username);
     localStorage.setItem(this.userStatusKey, userStatus.toString());
@@ -80,7 +86,7 @@ export class UserService {
     localStorage.removeItem(this.userNameKey);
     localStorage.removeItem(this.userStatusKey);
     this.userName$.next(null);
-    this.isMaster$.next(false);
+    this.setIsMaster(false);
   }
 
 }
