@@ -18,6 +18,8 @@ import {MasterService} from '../../shared/services/master.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
+import {EventType} from '../../../types/event.type';
+import {EventService} from '../../shared/services/event.service';
 
 @Component({
   selector: 'app-main',
@@ -30,11 +32,12 @@ import {HttpErrorResponse} from '@angular/common/http';
 
 export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
-  //ToDo
+  //ToDo add filter to nearestEvents, replace eventsTempData
   eventsTempData = events
-  eventsTempData2 = events2
+  nearestEvents: EventType[] = [];
   mastersList: MasterInfoType[] = [];
   mastersListSubscription: Subscription | null = null;
+  getEventsSubscription: Subscription | null = null;
 
   isCityModalOpened:boolean = false;
   isParamModalOpened:boolean = false;
@@ -82,7 +85,8 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
     (event.target as Window).innerWidth;
   }
 
-  constructor(private masterService: MasterService,
+  constructor(private eventService: EventService,
+              private masterService: MasterService,
               private _snackBar: MatSnackBar) {
   }
 
@@ -104,7 +108,26 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
             this._snackBar.open('Ошибка получения данных')
           }
         }
-      })
+      });
+
+    this.getEventsSubscription = this.eventService.getEventsList().subscribe({
+      next: (data: EventType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        this.nearestEvents = data as EventType[];
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    })
+
   }
 
   ngAfterViewInit() {
@@ -147,6 +170,7 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   ngOnDestroy() {
     this.mastersListSubscription?.unsubscribe();
+    this.getEventsSubscription?.unsubscribe();
   }
 }
 
@@ -212,75 +236,3 @@ const events = [
   }
 ]
 
-const events2 = [
-  {
-    img: "event4",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar",
-    master: "Дарья Солодаева",
-    city: "Москва",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event5",
-    day: "15",
-    month: "Декабря",
-    premium: "",
-    price: "Бесплатно",
-    avatar: "avatar2",
-    master: "Андрей Филоменко",
-    city: "Пермь",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "3 часа",
-    many: "",
-  },
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar3",
-    master: "Валентина Солодкина",
-    city: "Нижний-<br>Новгород",
-    title: "Баня с Валентиной Солодкиной",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar3",
-    master: "Валентина Солодкина",
-    city: "Нижний-<br>Новгород",
-    title: "Баня с Валентиной Солодкиной",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar3",
-    master: "Валентина Солодкина",
-    city: "Нижний-<br>Новгород",
-    title: "Баня с Валентиной Солодкиной",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  }
-]

@@ -14,4 +14,5 @@ export type MasterInfoType = {
   telegram: string,
   vk: string,
   instagram: string,
+  is_master: boolean,
 }

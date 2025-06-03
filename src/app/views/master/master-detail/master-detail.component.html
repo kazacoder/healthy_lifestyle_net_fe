@@ -36,7 +36,7 @@
               <div class="master-top__name h1">
                 {{ master?.full_name }}
               </div>
-              <div class="master-badge">
+              <div class="master-badge" *ngIf="master?.is_master">
                 <img src="assets/img/crone2.svg" alt="">
                 <span>Мастер</span>
               </div>

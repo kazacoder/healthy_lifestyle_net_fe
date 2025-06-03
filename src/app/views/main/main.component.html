@@ -86,9 +86,9 @@
       <div class="events-slider2 slider">
         <div class="slider__wrap">
           <swiper-container class="event-swiper nearest-events" init="false">
-<!--            <swiper-slide class="swiper-slide" *ngFor="let event of eventsTempData2">-->
-<!--              <event-card2 [event]="event" class="event-card2"></event-card2>-->
-<!--            </swiper-slide>-->
+            <swiper-slide class="swiper-slide" *ngFor="let event of nearestEvents">
+              <event-card2 [event]="event" class="event-card2"></event-card2>
+            </swiper-slide>
           </swiper-container>
         </div>
         <swiper-nav></swiper-nav>
