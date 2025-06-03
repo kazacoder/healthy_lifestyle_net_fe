@@ -1,34 +1,28 @@
-import {Component, HostListener, Input} from '@angular/core';
-import {NgClass, NgIf} from '@angular/common';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
+import {EventType} from '../../../../../types/event.type';
+import {MonthToStringPipe} from '../../../pipes/month-to-string.pipe';
+import {ToIntPipe} from '../../../pipes/to-int.pipe';
+import {CommonUtils} from '../../../utils/common-utils';
 
 @Component({
   selector: 'event-card2',
   imports: [
     NgIf,
     NgClass,
-    RouterLink
+    RouterLink,
+    NgForOf,
+    MonthToStringPipe,
+    ToIntPipe
   ],
   standalone: true,
   templateUrl: './event-card2.component.html',
   styleUrl: './event-card2.component.scss',
 })
-export class EventCard2Component {
-  @Input()
-  event: {
-    img: string,
-    day: string,
-    month: string,
-    premium: string,
-    price: string,
-    avatar: string,
-    master: string,
-    city: string,
-    title: string,
-    desc: string,
-    time: string,
-    many: string,
-  } | null = null;
+export class EventCard2Component implements OnInit {
+  @Input() event: EventType | null = null;
+  periodLabel: string = '';
 
   tagsOpen: boolean = false;
 
@@ -45,6 +39,10 @@ export class EventCard2Component {
       this.tagsOpen = false;
     }
     this.wasInside = false;
+  }
+
+  ngOnInit() {
+    this.periodLabel = CommonUtils.getDurationLabel(this.event!.duration, this.event!.time_period)
   }
 
   clickTagsButton() {

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DateFilterComponent} from '../../../shared/components/page-blocks/date-filter/date-filter.component';
 import {DateFeedComponent} from '../../../shared/components/page-blocks/date-feed/date-feed.component';
 import {PosterInfoComponent} from '../../../shared/components/events/poster-info/poster-info.component';
@@ -9,6 +9,12 @@ import {NgClass, NgForOf} from '@angular/common';
 import {EventCard2Component} from '../../../shared/components/cards/event-card2/event-card2.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
+import {Subscription} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {EventService} from '../../../shared/services/event.service';
+import {DefaultResponseType} from '../../../../types/default-response.type';
+import {HttpErrorResponse} from '@angular/common/http';
+import {EventType} from '../../../../types/event.type';
 
 @Component({
   selector: 'app-events-list',
@@ -28,11 +34,37 @@ import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
   templateUrl: './events-list.component.html',
   styleUrl: './events-list.component.scss'
 })
-export class EventsListComponent {
+export class EventsListComponent implements OnInit, OnDestroy {
   chosenCity: string = 'Все города';
   isCityModalOpened: boolean = false;
   isParamModalOpened: boolean = false;
   calendarActive: boolean = false;
+  events: EventType[] = [];
+  getEventsSubscription: Subscription | null = null;
+
+  constructor(private eventService: EventService,
+              private _snackBar: MatSnackBar) {
+  }
+
+  ngOnInit() {
+    this.getEventsSubscription = this.eventService.getEventsList().subscribe({
+      next: (data: EventType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        this.events = data as EventType[];
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    })
+  }
 
   toggleCalendarActive(value: boolean) {
     this.calendarActive = value;
@@ -52,140 +84,14 @@ export class EventsListComponent {
     this.chosenCity = value;
   }
 
-  protected readonly events = events;
+  ngOnDestroy() {
+    this.getEventsSubscription?.unsubscribe()
+  }
+
   protected readonly filterObjects = filterObjects;
 }
 
 // ToDo remove after the Backend is ready
-
-const events = [
-  {
-    img: "event4",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar",
-    master: "Дарья Солодаева",
-    city: "Москва",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event5",
-    day: "15",
-    month: "Декабря",
-    premium: "",
-    price: "Бесплатно",
-    avatar: "avatar2",
-    master: "Андрей Филоменко",
-    city: "Пермь",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "3 часа",
-    many: "",
-  },
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar3",
-    master: "Валентина Солодкина",
-    city: "Нижний-<br>Новгород",
-    title: "Баня с Валентиной Солодкиной",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event4",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar",
-    master: "Дарья Солодаева",
-    city: "Москва",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event5",
-    day: "15",
-    month: "Декабря",
-    premium: "",
-    price: "Бесплатно",
-    avatar: "avatar2",
-    master: "Андрей Филоменко",
-    city: "Пермь",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "3 часа",
-    many: "",
-  },
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar3",
-    master: "Валентина Солодкина",
-    city: "Нижний-<br>Новгород",
-    title: "Баня с Валентиной Солодкиной",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event4",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar",
-    master: "Дарья Солодаева",
-    city: "Москва",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  },
-  {
-    img: "event5",
-    day: "15",
-    month: "Декабря",
-    premium: "",
-    price: "Бесплатно",
-    avatar: "avatar2",
-    master: "Андрей Филоменко",
-    city: "Пермь",
-    title: "Парная йога",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "3 часа",
-    many: "",
-  },
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    premium: "true",
-    price: "от 1700₽",
-    avatar: "avatar3",
-    master: "Валентина Солодкина",
-    city: "Нижний-<br>Новгород",
-    title: "Баня с Валентиной Солодкиной",
-    desc: "Раскачаем межбровный центр, пообщаемся с единомышленниками.",
-    time: "2 дня",
-    many: "true",
-  }
-]
 
 const filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = [
   {title: 'Формат', options: ['Формат 1', 'Формат 2'], search: false},

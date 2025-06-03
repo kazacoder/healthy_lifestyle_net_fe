@@ -3,8 +3,8 @@ import {UploadItemComponent} from './upload-item/upload-item.component';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {Settings} from '../../../../../../settings/settings';
-import {AdditionalImageType} from '../../../../../../types/publication.type';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AdditionalImageType} from '../../../../../../types/additional-image.type';
 
 @Component({
   selector: 'publication-upload',

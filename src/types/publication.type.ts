@@ -1,4 +1,5 @@
 import {CategoryType} from './category.type';
+import {AdditionalImageType} from './additional-image.type';
 
 export type PublicationType = {
   id: number,
@@ -27,10 +28,6 @@ export type PublicationType = {
   format: number
 }
 
-export type AdditionalImageType = {
-  id: number,
-  file: string,
-}
 
 export const publicationFormFieldsMatch = {
   title: {group: null, field: 'title'},

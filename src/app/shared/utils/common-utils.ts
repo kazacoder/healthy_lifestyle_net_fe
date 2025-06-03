@@ -128,6 +128,27 @@ export class CommonUtils {
     return `${year}-${month}-${day}`;
   }
 
+  static getDurationLabel(amount: number, period: number): string {
+    const getPlural = (value: number, forms: [string, string, string]): string => {
+      const mod10 = value % 10;
+      const mod100 = value % 100;
+
+      if (mod10 === 1 && mod100 !== 11) return forms[0]; // "час"
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return forms[1]; // "часа"
+      return forms[2]; // "часов"
+    };
+
+    if (period === 1) {
+      // Часы
+      return `${amount} ${getPlural(amount, ['час', 'часа', 'часов'])}`;
+    } else if (period === 2) {
+      // Дни
+      return `${amount} ${getPlural(amount, ['день', 'дня', 'дней'])}`;
+    } else {
+      return ''; // Неверный период
+    }
+  }
+
 }
 
 export const highlightWeekend: MatCalendarCellClassFunction<Date> = (cellDate, view) => {

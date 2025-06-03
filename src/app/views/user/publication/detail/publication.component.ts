@@ -3,12 +3,13 @@ import {UploadComponent} from './upload/upload.component';
 import {PublicationFormComponent} from './form/publication-form.component';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {FormGroup} from '@angular/forms';
-import {AdditionalImageType, PublicationType} from '../../../../../types/publication.type';
+import {PublicationType} from '../../../../../types/publication.type';
 import {Subscription} from 'rxjs';
 import {PublicationService} from '../../../../shared/services/publication.service';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AdditionalImageType} from '../../../../../types/additional-image.type';
 
 @Component({
   selector: 'publication',
@@ -36,7 +37,6 @@ export class PublicationComponent implements OnInit, OnDestroy {
               private publicationService: PublicationService,
               private _snackBar: MatSnackBar,
               private router: Router) {
-
   }
 
   ngOnInit() {
