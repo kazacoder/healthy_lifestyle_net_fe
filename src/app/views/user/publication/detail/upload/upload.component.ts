@@ -72,7 +72,7 @@ export class UploadComponent implements OnChanges {
           this.additionalImagePreview.push({file: reader.result, name: file.name, id: null});
         };
       } else {
-        this._snackBar.open(`Максимальное кольчество дополнительных фотографий ${Settings.maxAdditionEventPhotoCount}`)
+        this._snackBar.open(`Максимальное количество дополнительных фотографий ${Settings.maxAdditionEventPhotoCount}`)
       }
       this.imagesChanged.additional = true
     }

@@ -18,6 +18,63 @@
       <user-settings [notifications]="notifications"
                      [isMaster]="isMaster"
                      [userId]="profileInfo.id.toString()"></user-settings>
+      <div class="upload-group user-additional-images">
+        <div class="upload-group__images">
+          <publication-upload-item *ngIf="additionalImagePreview.length === 0"></publication-upload-item>
+          <publication-upload-item
+            *ngFor="let image of additionalImagePreview"
+            [imagePreview]="image.file"
+            [fileName]="image.name"
+            (onImageRemove)="removeImage($event)"></publication-upload-item>
+        </div>
+        <div class="upload-group__nav">
+          <button type="button" class="add-btn m-btn-bounce"
+                  *ngIf="additionalImagePreview.length < maxAdditionUserPhotoCount">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M4.0013 15.1668H12.0013C12.8408 15.1658 13.6457 14.8318 14.2393 14.2382C14.8329 13.6445 15.1669 12.8397 15.168 12.0002V4.00016C15.1669 3.16064 14.8329 2.3558 14.2393 1.76216C13.6457 1.16852 12.8408 0.834555 12.0013 0.833496H4.0013C3.16177 0.834555 2.35693 1.16852 1.7633 1.76216C1.16966 2.3558 0.835693 3.16064 0.834635 4.00016V12.0002C0.835693 12.8397 1.16966 13.6445 1.7633 14.2382C2.35693 14.8318 3.16177 15.1658 4.0013 15.1668ZM12.0013 1.8335C12.5757 1.8342 13.1264 2.0627 13.5326 2.46888C13.9388 2.87505 14.1673 3.42574 14.168 4.00016V12.0002C14.1673 12.5746 13.9388 13.1253 13.5326 13.5314C13.1264 13.9376 12.5757 14.1661 12.0013 14.1668H4.0013C3.42688 14.1661 2.87619 13.9376 2.47002 13.5314C2.06384 13.1253 1.83534 12.5746 1.83464 12.0002V4.00016C1.83534 3.42574 2.06384 2.87505 2.47002 2.46888C2.87619 2.0627 3.42688 1.8342 4.0013 1.8335H12.0013Z"
+                fill="#BDDA13"/>
+              <path
+                d="M8 11.8337C8.13261 11.8337 8.25978 11.781 8.35355 11.6872C8.44732 11.5934 8.5 11.4663 8.5 11.3337V4.66699C8.5 4.53438 8.44732 4.40721 8.35355 4.31344C8.25978 4.21967 8.13261 4.16699 8 4.16699C7.86739 4.16699 7.74022 4.21967 7.64645 4.31344C7.55268 4.40721 7.5 4.53438 7.5 4.66699V11.3337C7.5 11.4663 7.55268 11.5934 7.64645 11.6872C7.74022 11.781 7.86739 11.8337 8 11.8337Z"
+                fill="#BDDA13"/>
+              <path
+                d="M4.66927 8.5H11.3359C11.4685 8.5 11.5957 8.44732 11.6895 8.35355C11.7833 8.25978 11.8359 8.13261 11.8359 8C11.8359 7.86739 11.7833 7.74022 11.6895 7.64645C11.5957 7.55268 11.4685 7.5 11.3359 7.5H4.66927C4.53666 7.5 4.40949 7.55268 4.31572 7.64645C4.22195 7.74022 4.16927 7.86739 4.16927 8C4.16927 8.13261 4.22195 8.25978 4.31572 8.35355C4.40949 8.44732 4.53666 8.5 4.66927 8.5Z"
+                fill="#BDDA13"/>
+            </svg>
+            <span>Добавить <ng-container *ngIf="additionalImagePreview.length > 0">еще</ng-container> фото</span>
+            <input type="file" (change)="onFileChange($event)">
+          </button>
+          <button type="button"
+                  [disabled]="!userImagesForm.dirty"
+                  [ngClass]="{'m-btn-bounce': userImagesForm.dirty}"
+                  class="add-btn" (click)="save()">
+            <svg width="64px" height="64px" viewBox="0 0 32 32"
+                 fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
+                 stroke-width="0.384"></g>
+              <g id="SVGRepo_iconCarrier"><title>save-floppy</title>
+                <desc>Created with Sketch Beta.</desc>
+                <defs></defs>
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" >
+                  <g id="Icon-Set" transform="translate(-152.000000, -515.000000)"
+                     fill="#000000">
+                    <path
+                      d="M171,525 C171.552,525 172,524.553 172,524 L172,520 C172,519.447 171.552,519 171,519 C170.448,519 170,519.447 170,520 L170,524 C170,524.553 170.448,525 171,525 L171,525 Z M182,543 C182,544.104 181.104,545 180,545 L156,545 C154.896,545 154,544.104 154,543 L154,519 C154,517.896 154.896,517 156,517 L158,517 L158,527 C158,528.104 158.896,529 160,529 L176,529 C177.104,529 178,528.104 178,527 L178,517 L180,517 C181.104,517 182,517.896 182,519 L182,543 L182,543 Z M160,517 L176,517 L176,526 C176,526.553 175.552,527 175,527 L161,527 C160.448,527 160,526.553 160,526 L160,517 L160,517 Z M180,515 L156,515 C153.791,515 152,516.791 152,519 L152,543 C152,545.209 153.791,547 156,547 L180,547 C182.209,547 184,545.209 184,543 L184,519 C184,516.791 182.209,515 180,515 L180,515 Z"
+                      id="save-floppy" ></path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <span>Сохранить</span>
+          </button>
+          <div class="upload-group__hint">
+            <span>*</span>Минимальный размер 880х750
+          </div>
+        </div>
+      </div>
+
+
     </div>
     <div class="user__col">
       <user-form [userInfo]="profileInfo"

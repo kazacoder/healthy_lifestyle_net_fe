@@ -10,8 +10,11 @@ import {Subscription} from 'rxjs';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {NgClass, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {NotificationsType} from '../../../../types/notifications.type';
+import {UploadItemComponent} from "../publication/detail/upload/upload-item/upload-item.component";
+import {FormArray, FormBuilder} from '@angular/forms';
+import {Settings} from '../../../../settings/settings';
 
 
 @Component({
@@ -23,7 +26,9 @@ import {NotificationsType} from '../../../../types/notifications.type';
     UserSettingsComponent,
     UserFormComponent,
     NgIf,
-    NgClass
+    NgClass,
+    NgForOf,
+    UploadItemComponent
   ],
   standalone: true,
   templateUrl: './user-profile.component.html',
@@ -37,10 +42,15 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   notifications: NotificationsType | null = null;
   isMaster: boolean = false;
   checkingProfile: boolean = false;
+  existingFilesIds: number[] = [];
+  maxAdditionUserPhotoCount = Settings.maxAdditionUserPhotoCount
+  additionalImagePreview: { file: string | ArrayBuffer | null, name: string, id: number | null }[] = [];
+  userImagesForm: FormArray = this.fb.array([])
 
 
   constructor(private userService: UserService,
-              private _snackBar: MatSnackBar,) {
+              private _snackBar: MatSnackBar,
+              private fb: FormBuilder,) {
     this.userId = this.userService.getUserId()
   }
 
@@ -75,6 +85,54 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    if (this.additionalImagePreview.length < Settings.maxAdditionUserPhotoCount) {
+      if (this.additionalImagePreview.findIndex(item => item.name === file.name) === -1) {
+        this.userImagesForm.push(
+          this.fb.control({image: file})
+        );
+        reader.onload = () => {
+          this.additionalImagePreview.push({file: reader.result, name: file.name, id: null});
+        };
+      }
+    } else {
+      this._snackBar.open(`Максимальное количество дополнительных фотографий ${Settings.maxAdditionUserPhotoCount}`)
+    }
+    this.userImagesForm.markAsDirty()
+    this.userImagesForm.updateValueAndValidity()
+
+    reader.readAsDataURL(file);
+    input.value = '';
+  }
+
+  removeImage(fileName: string) {
+    const index = this.userImagesForm.controls.findIndex(control => {
+      return control.value.image.name === fileName;
+    })
+    this.userImagesForm.removeAt(index)
+
+    this.existingFilesIds = []
+    this.additionalImagePreview.forEach(item => {
+      if (item.name !== fileName && item.id) {
+        this.existingFilesIds.push(item.id);
+      }
+    });
+    this.additionalImagePreview = [...this.additionalImagePreview.filter(item => item.name !== fileName)];
+    this.userImagesForm.markAsDirty()
+    this.userImagesForm.updateValueAndValidity()
+  }
+
+  save() {
+    console.log(this.userImagesForm)
+    console.log(this.userImagesForm.dirty)
   }
 
   ngOnDestroy() {
