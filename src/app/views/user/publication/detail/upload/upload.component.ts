@@ -42,9 +42,9 @@ export class UploadComponent implements OnChanges {
       this.imagePreview = this.currentPublicationImages.mainImage
       this.currentPublicationImages.additionalImages.forEach(item => {
         this.additionalImagePreview.push({file: item.file, name: item.file, id: item.id});
+        this.existingFilesIds.push(item.id);
       })
     }
-    this.currentPublicationImages?.additionalImages.forEach(item => {this.existingFilesIds.push(item.id)})
   }
 
   onFileChange(event: Event, mainImage: boolean = true): void {

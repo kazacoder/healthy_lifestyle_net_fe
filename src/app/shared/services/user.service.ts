@@ -8,6 +8,7 @@ import {UserFullInfoType} from '../../../types/user-full-info.type';
 import {SpecialityType, UserSpecialityUpdateType} from '../../../types/speciality.type';
 import {UserPhotoDeleteType, UserPhotoType} from '../../../types/user-photo.type';
 import {UserChangePassType} from '../../../types/user-change-pass.type';
+import {AdditionalImageType} from '../../../types/additional-image.type';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,14 @@ export class UserService {
 
   getProfileInfo(user_id: string): Observable<UserFullInfoType | DefaultResponseType> {
     return this.http.get<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/');
+  }
+
+  getAdditionalPhoto(): Observable<AdditionalImageType[] | DefaultResponseType> {
+    return this.http.get<AdditionalImageType[] | DefaultResponseType>(environment.api + 'add-user-images/');
+  }
+
+  updateAdditionalPhoto (id: string, formData: FormData): Observable<AdditionalImageType[] | DefaultResponseType> {
+    return this.http.patch<AdditionalImageType[] | DefaultResponseType>(environment.api + 'add-user-images/' + id  + '/', formData);
   }
 
   updateProfileInfo(user_id: string, value: {[key: string]: boolean | null | number | string | {}}):
