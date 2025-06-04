@@ -14,6 +14,7 @@ import {UserProfileLayoutComponent} from './views/user/user-profile-layout.compo
 import {AuthForwardGuard} from './core/auth/auth-forward.guard';
 import {PublicationComponent} from './views/user/publication/detail/publication.component';
 import {PublicationsComponent} from './views/user/publication/list/publications/publications.component';
+import {EventDetailComponent} from './views/event/event-detail/event-detail.component';
 
 export const routes: Routes = [
   {
@@ -24,7 +25,7 @@ export const routes: Routes = [
       {path: 'masters', component: MastersListComponent, title: 'Мастера',},
       {path: 'masters/:url', component: MasterDetailComponent, title: 'Мастер',},
       {path: 'events', component: EventsListComponent, title: 'Мероприятия',},
-      {path: 'events/:url', component: PageUnderConstructionComponent, title: 'Мероприятие',},
+      {path: 'events/:url', component: EventDetailComponent, title: 'Мероприятие',},
       {path: 'articles', component: BlogComponent, title: 'Статьи',},
       {path: 'articles/:url', component: PageUnderConstructionComponent, title: 'Статья',},
       {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},

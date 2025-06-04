@@ -100,8 +100,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             this.existingFilesIds.push(item.id);
             this.additionalImagePreview.push({file: item.file, name: item.file, id: item.id});
           })
-          console.log(receivedUserPhotos)
-          console.log(this.existingFilesIds)
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
@@ -155,7 +153,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.additionalImagePreview = [...this.additionalImagePreview.filter(item => item.name !== fileName)];
     this.userImagesForm.markAsDirty()
     this.userImagesForm.updateValueAndValidity()
-    console.log(this.existingFilesIds)
   }
 
   buildImagesFormData(): FormData {
@@ -172,8 +169,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    console.log(this.userImagesForm)
-    console.log(this.userImagesForm.dirty)
     if (this.userId) {
       const formData = this.buildImagesFormData()
       this.saveUserPhotosSubscription = this.userService.updateAdditionalPhoto(this.userId, formData)

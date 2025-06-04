@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="event-desc__inner">
+    <div class="event-desc__grid">
+      <div class="event-desc__col">
+        <div class="event-desc__title text20 text16-tablet bold-text">
+          Описание
+        </div>
+        <div class="event-desc__text">
+          <div class="text18 text16-tablet">
+            Раскачаем межбровный центр, пообщаемся с единомышленниками. Вас ждет сырая еда, много энергетических практик, баня и тд
+          </div>
+        </div>
+        <div class="event-desc__nav">
+          <a href="" class="text16">Читать далее</a>
+        </div>
+      </div>
+      <div class="event-desc__col2">
+        <div class="event-desc__status" *ngIf="already">
+          <img src="assets/img/success.svg" alt="">
+          <span class="text14">Вы уже участник мероприятия</span>
+        </div>
+        <button class="event-desc__btn m-btn m-btn-primary m-btn-bounce">
+          <span>Забронировать <ng-container *ngIf="already">еще места</ng-container></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="events-slider2 slider">
+      <div class="event-desc__title2 text20 text16-tablet bold-text">
+        Фото
+      </div>
+      <div class="slider__wrap">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="event-card2 event-card3">
+                <div class="event-card2__top">
+                  <a href="" class="event-card2__img m-backdrop _scale-img">
+                    <img src="assets/img/event4.webp" alt="">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="event-card2 event-card3">
+                <div class="event-card2__top">
+                  <a href="" class="event-card2__img m-backdrop _scale-img">
+                    <img src="assets/img/event7.webp" alt="">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="event-card2 event-card3">
+                <div class="event-card2__top">
+                  <a href="" class="event-card2__img m-backdrop _scale-img">
+                    <img src="assets/img/event8.webp" alt="">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="event-card2 event-card3">
+                <div class="event-card2__top">
+                  <a href="" class="event-card2__img m-backdrop _scale-img">
+                    <img src="assets/img/event6.webp" alt="">
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+     <swiper-nav></swiper-nav>
+    </div>
+
+    <div class="event-contacts">
+      <div class="event-contacts__title text16 bold-text">
+        Контакты
+      </div>
+      <div class="event-contacts__items">
+        <a href="" class="event-contacts__item">
+          <img src="assets/img/tg.svg" alt="">
+          <span>+7 777 000 99 09</span>
+        </a>
+        <a href="" class="event-contacts__item">
+          <img src="assets/img/whatsapp.svg" alt="">
+          <span>+7 777 000 99 09</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
