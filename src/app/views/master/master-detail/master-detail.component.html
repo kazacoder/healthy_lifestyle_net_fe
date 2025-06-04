@@ -6,23 +6,18 @@
         <div class="master-item__col">
           <div class="master-slider2 slider _loop m-backdrop">
             <swiper-container class="master-swiper" init="false">
-              <swiper-slide class="swiper-slide">
+              <swiper-slide class="swiper-slide" *ngIf="master?.photo">
                 <div class="master-slider2__img">
                   <img src="{{ master?.photo }}" alt="">
                 </div>
               </swiper-slide>
-              <swiper-slide class="swiper-slide">
+              <swiper-slide class="swiper-slide" *ngFor="let image of master?.additional_images">
                 <div class="master-slider2__img">
-                  <img src="{{ master?.photo }}" alt="">
-                </div>
-              </swiper-slide>
-              <swiper-slide class="swiper-slide">
-                <div class="master-slider2__img">
-                  <img src="{{ master?.photo }}" alt="">
+                  <img src="{{ image.file }}" alt="">
                 </div>
               </swiper-slide>
             </swiper-container>
-            <swiper-nav></swiper-nav>
+            <swiper-nav *ngIf="master!.additional_images.length > 0"></swiper-nav>
             <div class="swiper-pagination"></div>
           </div>
           <button class="master-item__btn m-btn m-btn-primary m-btn-bounce">

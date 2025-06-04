@@ -1,4 +1,5 @@
 import {UserSpecialityType} from './speciality.type';
+import {AdditionalImageType} from './additional-image.type';
 
 export type MasterInfoType = {
   id: number,
@@ -15,4 +16,5 @@ export type MasterInfoType = {
   vk: string,
   instagram: string,
   is_master: boolean,
+  additional_images: AdditionalImageType[]
 }
