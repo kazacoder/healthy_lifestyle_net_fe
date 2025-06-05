@@ -5,22 +5,17 @@
   </div>
 
   <div class="event-desc">
-    <event-desc></event-desc>
-<!--    @@include('components/events/_event-desc.html',{-->
-<!--    "already":"true"-->
-<!--    })-->
+    <event-desc [alreadyBooked]="true"></event-desc>
   </div>
 
   <div class="questions">
-<!--    @@include('components/events/_questions.html')-->
+    <event-questions></event-questions>
   </div>
 
   <div class="address">
-<!--    @@include('components/events/_address.html')-->
+    <event-address></event-address>
   </div>
 
-
-<!--  @@include('components/events/_collection.html')-->
-
+  <event-collections></event-collections>
 
 </main>

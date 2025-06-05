@@ -24,7 +24,8 @@ import {EventService} from '../../shared/services/event.service';
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent, NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink, CityModalComponent, ParamModalComponent],
+  imports: [PosterInfoComponent, DateFeedComponent, NgIf, DateFilterComponent, EventCardComponent, SwiperNavComponent,
+    NgForOf, EventCard2Component, NgClass, MasterCardComponent, RouterLink, CityModalComponent, ParamModalComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

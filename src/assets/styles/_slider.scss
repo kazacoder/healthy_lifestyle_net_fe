@@ -1,0 +1,36 @@
+.slider{
+  position: relative;
+  &__wrap{
+    padding: 0 2.75em;
+  }
+  .swiper{
+    &-container{
+      width: calc(100% + .625em);
+    }
+    &-wrapper{
+      align-items: stretch;
+    }
+    &-slide{
+      padding-right: .625em;
+      height: auto;
+    }
+    &-button{
+      transition: all .3s;
+      top: 50%;
+      margin: 0;
+      transform: translateY(-50%);
+      &-prev{
+        left: -.9375em;
+      }
+      &-next{
+        right: -.9375em;
+      }
+      @media screen and (min-width: 993px){
+        &:hover{
+          transform: translateY(calc(-50% - .25em));
+          box-shadow: rgba(193, 193, 193, 0.7) 0 .3125em 1.25em;
+        }
+      }
+    }
+  }
+}

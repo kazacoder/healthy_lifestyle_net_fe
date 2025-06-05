@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="h2">
+    Вопросы и ответы
+  </div>
+  <div class="questions__items">
+    <event-question-item [name]="'Елена'"></event-question-item>
+    <event-question-item [name]="'Алиса'"></event-question-item>
+  </div>
+  <div class="questions__nav">
+    <button class="questions__more m-btn m-btn-gray m-btn-bounce">
+      <span>Показать еще</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8.00013 12.1667C7.91865 12.1667 7.83796 12.1517 7.76269 12.1225C7.68742 12.0932 7.61906 12.0503 7.56153 11.9963L1.35783 6.18029C1.11542 5.95303 1.11542 5.58503 1.35783 5.35791C1.60024 5.1308 1.99278 5.13065 2.23503 5.35791L8.00013 10.7627L13.7652 5.35791C14.0076 5.13065 14.4002 5.13065 14.6424 5.35791C14.8847 5.58517 14.8848 5.95318 14.6424 6.18029L8.43873 11.9963C8.3812 12.0503 8.31283 12.0932 8.23757 12.1225C8.1623 12.1517 8.08161 12.1667 8.00013 12.1667Z" fill="black"/>
+      </svg>
+    </button>
+  </div>
+  <form action="" class="question-form">
+    <div class="text16 semi-bold-text">
+      Вопросы
+    </div>
+    <div class="fg question-form__field m-text-field">
+      <textarea maxlength="1000" data-id="1" placeholder="Задайте вопрос о мероприятии"></textarea>
+    </div>
+    <div class="question-form__nav">
+      <div class="question-form__buttons">
+        <button class="question-form__btn m-btn m-btn-primary m-btn-bounce">
+          <span>Задать вопрос</span>
+        </button>
+        <button class="question-form__btn m-btn m-btn-gray m-btn-bounce">
+          <span>Отменить</span>
+        </button>
+      </div>
+      <div class="question-form__info">
+        Всего символов <span class="question-form__field-count" data-id="1">0</span>/1000
+      </div>
+    </div>
+    <button class="question-form__claim m-btn m-btn-gray m-btn-bounce">
+      <img src="assets/img/info-icon.svg" alt="">
+      <span>Пожаловаться на мероприятие</span>
+    </button>
+  </form>
+</div>
