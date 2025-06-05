@@ -31,13 +31,13 @@ export class EventDescComponent implements AfterViewInit {
     observeParents: true,
     observeSlideChildren: true,
     navigation: {
-      nextEl: `.events-slider2 .swiper-button-next`,
-      prevEl: `.events-slider2 .swiper-button-prev`,
+      nextEl: `.events-slide-photo .swiper-button-next`,
+      prevEl: `.events-slide-photo .swiper-button-prev`,
     },
   }
 
   ngAfterViewInit(): void {
-    this.photoSwiper = document.querySelector('.event-swiper');
+    this.photoSwiper = document.querySelector('.event-swiper-photo');
     if (this.photoSwiper) {
       Object.assign(this.photoSwiper, this.photoSwiperParams);
       this.photoSwiper.initialize();
