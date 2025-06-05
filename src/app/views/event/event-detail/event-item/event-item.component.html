@@ -1,18 +1,17 @@
 <div class="container">
-  <div class="event-item__top">
-    <img src="assets/img/event9.webp" alt="" class="event-item__img _view1">
-    <img src="assets/img/event10.webp" alt="" class="event-item__img _view2">
-
+  <div class="event-item__top" [ngStyle]="{'background-image': 'url(' + event?.image+ ')'}">
+<!--    <img src="{{ event?.image }}" alt="" class="event-item__img _view1">-->
+    <img src="{{ event?.image }}" alt="" class="event-item__img _view2">
     <div class="event-item__badges">
       <div class="event-item__time">
         <div class="event-item__time-date">
-          <div class="text24 text14-tablet">18 Марта</div>
+          <div class="text24 text14-tablet">{{ event?.day }} {{ event?.month | monthToString }}</div>
         </div>
         <div class="event-item__time-hours">
-          <div class="text24 text14-tablet">15:00</div>
+          <div class="text24 text14-tablet">15:00!</div>
         </div>
       </div>
-      <div class="event-premium">
+      <div class="event-premium" *ngIf="event?.is_master">
         <div class="event-premium__show">
           <img src="assets/img/crone.svg" alt="">
         </div>
@@ -27,53 +26,43 @@
       <img src="assets/img/clock.svg" alt="">
       <div class="text18 text14-tablet">
         <span class="_hide-tablet">Длительность:</span>
-        <span class="medium-text">2 дня</span>
+        <span class="medium-text">{{ periodLabel }}</span>
       </div>
     </div>
     <div class="event-item__badges2 _flex">
-      <div class="m-badge _hide-tablet">
-        <img src="assets/img/type-icon.svg" alt="">
-        <span class="text16">Йога</span>
-      </div>
-      <div class="m-badge _hide-tablet">
-        <img src="assets/img/type-icon2.svg" alt="">
-        <span class="text16">Баня</span>
+      <div class="m-badge _hide-tablet" *ngFor="let category of event?.categories">
+        <img src="assets/img/marker.svg" alt="" *ngIf="!category.image">
+        <img src="{{ category.image }}" alt="" *ngIf="category.image">
+        <span class="text16">{{ category.title }}</span>
       </div>
       <div class="m-badge">
-        <img src="assets/img/type-icon3.svg" alt="">
-        <span class="text16">Для мужчин и женщин</span>
+        <img src="{{ event?.suit_image }}" alt="">
+        <span class="text16">{{ event?.suit_title }}</span>
       </div>
     </div>
   </div>
   <div class="event-item__bottom">
     <div class="event-item__col">
       <div class="event-item__title text34 text20-tablet semi-bold-text">
-        Энергетический ретрит на раскрытие сердца
+        {{ event?.title }}
       </div>
       <div class="event-item__wrap _flex">
-        <a href="" class="event-card2__master _flex">
+        <a routerLink="/masters/{{ event?.author }}" class="event-card2__master _flex">
           <div class="avatar">
-            <img src="assets/img/avatar.webp" alt="">
+            <img src="{{ event?.author_photo }}" alt="">
           </div>
-          <span class="text20 text16-tablet">
-                        Дарья Солодаева
-                    </span>
+          <span class="text20 text16-tablet">{{ event?.author_full_name }}</span>
         </a>
         <div class="event-item__street _flex">
           <img src="assets/img/marker.svg" alt="">
-          <span class="text18 text16-tablet">
-                        Москва, ул. Николаева д.34
-                    </span>
+          <span class="text18 text16-tablet">{{ address }}</span>
         </div>
       </div>
       <div class="event-item__badges3 _flex">
-        <div class="m-badge">
-          <img src="assets/img/type-icon.svg" alt="">
-          <span class="text16">Йога</span>
-        </div>
-        <div class="m-badge">
-          <img src="assets/img/type-icon2.svg" alt="">
-          <span class="text16">Баня</span>
+        <div class="m-badge" *ngFor="let category of event?.categories">
+          <img src="assets/img/marker.svg" alt="" *ngIf="!category.image">
+          <img src="{{ category.image }}" alt="" *ngIf="category.image">
+          <span class="text16">{{ category.title }}</span>
         </div>
       </div>
     </div>
@@ -93,9 +82,10 @@
           <span class="text18">Поделиться</span>
         </a>
         <div class="event-action__price">
-          <div class="text24 text14-tablet">
-            <span class="_hide-tablet">от</span> 1700₽
+          <div class="text24 text14-tablet" *ngIf="!event?.is_free">
+            <span class="_hide-tablet">от</span> {{ event?.price | toInt }}₽
           </div>
+          <div class="text24 text14-tablet" *ngIf="event?.is_free">Бесплатно</div>
         </div>
       </div>
     </div>

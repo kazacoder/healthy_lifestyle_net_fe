@@ -4,7 +4,7 @@
     <div class="container">
       <div class="master-item__grid">
         <div class="master-item__col">
-          <div class="master-slider2 slider _loop m-backdrop">
+          <div class="master-slider2 slider _loop m-backdrop" [ngClass]="{'_hide-buttons': hideNavigation}">
             <swiper-container class="master-swiper" init="false">
               <swiper-slide class="swiper-slide" *ngIf="master?.photo">
                 <div class="master-slider2__img">
@@ -17,7 +17,7 @@
                 </div>
               </swiper-slide>
             </swiper-container>
-            <swiper-nav *ngIf="master!.additional_images.length > 0"></swiper-nav>
+            <swiper-nav></swiper-nav>
             <div class="swiper-pagination"></div>
           </div>
           <button class="master-item__btn m-btn m-btn-primary m-btn-bounce">
@@ -74,7 +74,7 @@
                   <a href="tel:+7{{ master?.phone }}" class="contact-item__link font2">
                     <img src="assets/img/phone.svg" alt="">
                     <span>{{ master?.phone }}</span>
-<!--                    <span>+7 (3812) 35-30-37</span>-->
+                    <!--                    <span>+7 (3812) 35-30-37</span>-->
                   </a>
                 </div>
                 <div class="contact-item__desc">
@@ -102,7 +102,9 @@
                 <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="0.5" y="0.5" width="44" height="44" rx="22" stroke="#BDDA13"></rect>
                   <g clip-path="url(#clip0_40_9954)">
-                    <path d="M27.5931 25.2183C26.7153 25.2183 25.9207 25.5814 25.3503 26.1649L20.4204 23.2869C20.5012 23.0089 20.5469 22.7163 20.5469 22.4123C20.5469 22.1226 20.5044 21.8431 20.431 21.5767L25.3235 18.8049C25.8956 19.4053 26.7008 19.7813 27.5936 19.7813C29.3252 19.7813 30.7343 18.3727 30.7343 16.6403C30.7343 14.9086 29.3252 13.5 27.5936 13.5C25.8621 13.5 24.453 14.9086 24.453 16.6403C24.453 16.93 24.4954 17.2095 24.5694 17.4765L19.6767 20.2486C19.1046 19.6481 18.2993 19.2721 17.4066 19.2721C15.6749 19.2721 14.2664 20.6806 14.2664 22.4129C14.2664 24.1445 15.6749 25.5532 17.4066 25.5532C18.2851 25.5532 19.079 25.1901 19.6499 24.6066L24.5793 27.4846C24.4987 27.763 24.4526 28.0562 24.4526 28.3595C24.4526 30.0917 25.8617 31.5 27.593 31.5C29.3249 31.5 30.734 30.0917 30.734 28.3595C30.734 26.6271 29.3249 25.2183 27.5931 25.2183Z" fill="#BDDA13"></path>
+                    <path
+                      d="M27.5931 25.2183C26.7153 25.2183 25.9207 25.5814 25.3503 26.1649L20.4204 23.2869C20.5012 23.0089 20.5469 22.7163 20.5469 22.4123C20.5469 22.1226 20.5044 21.8431 20.431 21.5767L25.3235 18.8049C25.8956 19.4053 26.7008 19.7813 27.5936 19.7813C29.3252 19.7813 30.7343 18.3727 30.7343 16.6403C30.7343 14.9086 29.3252 13.5 27.5936 13.5C25.8621 13.5 24.453 14.9086 24.453 16.6403C24.453 16.93 24.4954 17.2095 24.5694 17.4765L19.6767 20.2486C19.1046 19.6481 18.2993 19.2721 17.4066 19.2721C15.6749 19.2721 14.2664 20.6806 14.2664 22.4129C14.2664 24.1445 15.6749 25.5532 17.4066 25.5532C18.2851 25.5532 19.079 25.1901 19.6499 24.6066L24.5793 27.4846C24.4987 27.763 24.4526 28.0562 24.4526 28.3595C24.4526 30.0917 25.8617 31.5 27.593 31.5C29.3249 31.5 30.734 30.0917 30.734 28.3595C30.734 26.6271 29.3249 25.2183 27.5931 25.2183Z"
+                      fill="#BDDA13"></path>
                   </g>
                 </svg>
                 <span class="text18">Поделиться</span>
@@ -117,15 +119,15 @@
   </div>
 
   <div class="events2">
-<!--    @@include('components/events/_events-collection.html',{-->
-<!--    "title":"Ближайшие мероприятия мастера"-->
-<!--    })-->
+    <!--    @@include('components/events/_events-collection.html',{-->
+    <!--    "title":"Ближайшие мероприятия мастера"-->
+    <!--    })-->
   </div>
 
   <div class="events2">
-<!--    @@include('components/events/_events-collection.html',{-->
-<!--    "title":"Прошедшие мероприятия мастера"-->
-<!--    })-->
+    <!--    @@include('components/events/_events-collection.html',{-->
+    <!--    "title":"Прошедшие мероприятия мастера"-->
+    <!--    })-->
   </div>
 
   <div class="master-claim">

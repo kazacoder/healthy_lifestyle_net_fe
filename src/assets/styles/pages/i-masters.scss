@@ -69,6 +69,13 @@
   }
 }
 
+.master-slider2._hide-buttons{
+  .swiper-button {
+    display: none;
+  }
+}
+
+
 .master-slider2{
   border-radius: 1.25em;
   overflow: hidden;

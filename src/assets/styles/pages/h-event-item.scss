@@ -45,6 +45,12 @@
   }
   .events-slider2{
     margin-top: 3.125em;
+
+    &._hide-buttons{
+      .swiper-button {
+        display: none;
+      }
+    }
   }
   &__inner{
     position: relative;

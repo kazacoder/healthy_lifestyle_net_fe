@@ -6,7 +6,7 @@
             </span>
     </a>
   </div>
-  <div class="events-slider2 events-slider3 _hide-buttons slider events-slider-history">
+  <div class="events-slider2 events-slider3 slider events-slider-history" [ngClass]="{'_hide-buttons': true}">
     <div class="slider__wrap">
       <swiper-container class="event-swiper-history" init="false">
         <swiper-slide class="swiper-slide" *ngFor="let event of tmpEvent">

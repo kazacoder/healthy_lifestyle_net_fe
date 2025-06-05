@@ -2,14 +2,15 @@ import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, Input} from '@angular/
 import {SwiperNavComponent} from '../../../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element';
 import {EventCard3Component} from '../../../../../shared/components/cards/event-card3/event-card3.component';
-import {NgForOf} from '@angular/common';
+import {NgClass, NgForOf} from '@angular/common';
 
 @Component({
   selector: 'event-collection-history',
   imports: [
     SwiperNavComponent,
     EventCard3Component,
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   standalone: true,
   templateUrl: './event-collection-history.component.html',

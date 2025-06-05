@@ -6,10 +6,7 @@
           Описание
         </div>
         <div class="event-desc__text">
-          <div class="text18 text16-tablet">
-            Раскачаем межбровный центр, пообщаемся с единомышленниками. Вас ждет сырая еда, много энергетических
-            практик, баня и тд
-          </div>
+          <div class="text18 text16-tablet">{{ description }}</div>
         </div>
         <div class="event-desc__nav">
           <a href="" class="text16">Читать далее</a>
@@ -26,44 +23,17 @@
       </div>
     </div>
 
-    <div class="events-slider2 slider events-slide-photo">
-      <div class="event-desc__title2 text20 text16-tablet bold-text">
+    <div class="events-slider2 slider events-slide-photo" [ngClass]="{'_hide-buttons': hideNavigation}">
+      <div class="event-desc__title2 text20 text16-tablet bold-text" *ngIf="photos && photos.length > 0">
         Фото
       </div>
       <div class="slider__wrap">
         <swiper-container class="event-swiper-photo" init="false">
-          <swiper-slide class="swiper-slide">
+          <swiper-slide class="swiper-slide" *ngFor="let photo of photos">
             <div class="event-card2 event-card3">
               <div class="event-card2__top">
                 <a href="" class="event-card2__img m-backdrop _scale-img">
-                  <img src="assets/img/event4.webp" alt="">
-                </a>
-              </div>
-            </div>
-          </swiper-slide>
-          <swiper-slide class="swiper-slide">
-            <div class="event-card2 event-card3">
-              <div class="event-card2__top">
-                <a href="" class="event-card2__img m-backdrop _scale-img">
-                  <img src="assets/img/event7.webp" alt="">
-                </a>
-              </div>
-            </div>
-          </swiper-slide>
-          <swiper-slide class="swiper-slide">
-            <div class="event-card2 event-card3">
-              <div class="event-card2__top">
-                <a href="" class="event-card2__img m-backdrop _scale-img">
-                  <img src="assets/img/event8.webp" alt="">
-                </a>
-              </div>
-            </div>
-          </swiper-slide>
-          <swiper-slide class="swiper-slide">
-            <div class="event-card2 event-card3">
-              <div class="event-card2__top">
-                <a href="" class="event-card2__img m-backdrop _scale-img">
-                  <img src="assets/img/event6.webp" alt="">
+                  <img src="{{ photo.file }}" alt="">
                 </a>
               </div>
             </div>
@@ -78,13 +48,13 @@
         Контакты
       </div>
       <div class="event-contacts__items">
-        <a href="" class="event-contacts__item">
+        <a href="" class="event-contacts__item" *ngIf="tg">
           <img src="assets/img/tg.svg" alt="">
-          <span>+7 777 000 99 09</span>
+          <span>{{ tg }}</span>
         </a>
-        <a href="" class="event-contacts__item">
+        <a href="" class="event-contacts__item" *ngIf="whatsapp">
           <img src="assets/img/whatsapp.svg" alt="">
-          <span>+7 777 000 99 09</span>
+          <span>{{ whatsapp }}</span>
         </a>
       </div>
     </div>

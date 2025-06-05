@@ -1,11 +1,16 @@
 <main class="content">
 
   <div class="event-item">
-    <event-item></event-item>
+    <event-item [address]="address" [event]="event"></event-item>
   </div>
 
   <div class="event-desc">
-    <event-desc [alreadyBooked]="true"></event-desc>
+    <event-desc
+      [description]="event?.description"
+      [whatsapp]="event?.whatsapp"
+      [tg]="event?.telegram"
+      [photos]="event?.additional_images"
+      [alreadyBooked]="true"></event-desc>
   </div>
 
   <div class="questions">

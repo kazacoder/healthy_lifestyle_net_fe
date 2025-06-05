@@ -2,7 +2,7 @@ import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit} fro
 import {SwiperNavComponent} from '../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SocialsComponent} from '../../../shared/components/ui/socials/socials.component';
 import {EventCardComponent} from '../../../shared/components/cards/event-card/event-card.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MasterService} from '../../../shared/services/master.service';
@@ -23,7 +23,8 @@ import {CommonUtils} from '../../../shared/utils/common-utils';
     EventCardComponent,
     NgForOf,
     NgIf,
-    ParagraphTextPipe
+    ParagraphTextPipe,
+    NgClass
   ],
   standalone: true,
   templateUrl: './master-detail.component.html',
@@ -35,6 +36,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   activatedRouteSubscription: Subscription | null = null;
   masterDetailSubscription: Subscription | null = null;
   master: MasterInfoType | null = null;
+  hideNavigation: boolean = false;
   socialObject: SocialObjectType | null = null
   masterSlider: SwiperContainer | null = null;
   specialityList: {speciality: string, experience: string}[] = []
@@ -98,6 +100,8 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               vk: this.master.vk,
               instagram: this.master.instagram,
             }
+            this.hideNavigation = (+!!this.master.photo + this.master.additional_images.length) < 2;
+            console.log(this.hideNavigation);
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.detail) {
