@@ -15,7 +15,7 @@ import {NgForOf, NgStyle} from '@angular/common';
 })
 export class ParamFilterComponent {
 
-  zIndex: number = 1;
+  zIndex: number = 0;
 
   @Input()
   filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = []
@@ -24,8 +24,7 @@ export class ParamFilterComponent {
 
   isFilterOpen(val: boolean) {
     if(window.innerWidth <= 992){
-      this.zIndex = val ? 7 : 1
-      console.log(this.zIndex)
+      this.zIndex = val ? 7 : 0
       document.querySelector(".m-page")?.classList.toggle("fixed-body")
       document.querySelector(".m-page")?.classList.toggle("open-calendar")
     }
