@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {UserInfoType} from '../../../types/user-info.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
@@ -20,13 +20,16 @@ export class UserService {
   userName$: Subject<string | null> = new Subject<string | null>();
   isMaster: boolean = false;
   private isMaster$: Subject<boolean> = new Subject<boolean>();
-  private isLogged$: Subject<boolean> = new Subject<boolean>();
+  private isLogged$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isMasterObservable = this.isMaster$.asObservable();
   isLoggedObservable = this.isLogged$.asObservable();
 
   constructor(private http: HttpClient) {
     this.isMaster = localStorage.getItem(this.userStatusKey) === '3'
     this.setIsMaster(this.isMaster);
+    if (this.getUserId()) {
+      this.setIsLogged(true)
+    }
   }
 
   setIsMaster(isMaster: boolean): void {

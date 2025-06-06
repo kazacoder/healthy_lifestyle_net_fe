@@ -25,6 +25,7 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
   @Input() eventId: number | undefined | null = null;
 
   constructor(private userService: UserService,) {
+
   }
 
   ngOnInit() {
