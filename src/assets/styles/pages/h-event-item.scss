@@ -305,6 +305,8 @@
     }
     &__badges3{
       display: flex;
+      flex-wrap: wrap;
+      row-gap: 0.25em;
       margin-top: .75em;
       .m-badge{
         margin-right: .375em;
@@ -323,17 +325,28 @@
   }
 
   .event-action{
+    position: absolute; //added to fix buttons position
+    right: .875em; //added to fix buttons position
+    bottom: 100%; //added to fix buttons position
     .favourite-btn{
       margin-right: .625em;
+      position: absolute; //added to fix buttons position
+      right: 1.875em; //added to fix buttons position
+      top: 100%; //added to fix buttons position
+    }
+    .share-btn {
+      position: absolute; //added to fix buttons position
+      right: -.75em; //added to fix buttons position
+      top: 100%; //added to fix buttons position
     }
     &__price{
       padding: 0 .625em;
       height: 1.875em;
       background-color: #fff;
       border-radius: .5em;
-      position: absolute;
-      right: .875em;
-      bottom: 100%;
+      //position: absolute; //removed to fix buttons position
+      //right: .875em; //removed to fix buttons position
+      //bottom: 100%; //removed to fix buttons position
       margin-bottom: 1.875em;
       display: flex;
       align-items: center;
