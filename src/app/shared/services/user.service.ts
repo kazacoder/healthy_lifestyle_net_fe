@@ -20,7 +20,9 @@ export class UserService {
   userName$: Subject<string | null> = new Subject<string | null>();
   isMaster: boolean = false;
   private isMaster$: Subject<boolean> = new Subject<boolean>();
+  private isLogged$: Subject<boolean> = new Subject<boolean>();
   isMasterObservable = this.isMaster$.asObservable();
+  isLoggedObservable = this.isLogged$.asObservable();
 
   constructor(private http: HttpClient) {
     this.isMaster = localStorage.getItem(this.userStatusKey) === '3'
@@ -29,6 +31,10 @@ export class UserService {
 
   setIsMaster(isMaster: boolean): void {
     this.isMaster$.next(isMaster);
+  }
+
+  setIsLogged(isLogged: boolean): void {
+    this.isLogged$.next(isLogged);
   }
 
   getUserInfo(): Observable<UserInfoType | DefaultResponseType> {

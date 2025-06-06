@@ -95,6 +95,7 @@ export class SignUpModalComponent implements OnDestroy {
             loginResponse.firstName ? loginResponse.firstName : loginResponse.username,
             loginResponse.status
           );
+          this.userService.setIsLogged(true);
           this._snackBar.open('Пользователь успешно зарегистрирован')
           this.closeModal()
         },

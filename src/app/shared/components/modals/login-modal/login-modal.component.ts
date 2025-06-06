@@ -78,6 +78,7 @@ export class LoginModalComponent implements OnDestroy {
             loginResponse.firstName ? loginResponse.firstName : loginResponse.username,
             loginResponse.status
           );
+          this.userService.setIsLogged(true);
           this._snackBar.open('Вы успешно авторизовались');
           this.closeModal();
         },

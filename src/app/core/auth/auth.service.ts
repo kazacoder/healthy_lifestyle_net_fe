@@ -51,6 +51,7 @@ export class AuthService {
     }
     this.removeTokens();
     this.userService.removeUserInfo();
+    this.userService.setIsLogged(false)
   }
 
 
