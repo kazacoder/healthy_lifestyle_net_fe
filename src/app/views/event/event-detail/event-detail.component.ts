@@ -28,7 +28,7 @@ import {ActivatedRoute} from '@angular/router';
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: EventType | null = null;
   address: string = ''
-  eventId: string | null = null;
+  eventId: string | null | undefined = null;
   getEventSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,

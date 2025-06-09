@@ -4,6 +4,11 @@ import {FormsModule} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {UserService} from '../../../../shared/services/user.service';
 import {NgIf} from '@angular/common';
+import {EventService} from '../../../../shared/services/event.service';
+import {DefaultResponseType} from '../../../../../types/default-response.type';
+import {HttpErrorResponse} from '@angular/common/http';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {EventQuestionResponseType} from '../../../../../types/event-question-response.type';
 
 @Component({
   selector: 'event-questions',
@@ -22,9 +27,13 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
   minQuestionLength: number = 10;
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
-  @Input() eventId: number | undefined | null = null;
+  questionResponse: EventQuestionResponseType | null = null;
+  answersSubscription: Subscription | null = null;
+  @Input() eventId: string | undefined | null = null;
 
-  constructor(private userService: UserService,) {
+  constructor(private userService: UserService,
+              private eventService: EventService,
+              private _snackBar: MatSnackBar,) {
 
   }
 
@@ -32,6 +41,32 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
     this.isLoggedSubscription = this.userService.isLoggedObservable.subscribe(isLogged => {
       this.isLogged = isLogged;
     })
+
+    console.log(this.eventId)
+
+    if (this.eventId) {
+      this.answersSubscription = this.eventService.getQuestionsWithAnswers(this.eventId).subscribe({
+        next: (data: EventQuestionResponseType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.questionResponse = data as EventQuestionResponseType;
+          console.log(this.questionResponse);
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      })
+    }
+
+
+
   }
 
   proceed() {
