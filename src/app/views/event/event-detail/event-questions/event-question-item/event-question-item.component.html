@@ -1,32 +1,63 @@
 <div class="question-item">
   <div class="question-item__top _flex">
     <div class="avatar">
-      <img src="assets/img/avatar.svg" alt="">
+      <img src="assets/img/avatar.svg" alt="" *ngIf="!question?.author_photo">
+      <img src="{{ question?.author_photo }}" alt="" *ngIf="question?.author_photo">
     </div>
     <div class="question-item__info">
       <div class="text16 semi-bold-text">
-        {{ name }}
+        {{ question?.author_full_name }}
       </div>
       <div class="question-item__date text12">
-        12.01.2023, 12:43
+        {{ question?.created_at | date: 'dd.MM.yyyy, HH:mm' }}
       </div>
     </div>
   </div>
   <div class="question-item__desc text16">
-    Вопрос о мероприятие. Подскажите будут ли обсуждены вопросы о..?
+    {{ question?.text }}
   </div>
-  <div class="answer">
+  <div class="answer" *ngIf="question?.answer && !editAnswer">
     <div class="answer__top _flex">
       <div class="answer__name text16 semi-bold-text">
-        Дарья Солодаева
+        {{ question?.answer?.author_full_name }}
       </div>
-      <div class="answer__badge _flex">
+      <div class="answer__badge _flex" *ngIf="question?.answer?.is_master">
         <img src="assets/img/crone2.svg" alt="">
         <span class="text12">Мастер</span>
       </div>
     </div>
     <div class="answer__desc text16">
-      Ответ в 2 строки. Подскажите подходит ли под данную модель?Ответ о товаре в 2-4 строки. Подскажите подходит ли под данную модель? Подскажите подходит ли .....
+      {{ question?.answer?.text }}
+    </div>
+    <div class="question-form__nav" *ngIf="userId === eventAuthor?.toString()">
+      <div class="question-form__buttons">
+        <button class="question-form__btn m-btn m-btn-primary m-btn-bounce"
+                (click)="allowEditAnswer(true)">
+          <span>Редактировать</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="answer" *ngIf="(!question?.answer && userId === eventAuthor?.toString()) || editAnswer">
+    <div class="fg question-form__field m-text-field">
+      <textarea maxlength="{{ maxAnswerLength }}"
+                placeholder="Введите ответ на вопрос. Минимум символов: {{ minAnswerLength }}"
+                [(ngModel)]="answer"></textarea>
+    </div>
+    <div class="question-form__nav">
+      <div class="question-form__buttons">
+        <button class="question-form__btn m-btn m-btn-primary m-btn-bounce"
+                (click)="proceed()"
+                [disabled]="answer.length > maxAnswerLength || answer.length < minAnswerLength">
+          <span>Сохранить</span>
+        </button>
+        <button class="question-form__btn m-btn m-btn-gray m-btn-bounce" (click)="cancelAnswer()">
+          <span>Отменить</span>
+        </button>
+      </div>
+      <div class="question-form__info">
+        Всего символов <span class="question-form__field-count">{{ answer.length }}</span>/{{ maxAnswerLength }}
+      </div>
     </div>
   </div>
 </div>

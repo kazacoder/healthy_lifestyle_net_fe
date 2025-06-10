@@ -14,7 +14,9 @@
   </div>
 
   <div class="questions">
-    <event-questions [eventId]="eventId"></event-questions>
+    <event-questions
+      [eventAuthor]="event?.author"
+      [eventId]="eventId"></event-questions>
   </div>
 
   <div class="address">

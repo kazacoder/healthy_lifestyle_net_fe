@@ -3,8 +3,9 @@
     Вопросы и ответы
   </div>
   <div class="questions__items">
-    <event-question-item [name]="'Елена'"></event-question-item>
-    <event-question-item [name]="'Алиса'"></event-question-item>
+    <event-question-item [question]="question"
+                         [eventAuthor]="eventAuthor"
+                         *ngFor="let question of questionResponse?.results"></event-question-item>
   </div>
   <div class="questions__nav">
     <button class="questions__more m-btn m-btn-gray m-btn-bounce">
