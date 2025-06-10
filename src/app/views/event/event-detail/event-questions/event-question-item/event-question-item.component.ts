@@ -9,6 +9,7 @@ import {EventService} from '../../../../../shared/services/event.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AnswerResponseType} from '../../../../../../types/answer-response.type';
 import {UserService} from '../../../../../shared/services/user.service';
+import {Settings} from '../../../../../../settings/settings';
 
 @Component({
   selector: 'event-question-item',
@@ -23,8 +24,8 @@ import {UserService} from '../../../../../shared/services/user.service';
   styleUrl: './event-question-item.component.scss'
 })
 export class EventQuestionItemComponent implements OnInit, OnDestroy {
-  maxAnswerLength: number = 1000;
-  minAnswerLength: number = 10;
+  maxAnswerLength: number = Settings.maxAnswerLength;
+  minAnswerLength: number = Settings.minAnswerLength;
   createAnswerSubscription: Subscription | null = null;
   updateAnswerSubscription: Subscription | null = null;
   getQuestionSubscription: Subscription | null = null;

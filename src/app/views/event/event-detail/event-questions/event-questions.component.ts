@@ -10,6 +10,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {EventQuestionResponseType} from '../../../../../types/event-question-response.type';
 import {QuestionExtendedType} from '../../../../../types/question-extended.type';
+import {Settings} from '../../../../../settings/settings';
 
 @Component({
   selector: 'event-questions',
@@ -25,13 +26,15 @@ import {QuestionExtendedType} from '../../../../../types/question-extended.type'
 })
 export class EventQuestionsComponent implements OnInit, OnDestroy {
   question: string = '';
-  maxQuestionLength: number = 1000;
-  minQuestionLength: number = 10;
+  maxQuestionLength: number = Settings.maxQuestionLength;
+  minQuestionLength: number = Settings.minQuestionLength;
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   questionResponse: EventQuestionResponseType | null = null;
   answersSubscription: Subscription | null = null;
   createQuestionSubscription: Subscription | null = null;
+  offset: number = 0;
+  showMoreButton: boolean = false;
   @Input() eventId: string | undefined | null = null;
   @Input() eventAuthor: number | undefined | null = null;
 
@@ -48,25 +51,35 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
     this.getEventQuestionResponse();
   }
 
-  getEventQuestionResponse () {
+  getEventQuestionResponse(offset: number = 0) {
     if (this.eventId) {
-      this.answersSubscription = this.eventService.getQuestionsWithAnswers(this.eventId).subscribe({
-        next: (data: EventQuestionResponseType | DefaultResponseType) => {
-          if ((data as DefaultResponseType).detail !== undefined) {
-            const error = (data as DefaultResponseType).detail;
-            this._snackBar.open(error);
-            throw new Error(error);
+      this.answersSubscription = this.eventService
+        .getQuestionsWithAnswers(this.eventId, Settings.questionDefaultLimit, offset)
+        .subscribe({
+          next: (data: EventQuestionResponseType | DefaultResponseType) => {
+            if ((data as DefaultResponseType).detail !== undefined) {
+              const error = (data as DefaultResponseType).detail;
+              this._snackBar.open(error);
+              throw new Error(error);
+            }
+            if (offset > 0 && this.questionResponse) {
+              const results = this.questionResponse.results;
+              this.questionResponse = data as EventQuestionResponseType;
+              this.questionResponse.results = Array.prototype.concat(results, this.questionResponse.results);
+            } else {
+              this.questionResponse = data as EventQuestionResponseType;
+            }
+            this.showMoreButton = this.questionResponse.count > this.questionResponse.results.length;
+            this.offset = this.questionResponse.results.length;
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.detail) {
+              this._snackBar.open(errorResponse.error.detail)
+            } else {
+              this._snackBar.open('Ошибка получения данных')
+            }
           }
-          this.questionResponse = data as EventQuestionResponseType;
-        },
-        error: (errorResponse: HttpErrorResponse) => {
-          if (errorResponse.error && errorResponse.error.detail) {
-            this._snackBar.open(errorResponse.error.detail)
-          } else {
-            this._snackBar.open('Ошибка получения данных')
-          }
-        }
-      })
+        })
     }
   }
 
