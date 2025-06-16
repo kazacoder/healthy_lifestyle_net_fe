@@ -38,17 +38,33 @@
       </div>
     </div>
   </div>
-  <div class="answer" *ngIf="(!question?.answer && userId === eventAuthor?.toString()) || editAnswer">
+  <div class="answer fg" [formGroup]="answerForm"
+       [ngClass]="{'_error': (answerForm.get('answer')?.invalid || !hasChanged) &&
+       (answerForm.get('answer')?.dirty || answerForm.get('answer')?.touched)}"
+       *ngIf="(!question?.answer && userId === eventAuthor?.toString()) || editAnswer">
     <div class="fg question-form__field m-text-field">
       <textarea maxlength="{{ maxAnswerLength }}"
+                (input)="onAnswerChange()"
                 placeholder="Введите ответ на вопрос. Минимум символов: {{ minAnswerLength }}"
-                [(ngModel)]="answer"></textarea>
+                formControlName="answer"></textarea>
+    </div>
+    <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['minlength']">
+      <div class="text12">Введите минимум {{ minAnswerLength }} символов!</div>
+    </div>
+    <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['maxlength']">
+      <div class="text12">Максимальная длина ответа {{ maxAnswerLength }} символов!</div>
+    </div>
+    <div class="fg__error-text" *ngIf="!hasChanged && answerSaved">
+      <div class="text12">Ответ не изменен</div>
+    </div>
+    <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['required']">
+      <div class="text12">Обязательное поле</div>
     </div>
     <div class="question-form__nav">
       <div class="question-form__buttons">
         <button class="question-form__btn m-btn m-btn-primary m-btn-bounce"
                 (click)="proceed()"
-                [disabled]="answer.length > maxAnswerLength || answer.length < minAnswerLength">
+                [disabled]="answerForm.invalid || !hasChanged">
           <span>Сохранить</span>
         </button>
         <button class="question-form__btn m-btn m-btn-gray m-btn-bounce" (click)="cancelAnswer()">
@@ -56,7 +72,7 @@
         </button>
       </div>
       <div class="question-form__info">
-        Всего символов <span class="question-form__field-count">{{ answer.length }}</span>/{{ maxAnswerLength }}
+        Всего символов <span class="question-form__field-count">{{ answerForm.get('answer')?.value?.length }}</span>/{{ maxAnswerLength }}
       </div>
     </div>
   </div>
