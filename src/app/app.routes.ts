@@ -15,6 +15,7 @@ import {AuthForwardGuard} from './core/auth/auth-forward.guard';
 import {PublicationComponent} from './views/user/publication/detail/publication.component';
 import {PublicationsComponent} from './views/user/publication/list/publications/publications.component';
 import {EventDetailComponent} from './views/event/event-detail/event-detail.component';
+import {BlogItemComponent} from './views/article/blog-item/blog-item.component';
 
 export const routes: Routes = [
   {
@@ -27,7 +28,7 @@ export const routes: Routes = [
       {path: 'events', component: EventsListComponent, title: 'Мероприятия',},
       {path: 'events/:url', component: EventDetailComponent, title: 'Мероприятие',},
       {path: 'articles', component: BlogComponent, title: 'Статьи',},
-      {path: 'articles/:url', component: PageUnderConstructionComponent, title: 'Статья',},
+      {path: 'articles/:url', component: BlogItemComponent, title: 'Статья',},
       {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
       {path: 'notification', component: PageUnderConstructionComponent, title: 'Уведомления'},
       {path: 'profile',

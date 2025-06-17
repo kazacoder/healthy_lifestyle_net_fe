@@ -1,0 +1,40 @@
+.blog-slider {
+  swiper-container::part(container) {
+    overflow: visible;
+  }
+
+  .swiper-slide:not(.swiper-slide-visible) {
+    z-index: 0;
+  }
+
+  .slider__wrap {
+    overflow: hidden;
+    padding: 0.75em 0 1.2em 0.6em;
+    margin: -0.75em 2.75em -1.2em 2.6em;
+  }
+
+  &._hide-buttons {
+    .blog-slider-nav {
+      display: none;
+    }
+
+    .slider__wrap {
+      padding: 0.75em 0 1.2em 0.6em;
+      margin: -0.75em 0 -1.2em -0.6em;
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px) {
+  .blog-slider {
+    .blog-slider-nav {
+      display: none;
+    }
+
+    .slider__wrap {
+      padding: 0.75em 0 1.2em 0.6em;
+      margin: -0.75em 0 -1.2em -0.6em;
+    }
+  }
+}
