@@ -7,6 +7,7 @@ import {EventType} from '../../../types/event.type';
 import {EventQuestionResponseType} from '../../../types/event-question-response.type';
 import {QuestionExtendedType} from '../../../types/question-extended.type';
 import {AnswerResponseType} from '../../../types/answer-response.type';
+import {EventResponseType} from '../../../types/event-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,18 @@ export class EventService {
   }
 
 
-  getEventsList(): Observable<EventType[] | DefaultResponseType> {
-    return this.http.get<EventType[] | DefaultResponseType>(environment.api + 'event/');
+  getEventsList(limit?: number, offset?: number): Observable<EventResponseType | DefaultResponseType> {
+    let params = new HttpParams();
+
+    if (limit !== undefined) {
+      params = params.set('limit', limit.toString());
+    }
+
+    if (offset !== undefined) {
+      params = params.set('offset', offset.toString());
+    }
+
+    return this.http.get<EventResponseType | DefaultResponseType>(environment.api + 'event/', {params});
   }
 
   getEvent(id: string): Observable<EventType | DefaultResponseType> {

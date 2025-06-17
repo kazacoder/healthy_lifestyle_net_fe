@@ -7,4 +7,5 @@ export const Settings = {
   maxQuestionLength: 1000,
   minQuestionLength: 10,
   questionDefaultLimit: 4,
+  eventDefaultLimit: 9,
 }

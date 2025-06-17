@@ -31,7 +31,9 @@
       <event-card2 *ngFor="let event of events" [event]="event" class="event-card2"></event-card2>
     </div>
 
-    <button class="more-btn m-btn m-btn-primary m-btn-bounce">
+    <button class="more-btn m-btn m-btn-primary m-btn-bounce"
+            *ngIf="showMoreButton"
+            (click)="getEventsResponse(offset)">
       <span>Показать еще</span>
       <img src="assets/img/arrow-bottom.svg" alt="">
     </button>

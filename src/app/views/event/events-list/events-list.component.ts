@@ -5,7 +5,7 @@ import {PosterInfoComponent} from '../../../shared/components/events/poster-info
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
 import {CityModalComponent} from '../../../shared/components/modals/city-modal/city-modal.component';
 import {ParamModalComponent} from '../../../shared/components/modals/param-modal/param-modal.component';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {EventCard2Component} from '../../../shared/components/cards/event-card2/event-card2.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
@@ -15,6 +15,8 @@ import {EventService} from '../../../shared/services/event.service';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {EventType} from '../../../../types/event.type';
+import {EventResponseType} from '../../../../types/event-response.type';
+import {Settings} from '../../../../settings/settings';
 
 @Component({
   selector: 'app-events-list',
@@ -28,7 +30,8 @@ import {EventType} from '../../../../types/event.type';
     EventCard2Component,
     NgForOf,
     ParamFilterComponent,
-    SortComponent
+    SortComponent,
+    NgIf
   ],
   standalone: true,
   templateUrl: './events-list.component.html',
@@ -40,6 +43,8 @@ export class EventsListComponent implements OnInit, OnDestroy {
   isParamModalOpened: boolean = false;
   calendarActive: boolean = false;
   events: EventType[] = [];
+  offset: number = 0;
+  showMoreButton: boolean = false;
   getEventsSubscription: Subscription | null = null;
 
   constructor(private eventService: EventService,
@@ -47,14 +52,27 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getEventsSubscription = this.eventService.getEventsList().subscribe({
-      next: (data: EventType[] | DefaultResponseType) => {
+    this.getEventsResponse()
+  }
+
+  getEventsResponse(offset: number = 0) {
+    this.getEventsSubscription = this.eventService.getEventsList(Settings.eventDefaultLimit, offset).subscribe({
+      next: (data: EventResponseType | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
           const error = (data as DefaultResponseType).detail;
           this._snackBar.open(error);
           throw new Error(error);
         }
-        this.events = data as EventType[];
+        const eventResponse = data as EventResponseType
+
+        if (offset > 0 && eventResponse) {
+          this.events = Array.prototype.concat(this.events, eventResponse.results);
+        } else {
+          this.events = eventResponse.results;
+        }
+
+        this.showMoreButton = eventResponse.count > this.events.length;
+        this.offset = this.events.length;
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
