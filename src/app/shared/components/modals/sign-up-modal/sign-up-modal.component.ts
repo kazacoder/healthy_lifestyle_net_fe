@@ -5,17 +5,19 @@ import {AuthService} from '../../../../core/auth/auth.service';
 import {UserService} from '../../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
-import {NgClass} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {LoginResponseType} from '../../../../../types/login-response.type';
 import {CommonUtils} from '../../../utils/common-utils';
+import {ErrorResponseType} from '../../../../../types/eroor-response.type';
 
 @Component({
   selector: 'sign-up-modal',
   imports: [
     CloseBtnMobComponent,
     NgClass,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   standalone: true,
   templateUrl: './sign-up-modal.component.html',
@@ -45,6 +47,7 @@ export class SignUpModalComponent implements OnDestroy {
   signUpSubscription: Subscription | null = null;
   isPasswordShowed: boolean = false;
   isConfirmPasswordShowed: boolean = false;
+  errors: ErrorResponseType | null = null;
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -101,6 +104,7 @@ export class SignUpModalComponent implements OnDestroy {
         },
         error: (e) => {
           console.log(e)
+          this.errors = e.error as ErrorResponseType;
           this._snackBar.open('Возникла ошибка при создании пользователя')
         }
       })
@@ -109,6 +113,12 @@ export class SignUpModalComponent implements OnDestroy {
 
   togglePasswordShow(fieldName: 'isPasswordShowed' | 'isConfirmPasswordShowed') {
     this[fieldName] = !this[fieldName];
+  }
+
+  cleanError(key: keyof ErrorResponseType): void {
+    if (this.errors?.hasOwnProperty(key)) {
+      this.errors[key] = null;
+    }
   }
 
   loginOpen() {

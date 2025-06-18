@@ -14,11 +14,12 @@
       <section class="modal-form modal-form3" [formGroup]="signUpForm">
         <div class="fg"
              [ngClass]="{'_error': signUpForm.get('email')?.invalid &&
-             (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched)}">
+             (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched) || (errors && errors.email)}">
           <label>E-mail</label>
-          <input type="email" placeholder="pochta@mail.ru" formControlName="email">
+          <input type="email" placeholder="pochta@mail.ru" formControlName="email" (input)="cleanError('email')">
           <div class="fg__error-text">
-            <div class="text12">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('email')?.invalid">Обязательное поле</div>
+            <div class="text12" *ngIf="errors && errors?.email">{{ errors.email![0] }}</div>
           </div>
         </div>
         <div class="fg"
@@ -31,12 +32,13 @@
           </div>
         </div>
         <div class="fg"
-             [ngClass]="{'_error': signUpForm.get('username')?.invalid &&
-             (signUpForm.get('username')?.dirty || signUpForm.get('username')?.touched)}">
+             [ngClass]="{'_error': (signUpForm.get('username')?.invalid &&
+             (signUpForm.get('username')?.dirty || signUpForm.get('username')?.touched)) || (errors && errors.username)}">
           <label>Имя пользователя</label>
-          <input type="text" placeholder="Например: Иван" formControlName="username">
+          <input type="text" placeholder="Например: Иван" formControlName="username" (input)="cleanError('username')">
           <div class="fg__error-text">
-            <div class="text12">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('username')?.invalid">Обязательное поле</div>
+            <div class="text12" *ngIf="errors && errors?.username">{{ errors.username![0] }}</div>
           </div>
         </div>
         <div class="modal-form__pass">
