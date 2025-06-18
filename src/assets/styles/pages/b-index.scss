@@ -59,12 +59,20 @@
 
 .master-slider,
 .events-slider2{
+  @media screen and (min-width: 993px){
+    .slider__wrap {
+      overflow: hidden;
+      padding: 0.75em 0 1.2em 10px;
+      margin: -0.75em 2.75em -1.2em calc(2em + 10px);
+    }
+  }
+
   .swiper{
     &-slide{
       width: calc(100% / 3);
       @media screen and (min-width: 993px){
-        //ToDo
-        opacity: 0;
+        //ToDo fix shadow
+        //opacity: 0;
         pointer-events: none;
         transition: all .3s;
         &-active,
