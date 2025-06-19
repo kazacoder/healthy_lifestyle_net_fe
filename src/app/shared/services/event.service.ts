@@ -8,6 +8,7 @@ import {EventQuestionResponseType} from '../../../types/event-question-response.
 import {QuestionExtendedType} from '../../../types/question-extended.type';
 import {AnswerResponseType} from '../../../types/answer-response.type';
 import {EventResponseType} from '../../../types/event-response.type';
+import {FiltersDataType} from '../../../types/filters-data.type';
 
 @Injectable({
   providedIn: 'root'
@@ -70,4 +71,7 @@ export class EventService {
       { params });
   }
 
+  getFiltersData(): Observable<FiltersDataType | DefaultResponseType> {
+    return this.http.get<FiltersDataType | DefaultResponseType>(`${environment.api}events/filters/`)
+  }
 }

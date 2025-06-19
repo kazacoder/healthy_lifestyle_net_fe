@@ -17,6 +17,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {EventType} from '../../../../types/event.type';
 import {EventResponseType} from '../../../../types/event-response.type';
 import {Settings} from '../../../../settings/settings';
+import {FiltersDataType} from '../../../../types/filters-data.type';
 
 @Component({
   selector: 'app-events-list',
@@ -46,13 +47,17 @@ export class EventsListComponent implements OnInit, OnDestroy {
   offset: number = 0;
   showMoreButton: boolean = false;
   getEventsSubscription: Subscription | null = null;
+  getFiltersSubscription: Subscription | null = null;
+  protected readonly filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = [];
+
 
   constructor(private eventService: EventService,
               private _snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.getEventsResponse()
+    this.getFiltersResponse();
+    this.getEventsResponse();
   }
 
   getEventsResponse(offset: number = 0) {
@@ -84,6 +89,34 @@ export class EventsListComponent implements OnInit, OnDestroy {
     })
   }
 
+
+  getFiltersResponse() {
+    this.getFiltersSubscription = this.eventService.getFiltersData().subscribe({
+      next: (data: FiltersDataType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        console.log(data)
+        const filters = data as FiltersDataType
+        this.filterObjects.push({title: 'Формат', options: filters.formats.map(item => item.title), search: false});
+        this.filterObjects.push({title: 'Категории', options: filters.categories.map(item => item.title), search: true});
+        this.filterObjects.push({title: 'Тип мероприятия', options: ['Платное', 'Бесплатное'], search: false});
+        this.filterObjects.push({title: 'Для кого', options: filters.suits.map(item => item.title), search: false, defaultOption: 'Всем'});
+        this.filterObjects.push({title: 'Длительность', options: ['1 час', '2 часа'], search: false, defaultOption: 'Любая'});
+        this.filterObjects.push({title: 'Создатель мероприятия', options: filters.masters.map(item => item.full_name), search: true});
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных фильтов')
+        }
+      }
+    })
+  }
+
   toggleCalendarActive(value: boolean) {
     this.calendarActive = value;
   }
@@ -103,19 +136,8 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getEventsSubscription?.unsubscribe()
+    this.getEventsSubscription?.unsubscribe();
+    this.getFiltersSubscription?.unsubscribe();
   }
-
-  protected readonly filterObjects = filterObjects;
 }
 
-// ToDo remove after the Backend is ready
-
-const filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = [
-  {title: 'Формат', options: ['Формат 1', 'Формат 2'], search: false},
-  {title: 'Категории', options: ['Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна'], search: true},
-  {title: 'Тип мероприятия', options: ['Платное', 'Бесплатное'], search: false},
-  {title: 'Для кого', options: ['Мужчинам', 'Женщинам'], search: false, defaultOption: 'Всем'},
-  {title: 'Длительность', options: ['1 час', '2 часа'], search: false, defaultOption: 'Любая'},
-  {title: 'Создатель мероприятия', options: ['Создатель 1', 'Создатель 2'], search: false},
-]
