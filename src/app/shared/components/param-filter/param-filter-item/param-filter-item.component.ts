@@ -19,15 +19,17 @@ export class ParamFilterItemComponent implements OnInit {
 
   @Input() filterTitle: string = ''
   @Input() filterOptions: string[] = []
-  @Input() search: boolean = false
+  @Input() search: boolean = false;
+  @Input() multi: boolean = false;
   @Input() defaultOption: string | undefined = "Все"
   @Input() index: number = 0
 
   @Output() onDropdownOpen = new EventEmitter<boolean>(false);
+  @Output() onChange = new EventEmitter<string[]>();
 
   selector: string = '';
   isDropdownOpen: boolean = false;
-  selectedOption: string = '';
+  selectedOptions: string[] = [];
 
   // Closing dropdown if click outside component
   @HostListener('document:click', ['$event'])
@@ -40,7 +42,7 @@ export class ParamFilterItemComponent implements OnInit {
   ngOnInit() {
     this.selector = `.swiper-slide.param-select.filter-${this.index}`;
     if (this.defaultOption) {
-      this.selectedOption = this.filterTitle
+      this.selectedOptions = [];
     }
   }
 
@@ -52,8 +54,37 @@ export class ParamFilterItemComponent implements OnInit {
   }
 
   clearFilter() {
-    this.selectedOption = this.filterTitle;
+    this.selectedOptions = [];
+    this.onChange.emit(this.selectedOptions);
     this.isDropdownOpen = false;
     this.onDropdownOpen.emit(false)
+  }
+
+  isSelected(option: string): boolean {
+    return this.selectedOptions.includes(option);
+  }
+
+  toggleOption(option: string) {
+    if (this.multi) {
+      const index = this.selectedOptions.indexOf(option);
+      if (index >= 0) {
+        this.selectedOptions.splice(index, 1);
+      } else {
+        this.selectedOptions.push(option);
+      }
+    } else {
+      this.selectedOptions = [option];
+      this.isDropdownOpen = false;
+    }
+    this.onChange.emit(this.selectedOptions);
+  }
+
+  applyFilter() {
+    this.isDropdownOpen = false;
+    this.onDropdownOpen.emit(false)
+  }
+
+  get displayText(): string {
+    return this.selectedOptions.length ? this.selectedOptions.join(', ') : this.filterTitle;
   }
 }
