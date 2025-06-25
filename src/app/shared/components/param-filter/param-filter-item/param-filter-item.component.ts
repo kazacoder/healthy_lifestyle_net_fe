@@ -1,7 +1,9 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {WindowsUtils} from '../../../utils/windows-utils';
 import {FormsModule} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'param-filter-item',
@@ -15,9 +17,10 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './param-filter-item.component.html',
   styleUrl: './param-filter-item.component.scss'
 })
-export class ParamFilterItemComponent implements OnInit {
+export class ParamFilterItemComponent implements OnInit, OnDestroy {
 
   @Input() filterTitle: string = ''
+  @Input() filterName: string = ''
   @Input() filterOptions: string[] = []
   @Input() search: boolean = false;
   @Input() multi: boolean = false;
@@ -30,6 +33,7 @@ export class ParamFilterItemComponent implements OnInit {
   selector: string = '';
   isDropdownOpen: boolean = false;
   selectedOptions: string[] = [];
+  activatedRouterSubscription: Subscription | null = null;
 
   // Closing dropdown if click outside component
   @HostListener('document:click', ['$event'])
@@ -39,11 +43,25 @@ export class ParamFilterItemComponent implements OnInit {
     }
   }
 
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute) {
+  }
+
   ngOnInit() {
     this.selector = `.swiper-slide.param-select.filter-${this.index}`;
     if (this.defaultOption) {
       this.selectedOptions = [];
     }
+    this.activatedRouterSubscription = this.activatedRoute.queryParams.subscribe(params => {
+      const value = params[this.filterName];
+      if (value) {
+        this.selectedOptions = Array.isArray(value)
+          ? value
+          : [value];
+      } else {
+        this.selectedOptions = [];
+      }
+    })
   }
 
   toggleDropdown(event: Event | null = null): void {
@@ -58,6 +76,17 @@ export class ParamFilterItemComponent implements OnInit {
     this.onChange.emit(this.selectedOptions);
     this.isDropdownOpen = false;
     this.onDropdownOpen.emit(false)
+
+    const queryParams = {
+      ...this.activatedRoute.snapshot.queryParams,
+      [this.filterName]: null
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams,
+      queryParamsHandling: 'merge'
+    }).then();
   }
 
   isSelected(option: string): boolean {
@@ -77,6 +106,17 @@ export class ParamFilterItemComponent implements OnInit {
       this.isDropdownOpen = false;
     }
     this.onChange.emit(this.selectedOptions);
+
+    const queryParams = {
+      ...this.activatedRoute.snapshot.queryParams,
+      [this.filterName]: this.selectedOptions.length ? this.selectedOptions : null
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams,
+      queryParamsHandling: 'merge'
+    }).then();
   }
 
   applyFilter() {
@@ -86,5 +126,9 @@ export class ParamFilterItemComponent implements OnInit {
 
   get displayText(): string {
     return this.selectedOptions.length ? this.selectedOptions.join(', ') : this.filterTitle;
+  }
+
+  ngOnDestroy() {
+    this.activatedRouterSubscription?.unsubscribe();
   }
 }

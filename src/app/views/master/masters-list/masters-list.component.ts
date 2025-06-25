@@ -77,10 +77,10 @@ export class MastersListComponent implements OnInit, OnDestroy {
 
 // ToDo remove after the Backend is ready
 
-const filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string, multi?: boolean}[] = [
-  {title: 'Формат занятий', options: ['Формат 1', 'Формат 2'], search: false},
-  {title: 'Стаж', options: ['1 год', '2 года'], search: false, defaultOption: 'Любой'},
-  {title: 'Вид деятельности', options: ['Деятельность1', 'Деятельность2', 'Деятельность3', 'Деятельность4', 'Деятельность5',
+const filterObjects: {title: string, name: string, options: string[], search: boolean, defaultOption?: string, multi?: boolean}[] = [
+  {title: 'Формат занятий', name: 'format', options: ['Формат 1', 'Формат 2'], search: false},
+  {title: 'Стаж', name: 'experience', options: ['1 год', '2 года'], search: false, defaultOption: 'Любой'},
+  {title: 'Вид деятельности', name: 'specialities', options: ['Деятельность1', 'Деятельность2', 'Деятельность3', 'Деятельность4', 'Деятельность5',
       'Деятельность6', 'Деятельность7', 'Деятельность8', 'Деятельность9', 'Деятельность10', 'Деятельность11', 'Деятельность12'],
     search: true, multi: true},
 ]

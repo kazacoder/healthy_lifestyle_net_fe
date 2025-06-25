@@ -18,7 +18,7 @@ export class ParamFilterComponent implements OnInit {
   zIndex: number = 0;
 
   @Input()
-  filterObjects: { title: string, options: string[], search: boolean, defaultOption?: string, multi?: boolean }[] = []
+  filterObjects: { title: string, name: string, options: string[], search: boolean, defaultOption?: string, multi?: boolean }[] = []
 
   defaultOption: string = 'Все'
 

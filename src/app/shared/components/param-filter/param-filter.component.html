@@ -3,6 +3,7 @@
     <div class="swiper-wrapper">
       <param-filter-item *ngFor="let filter of filterObjects; index as i"
                          [filterTitle]="filter.title"
+                         [filterName]="filter.name"
                          [filterOptions]="filter.options"
                          [defaultOption]="filter.defaultOption ? filter.defaultOption : defaultOption"
                          [index]="i"

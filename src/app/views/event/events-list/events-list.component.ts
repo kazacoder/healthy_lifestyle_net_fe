@@ -48,7 +48,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   showMoreButton: boolean = false;
   getEventsSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
-  protected readonly filterObjects: {title: string, options: string[], search: boolean, defaultOption?: string}[] = [];
+  protected readonly filterObjects: {title: string, name: string, options: string[], search: boolean, multi?: boolean, defaultOption?: string}[] = [];
 
 
   constructor(private eventService: EventService,
@@ -100,12 +100,12 @@ export class EventsListComponent implements OnInit, OnDestroy {
         }
         console.log(data)
         const filters = data as FiltersDataType
-        this.filterObjects.push({title: 'Формат', options: filters.formats.map(item => item.title), search: false});
-        this.filterObjects.push({title: 'Категории', options: filters.categories.map(item => item.title), search: true});
-        this.filterObjects.push({title: 'Тип мероприятия', options: ['Платное', 'Бесплатное'], search: false});
-        this.filterObjects.push({title: 'Для кого', options: filters.suits.map(item => item.title), search: false, defaultOption: 'Всем'});
-        this.filterObjects.push({title: 'Длительность', options: ['1 час', '2 часа'], search: false, defaultOption: 'Любая'});
-        this.filterObjects.push({title: 'Создатель мероприятия', options: filters.masters.map(item => item.full_name), search: true});
+        this.filterObjects.push({title: 'Формат', name: 'format', options: filters.formats.map(item => item.title), search: false});
+        this.filterObjects.push({title: 'Категории', name: 'categories', options: filters.categories.map(item => item.title), search: true, multi: true});
+        this.filterObjects.push({title: 'Тип мероприятия', name: 'type', options: ['Платное', 'Бесплатное'], search: false});
+        this.filterObjects.push({title: 'Для кого', name: 'suit', options: filters.suits.map(item => item.title), search: false, defaultOption: 'Всем'});
+        this.filterObjects.push({title: 'Длительность', name: 'duration', options: ['1 час', '2 часа'], search: false, defaultOption: 'Любая'});
+        this.filterObjects.push({title: 'Создатель мероприятия', name: 'master', options: filters.masters.map(item => item.full_name), search: true});
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {

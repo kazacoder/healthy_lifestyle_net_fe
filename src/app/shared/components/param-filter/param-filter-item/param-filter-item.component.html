@@ -38,13 +38,14 @@
       <div class="param-select__items">
         <div class="param-select__option m-check" *ngIf="!search && ! multi">
           <input [checked]="displayText === filterTitle" type="radio" name="eventTypeRadios{{index}}" class="_disabled"
-                 (click)="toggleOption(filterTitle)"
+                 (click)="clearFilter()"
                  [value]="filterTitle">
           <label>{{ defaultOption }}</label>
         </div>
         <div class="param-select__option m-check" *ngFor="let option of filterOptions">
           <input type="checkbox" *ngIf="multi" name="eventTypeRadios{{index}}"
                  (click)="toggleOption(option)"
+                 [checked]="isSelected(option)"
                  [value]="option">
           <input type="radio" *ngIf="!multi" [value]="option" [checked]="isSelected(option)" (change)="toggleOption(option)">
           <label>{{ option }}</label>
