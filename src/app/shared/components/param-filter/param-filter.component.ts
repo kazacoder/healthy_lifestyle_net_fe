@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ParamFilterItemComponent} from './param-filter-item/param-filter-item.component';
 import {NgForOf, NgStyle} from '@angular/common';
+import {FilterObjectType} from '../../../../types/filter-object.type';
 
 @Component({
   selector: 'param-filter',
@@ -18,7 +19,7 @@ export class ParamFilterComponent implements OnInit {
   zIndex: number = 0;
 
   @Input()
-  filterObjects: { title: string, name: string, options: string[], search: boolean, defaultOption?: string, multi?: boolean }[] = []
+  filterObjects: FilterObjectType[] = []
 
   defaultOption: string = 'Все'
 

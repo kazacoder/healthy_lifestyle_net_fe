@@ -3,6 +3,7 @@ import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {BlogCardComponent} from '../../../shared/components/cards/blog-card/blog-card.component';
 import {NgForOf, NgStyle} from '@angular/common';
+import {FilterObjectType} from '../../../../types/filter-object.type';
 
 @Component({
   selector: 'app-blog',
@@ -153,11 +154,12 @@ const articles = [
   }
 ]
 
-const filterObjects: { title: string, options: string[], search: boolean, defaultOption?: string }[] = [
-  {title: 'Формат', options: ['Формат 1', 'Формат 2'], search: false},
+const filterObjects: FilterObjectType[] = [
+  {title: 'Формат', name: 'formats', options: [{id: 1, title: 'Формат 1'}, {id: 2, title: 'Формат 2'}], search: false},
   {
     title: 'Категории',
-    options: ['Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна', 'Баня', 'Сауна'],
+    name: 'categories',
+    options: [{id: 1, title: 'Баня'}, {id: 2, title: 'Сауна'}],
     search: true
   },
 ]

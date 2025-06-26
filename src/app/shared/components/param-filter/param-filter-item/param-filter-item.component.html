@@ -6,7 +6,7 @@
     <div class="param-select__current" [attr.data-placeholder]="filterTitle">
       <ng-container *ngIf="multi">
         <ng-container *ngIf="selectedOptions.length > 0">
-          {{ selectedOptions[0] }}<span *ngIf="selectedOptions.length > 1">, +{{ selectedOptions.length - 1 }}</span>
+          {{ getOptionById(selectedOptions[0]) }}<span *ngIf="selectedOptions.length > 1">, +{{ selectedOptions.length - 1 }}</span>
         </ng-container>
         <ng-container *ngIf="selectedOptions.length === 0">
           {{ filterTitle }}
@@ -14,7 +14,7 @@
       </ng-container>
 
       <ng-container *ngIf="!multi">
-        {{ selectedOptions[0] || filterTitle }}
+        {{ selectedOptions[0] ? getOptionById(selectedOptions[0]) : filterTitle }}
       </ng-container>
     </div>
     <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,11 +44,11 @@
         </div>
         <div class="param-select__option m-check" *ngFor="let option of filterOptions">
           <input type="checkbox" *ngIf="multi" name="eventTypeRadios{{index}}"
-                 (click)="toggleOption(option)"
-                 [checked]="isSelected(option)"
-                 [value]="option">
-          <input type="radio" *ngIf="!multi" [value]="option" [checked]="isSelected(option)" (change)="toggleOption(option)">
-          <label>{{ option }}</label>
+                 (click)="toggleOption(option.id)"
+                 [checked]="isSelected(option.id)"
+                 [value]="option.id">
+          <input type="radio" *ngIf="!multi" [value]="option.id" [checked]="isSelected(option.id)" (change)="toggleOption(option.id)">
+          <label>{{ option.title }}</label>
           <button class="param-select__option-clear" (click)="clearFilter()"></button>
         </div>
         <div class="param-select__nav" *ngIf="search">

@@ -21,7 +21,7 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
 
   @Input() filterTitle: string = ''
   @Input() filterName: string = ''
-  @Input() filterOptions: string[] = []
+  @Input() filterOptions: { id: string | number, title: string}[] = []
   @Input() search: boolean = false;
   @Input() multi: boolean = false;
   @Input() defaultOption: string | undefined = "Все"
@@ -64,6 +64,14 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
     })
   }
 
+  getOptionById(id: number | string): string | null {
+    if (this.selectedOptions.length === 0) {
+      return null
+    }
+    const found = this.filterOptions.filter(item => item.id.toString() === id)
+    return found[0].title
+  }
+
   toggleDropdown(event: Event | null = null): void {
     if (event?.target !== document.querySelector(`.filter-${this.index} .param-select__clear`)) {
       this.isDropdownOpen = !this.isDropdownOpen;
@@ -89,20 +97,20 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
     }).then();
   }
 
-  isSelected(option: string): boolean {
-    return this.selectedOptions.includes(option);
+  isSelected(option: string | number): boolean {
+    return this.selectedOptions.includes(option.toString());
   }
 
-  toggleOption(option: string) {
+  toggleOption(option: string | number) {
     if (this.multi) {
-      const index = this.selectedOptions.indexOf(option);
+      const index = this.selectedOptions.indexOf(option.toString());
       if (index >= 0) {
         this.selectedOptions.splice(index, 1);
       } else {
-        this.selectedOptions.push(option);
+        this.selectedOptions.push(option.toString());
       }
     } else {
-      this.selectedOptions = [option];
+      this.selectedOptions = [option.toString()];
       this.isDropdownOpen = false;
     }
     this.onChange.emit(this.selectedOptions);

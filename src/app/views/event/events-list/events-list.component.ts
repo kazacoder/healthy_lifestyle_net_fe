@@ -18,6 +18,7 @@ import {EventType} from '../../../../types/event.type';
 import {EventResponseType} from '../../../../types/event-response.type';
 import {Settings} from '../../../../settings/settings';
 import {FiltersDataType} from '../../../../types/filters-data.type';
+import {FilterObjectType} from '../../../../types/filter-object.type';
 
 @Component({
   selector: 'app-events-list',
@@ -48,7 +49,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   showMoreButton: boolean = false;
   getEventsSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
-  protected readonly filterObjects: {title: string, name: string, options: string[], search: boolean, multi?: boolean, defaultOption?: string}[] = [];
+  protected readonly filterObjects: FilterObjectType[] = [];
 
 
   constructor(private eventService: EventService,
@@ -100,12 +101,16 @@ export class EventsListComponent implements OnInit, OnDestroy {
         }
         console.log(data)
         const filters = data as FiltersDataType
-        this.filterObjects.push({title: 'Формат', name: 'format', options: filters.formats.map(item => item.title), search: false});
-        this.filterObjects.push({title: 'Категории', name: 'categories', options: filters.categories.map(item => item.title), search: true, multi: true});
-        this.filterObjects.push({title: 'Тип мероприятия', name: 'type', options: ['Платное', 'Бесплатное'], search: false});
-        this.filterObjects.push({title: 'Для кого', name: 'suit', options: filters.suits.map(item => item.title), search: false, defaultOption: 'Всем'});
-        this.filterObjects.push({title: 'Длительность', name: 'duration', options: ['1 час', '2 часа'], search: false, defaultOption: 'Любая'});
-        this.filterObjects.push({title: 'Создатель мероприятия', name: 'master', options: filters.masters.map(item => item.full_name), search: true});
+        this.filterObjects.push({title: 'Формат', name: 'format', options: filters.formats, search: false});
+        this.filterObjects.push({title: 'Категории', name: 'categories', options: filters.categories, search: true, multi: true});
+        this.filterObjects.push({title: 'Тип мероприятия', name: 'type', options: [{id: 1, title: 'Платное'}, {id: 2, title: 'Бесплатное'}], search: false});
+        this.filterObjects.push({title: 'Для кого', name: 'suit', options: filters.suits, search: false, defaultOption: 'Всем'});
+        this.filterObjects.push({title: 'Длительность', name: 'duration', options: [{id: 1, title: '1 час'}, {id: 2, title: '2 часа'}], search: false, defaultOption: 'Любая'});
+        this.filterObjects.push({title: 'Создатель мероприятия', name: 'master',
+          options: filters.masters.map(item => {
+            return { id: item.id, title: item.full_name}
+          }),
+          search: true});
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {

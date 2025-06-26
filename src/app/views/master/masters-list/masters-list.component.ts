@@ -12,6 +12,10 @@ import {MasterService} from '../../../shared/services/master.service';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SpecialityType} from '../../../../types/speciality.type';
+import {SpecialityService} from '../../../shared/services/speciality.service';
+import {FilterObjectType} from '../../../../types/filter-object.type';
 
 @Component({
   selector: 'app-masters-list',
@@ -33,32 +37,73 @@ export class MastersListComponent implements OnInit, OnDestroy {
   chosenCity: string = 'Все города';
   mastersList: MasterInfoType[] = [];
   mastersListSubscription: Subscription | null = null;
+  activatedRouterSubscription: Subscription | null = null;
+  getSpecialityListSubscription: Subscription | null = null;
 
-  protected readonly filterObjects = filterObjects;
+  filterObjects: FilterObjectType[] = [];
 
   constructor(private masterService: MasterService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private router: Router,
+              private specialityService: SpecialityService,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.mastersListSubscription = this.masterService.getMastersList()
-      .subscribe({
-        next: (data: MasterInfoType[] | DefaultResponseType) => {
-          if ((data as DefaultResponseType).detail !== undefined) {
-            const error = (data as DefaultResponseType).detail;
-            this._snackBar.open(error);
-            throw new Error(error);
-          }
-          this.mastersList = data as MasterInfoType[]
-        },
-        error: (errorResponse: HttpErrorResponse) => {
-          if (errorResponse.error && errorResponse.error.detail) {
-            this._snackBar.open(errorResponse.error.detail)
-          } else {
-            this._snackBar.open('Ошибка получения данных')
-          }
+
+    this.getSpecialityListSubscription = this.specialityService.getSpecialityList().subscribe({
+      next: (data: SpecialityType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
         }
-      })
+        const receivedSpecialityList = data as SpecialityType[]
+
+        this.filterObjects = [
+          {title: 'Формат занятий', name: 'formats', options: [{id: 1, title: 'Формат 1'}, {id: 2, title: 'Формат 2'}], search: false},
+          {title: 'Стаж', name: 'experience', options: [{id: 1, title: '1 год'}, {id: 2, title: '2 года'}], search: false, defaultOption: 'Любой'},
+          {
+            title: 'Вид деятельности',
+            name: 'specialities',
+            options: receivedSpecialityList,
+            search: true,
+            multi: true
+          },
+        ]
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    })
+
+    this.activatedRouterSubscription = this.activatedRoute.queryParams.subscribe(params => {
+      this.mastersListSubscription = this.masterService.getMastersList(params)
+        .subscribe({
+          next: (data: MasterInfoType[] | DefaultResponseType) => {
+            if ((data as DefaultResponseType).detail !== undefined) {
+              const error = (data as DefaultResponseType).detail;
+              this._snackBar.open(error);
+              throw new Error(error);
+            }
+            this.mastersList = data as MasterInfoType[]
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.detail) {
+              this._snackBar.open(errorResponse.error.detail)
+            } else {
+              this._snackBar.open('Ошибка получения данных')
+            }
+          }
+        })
+    })
+
+
+
   }
 
   toggleCityModal(value: boolean) {
@@ -72,15 +117,11 @@ export class MastersListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.mastersListSubscription?.unsubscribe();
+    this.activatedRouterSubscription?.unsubscribe();
+    this.getSpecialityListSubscription?.unsubscribe();
   }
 }
 
 // ToDo remove after the Backend is ready
 
-const filterObjects: {title: string, name: string, options: string[], search: boolean, defaultOption?: string, multi?: boolean}[] = [
-  {title: 'Формат занятий', name: 'format', options: ['Формат 1', 'Формат 2'], search: false},
-  {title: 'Стаж', name: 'experience', options: ['1 год', '2 года'], search: false, defaultOption: 'Любой'},
-  {title: 'Вид деятельности', name: 'specialities', options: ['Деятельность1', 'Деятельность2', 'Деятельность3', 'Деятельность4', 'Деятельность5',
-      'Деятельность6', 'Деятельность7', 'Деятельность8', 'Деятельность9', 'Деятельность10', 'Деятельность11', 'Деятельность12'],
-    search: true, multi: true},
-]
+
