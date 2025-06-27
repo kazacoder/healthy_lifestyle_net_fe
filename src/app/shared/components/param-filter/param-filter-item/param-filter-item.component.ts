@@ -112,6 +112,7 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
     } else {
       this.selectedOptions = [option.toString()];
       this.isDropdownOpen = false;
+      this.onDropdownOpen.emit(false)
     }
     this.onChange.emit(this.selectedOptions);
 
