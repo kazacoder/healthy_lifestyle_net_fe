@@ -82,8 +82,11 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
   clearFilter() {
     this.selectedOptions = [];
     this.onChange.emit(this.selectedOptions);
-    this.isDropdownOpen = false;
-    this.onDropdownOpen.emit(false)
+    if (this.isDropdownOpen)
+    {
+      this.isDropdownOpen = false;
+      this.onDropdownOpen.emit(false)
+    }
 
     const queryParams = {
       ...this.activatedRoute.snapshot.queryParams,
