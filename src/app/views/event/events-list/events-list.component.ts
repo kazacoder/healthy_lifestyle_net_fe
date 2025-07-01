@@ -19,7 +19,7 @@ import {EventResponseType} from '../../../../types/event-response.type';
 import {Settings} from '../../../../settings/settings';
 import {FiltersDataType} from '../../../../types/filters-data.type';
 import {FilterObjectType} from '../../../../types/filter-object.type';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ParamsObjectType} from '../../../../types/params-object.type';
 
 @Component({
@@ -47,6 +47,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   isParamModalOpened: boolean = false;
   calendarActive: boolean = false;
   events: EventType[] = [];
+  filtersSelected: boolean = false;
   offset: number = 0;
   params: ParamsObjectType | null = null;
   showMoreButton: boolean = false;
@@ -58,13 +59,15 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   constructor(private eventService: EventService,
               private _snackBar: MatSnackBar,
-              private activateRoute: ActivatedRoute,) {
+              private activateRoute: ActivatedRoute,
+              private router: Router,) {
   }
 
   ngOnInit() {
     this.getFiltersResponse();
     this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
       this.params = params;
+      this.filtersSelected = Object.keys(this.params).length > 0;
       this.getEventsResponse();
     })
   }
@@ -153,6 +156,10 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.activatedRouterSubscription?.unsubscribe();
     this.getEventsSubscription?.unsubscribe();
     this.getFiltersSubscription?.unsubscribe();
+  }
+
+  clearAllFilters () {
+    this.router.navigate([]).then();
   }
 }
 
