@@ -59,7 +59,7 @@
     position: absolute;
     top: .5625em;
     left: .875em;
-    z-index: 3;
+    //z-index: 3;
     &:hover{
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L13 13' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M13 1L1 13' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
     }

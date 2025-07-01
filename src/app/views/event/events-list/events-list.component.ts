@@ -19,6 +19,8 @@ import {EventResponseType} from '../../../../types/event-response.type';
 import {Settings} from '../../../../settings/settings';
 import {FiltersDataType} from '../../../../types/filters-data.type';
 import {FilterObjectType} from '../../../../types/filter-object.type';
+import {ActivatedRoute} from '@angular/router';
+import {ParamsObjectType} from '../../../../types/params-object.type';
 
 @Component({
   selector: 'app-events-list',
@@ -46,23 +48,29 @@ export class EventsListComponent implements OnInit, OnDestroy {
   calendarActive: boolean = false;
   events: EventType[] = [];
   offset: number = 0;
+  params: ParamsObjectType | null = null;
   showMoreButton: boolean = false;
+  activatedRouterSubscription: Subscription | null = null;
   getEventsSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
   protected readonly filterObjects: FilterObjectType[] = [];
 
 
   constructor(private eventService: EventService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private activateRoute: ActivatedRoute,) {
   }
 
   ngOnInit() {
     this.getFiltersResponse();
-    this.getEventsResponse();
+    this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
+      this.params = params;
+      this.getEventsResponse();
+    })
   }
 
   getEventsResponse(offset: number = 0) {
-    this.getEventsSubscription = this.eventService.getEventsList(Settings.eventDefaultLimit, offset).subscribe({
+    this.getEventsSubscription = this.eventService.getEventsList(Settings.eventDefaultLimit, offset, this.params).subscribe({
       next: (data: EventResponseType | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
           const error = (data as DefaultResponseType).detail;
@@ -101,16 +109,17 @@ export class EventsListComponent implements OnInit, OnDestroy {
         }
         console.log(data)
         const filters = data as FiltersDataType
-        this.filterObjects.push({title: 'Формат', name: 'format', options: filters.formats, search: false});
+        // toDo Формат мероприятия не выводится в карточках мероприятия и в детальной информации
+        this.filterObjects.push({title: 'Формат', name: 'formats', options: filters.formats, search: false});
         this.filterObjects.push({title: 'Категории', name: 'categories', options: filters.categories, search: true, multi: true});
-        this.filterObjects.push({title: 'Тип мероприятия', name: 'type', options: [{id: 1, title: 'Платное'}, {id: 2, title: 'Бесплатное'}], search: false});
+        this.filterObjects.push({title: 'Тип мероприятия', name: 'type', options: [{id: 'paid', title: 'Платное'}, {id: 'free', title: 'Бесплатное'}], search: false});
         this.filterObjects.push({title: 'Для кого', name: 'suit', options: filters.suits, search: false, defaultOption: 'Всем'});
-        this.filterObjects.push({title: 'Длительность', name: 'duration', options: [{id: 1, title: '1 час'}, {id: 2, title: '2 часа'}], search: false, defaultOption: 'Любая'});
+        this.filterObjects.push({title: 'Длительность', name: 'duration', options: [{id: '1_1', title: '1 час'}, {id: '2_1', title: '2 часа'}, {id: '1_2', title: '1 день'}], search: false, defaultOption: 'Любая'});
         this.filterObjects.push({title: 'Создатель мероприятия', name: 'master',
           options: filters.masters.map(item => {
             return { id: item.id, title: item.full_name}
           }),
-          search: true});
+          search: true, multi: true});
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
@@ -119,7 +128,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
           this._snackBar.open('Ошибка получения данных фильтов')
         }
       }
-    })
+    });
   }
 
   toggleCalendarActive(value: boolean) {
@@ -141,6 +150,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.activatedRouterSubscription?.unsubscribe();
     this.getEventsSubscription?.unsubscribe();
     this.getFiltersSubscription?.unsubscribe();
   }

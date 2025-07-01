@@ -9,6 +9,7 @@ import {QuestionExtendedType} from '../../../types/question-extended.type';
 import {AnswerResponseType} from '../../../types/answer-response.type';
 import {EventResponseType} from '../../../types/event-response.type';
 import {FiltersDataType} from '../../../types/filters-data.type';
+import {ParamsObjectType} from '../../../types/params-object.type';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class EventService {
   }
 
 
-  getEventsList(limit?: number, offset?: number): Observable<EventResponseType | DefaultResponseType> {
+  getEventsList(limit?: number, offset?: number, paramsObj?: ParamsObjectType | null): Observable<EventResponseType | DefaultResponseType> {
     let params = new HttpParams();
 
     if (limit !== undefined) {
@@ -28,6 +29,19 @@ export class EventService {
 
     if (offset !== undefined) {
       params = params.set('offset', offset.toString());
+    }
+
+    if (paramsObj) {
+      Object.keys(paramsObj).forEach(key => {
+        const value = paramsObj[key];
+        if (Array.isArray(value)) {
+          value.forEach(v => {
+            params = params.append(key, v);
+          });
+        } else if (value !== undefined && value !== null) {
+          params = params.set(key, value);
+        }
+      });
     }
 
     return this.http.get<EventResponseType | DefaultResponseType>(environment.api + 'event/', {params});
