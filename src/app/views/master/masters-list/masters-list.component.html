@@ -2,11 +2,11 @@
 
   <div class="poster masters-page">
     <div class="container">
-<!--      <div class="poster__top _flex-between">
+      <div class="poster__top _flex-between">
         <poster-info [title]="'Мастера'"
                      [currentCity]="chosenCity"
                      (onAllCityModalButtonClick)="toggleCityModal($event)"></poster-info>
-      </div>-->
+      </div>
 
       <div class="filter" *ngIf="true" [ngClass]="{'_filters-selected': filtersSelected}">
         <param-filter [filterObjects]="filterObjects"></param-filter>
