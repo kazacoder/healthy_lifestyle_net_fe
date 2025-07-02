@@ -313,8 +313,7 @@
     }
     &._filters-selected{
       .param-slider .swiper-wrapper{
-        //width: calc(100vw - 4.5em) !important;
-        width: 100vw;
+        width: calc(100vw - 4.5em) !important;
       }
     }
   }
