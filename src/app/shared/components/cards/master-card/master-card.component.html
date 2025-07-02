@@ -1,4 +1,4 @@
-<a [routerLink]="'/masters/' + master?.id" class="master-card__img m-backdrop _scale-img">
+<a [routerLink]="'/master/' + master?.id" class="master-card__img m-backdrop _scale-img">
   <img src="assets/img/profile-default-img.svg" alt="" *ngIf="!master?.photo">
   <img src="{{master?.photo}}" alt="Фото мастера" *ngIf="master?.photo">
 </a>
@@ -11,7 +11,7 @@
 <div class="master-card__content">
   <div class="master-card__wrap _flex-between">
     <div class="font2 text20 text16-tablet bold-text">
-      <a [routerLink]="'/masters/' + master?.id">{{ master?.full_name }}</a>
+      <a [routerLink]="'/master/' + master?.id">{{ master?.full_name }}</a>
     </div>
     <div class="event-city _flex">
       <img src="assets/img/marker.svg" alt="">

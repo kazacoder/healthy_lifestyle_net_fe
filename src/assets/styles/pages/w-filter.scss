@@ -309,7 +309,7 @@
     &__clear{
       margin-top: -.5em;
       position: relative;
-      z-index: 3;
+      z-index: 0;
     }
     &._filters-selected{
       .param-slider .swiper-wrapper{
