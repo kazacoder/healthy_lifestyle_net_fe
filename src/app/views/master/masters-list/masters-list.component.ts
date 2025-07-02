@@ -122,10 +122,4 @@ export class MastersListComponent implements OnInit, OnDestroy {
     this.activatedRouterSubscription?.unsubscribe();
     this.getSpecialityListSubscription?.unsubscribe();
   }
-
-  protected readonly window = window;
 }
-
-// ToDo remove after the Backend is ready
-
-

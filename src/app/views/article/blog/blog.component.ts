@@ -39,8 +39,6 @@ export class BlogComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.activatedRouterSubscription?.unsubscribe();
   }
-
-  protected readonly window = window;
 }
 
 // ToDo remove after the Backend is ready
