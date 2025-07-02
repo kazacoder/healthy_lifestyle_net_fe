@@ -34,11 +34,11 @@ export class ParamFilterComponent implements OnInit {
 
   isFilterOpen(val: boolean) {
     if (window.innerWidth <= 992) {
-      this.zIndex = val ? 7 : 0
+      this.zIndex = val ? 100 : 0
       document.querySelector(".m-page")?.classList.toggle("fixed-body")
       document.querySelector(".m-page")?.classList.toggle("open-calendar")
     } else {
-      this.zIndex = val ? 7 : 1
+      this.zIndex = val ? 100 : 1
     }
   }
 
