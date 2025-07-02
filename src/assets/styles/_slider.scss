@@ -5,7 +5,8 @@
   }
   .swiper{
     &-container{
-      width: calc(100% + .625em);
+      //width: calc(100% + .625em);
+      width: 100vw;
     }
     &-wrapper{
       align-items: stretch;
