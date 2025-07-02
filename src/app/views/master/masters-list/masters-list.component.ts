@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MasterCardComponent} from '../../../shared/components/cards/master-card/master-card.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {PosterInfoComponent} from '../../../shared/components/events/poster-info/poster-info.component';
 import {CityModalComponent} from '../../../shared/components/modals/city-modal/city-modal.component';
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
@@ -12,7 +12,7 @@ import {MasterService} from '../../../shared/services/master.service';
 import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {SpecialityType} from '../../../../types/speciality.type';
 import {SpecialityService} from '../../../shared/services/speciality.service';
 import {FilterObjectType} from '../../../../types/filter-object.type';
@@ -26,7 +26,8 @@ import {FilterObjectType} from '../../../../types/filter-object.type';
     CityModalComponent,
     NgIf,
     ParamFilterComponent,
-    SortComponent
+    SortComponent,
+    NgClass
   ],
   standalone: true,
   templateUrl: './masters-list.component.html',
@@ -39,12 +40,12 @@ export class MastersListComponent implements OnInit, OnDestroy {
   mastersListSubscription: Subscription | null = null;
   activatedRouterSubscription: Subscription | null = null;
   getSpecialityListSubscription: Subscription | null = null;
+  filtersSelected: boolean = false;
 
   filterObjects: FilterObjectType[] = [];
 
   constructor(private masterService: MasterService,
               private _snackBar: MatSnackBar,
-              private router: Router,
               private specialityService: SpecialityService,
               private activatedRoute: ActivatedRoute) {
   }
@@ -82,6 +83,7 @@ export class MastersListComponent implements OnInit, OnDestroy {
     })
 
     this.activatedRouterSubscription = this.activatedRoute.queryParams.subscribe(params => {
+      this.filtersSelected = Object.keys(params).length > 0;
       this.mastersListSubscription = this.masterService.getMastersList(params)
         .subscribe({
           next: (data: MasterInfoType[] | DefaultResponseType) => {

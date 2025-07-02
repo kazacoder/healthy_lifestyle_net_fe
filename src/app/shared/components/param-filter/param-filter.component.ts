@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ParamFilterItemComponent} from './param-filter-item/param-filter-item.component';
 import {NgForOf, NgStyle} from '@angular/common';
 import {FilterObjectType} from '../../../../types/filter-object.type';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'param-filter',
@@ -23,6 +24,9 @@ export class ParamFilterComponent implements OnInit {
 
   defaultOption: string = 'Все'
 
+  constructor(private router: Router,) {
+  }
+
   ngOnInit() {
     this.zIndex = window.innerWidth <= 992 ? 0 : 1
   }
@@ -36,6 +40,10 @@ export class ParamFilterComponent implements OnInit {
     } else {
       this.zIndex = val ? 7 : 1
     }
+  }
+
+  clearAllFilters () {
+    this.router.navigate([]).then();
   }
 
 }

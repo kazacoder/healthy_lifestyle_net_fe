@@ -1,9 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {BlogCardComponent} from '../../../shared/components/cards/blog-card/blog-card.component';
-import {NgForOf, NgStyle} from '@angular/common';
+import {NgClass, NgForOf, NgStyle} from '@angular/common';
 import {FilterObjectType} from '../../../../types/filter-object.type';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-blog',
@@ -12,15 +14,31 @@ import {FilterObjectType} from '../../../../types/filter-object.type';
     ParamFilterComponent,
     BlogCardComponent,
     NgForOf,
-    NgStyle
+    NgStyle,
+    NgClass
   ],
   standalone: true,
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })
-export class BlogComponent {
+export class BlogComponent implements OnInit, OnDestroy {
   protected readonly articles = articles;
   protected readonly filterObjects = filterObjects;
+  filtersSelected: boolean = false;
+  activatedRouterSubscription: Subscription | null = null;
+
+  constructor(private activateRoute: ActivatedRoute,) {
+  }
+
+  ngOnInit() {
+    this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
+      this.filtersSelected = Object.keys(params).length > 0;
+    })
+  }
+
+  ngOnDestroy() {
+    this.activatedRouterSubscription?.unsubscribe();
+  }
 }
 
 // ToDo remove after the Backend is ready

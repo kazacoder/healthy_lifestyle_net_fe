@@ -19,7 +19,7 @@ import {EventResponseType} from '../../../../types/event-response.type';
 import {Settings} from '../../../../settings/settings';
 import {FiltersDataType} from '../../../../types/filters-data.type';
 import {FilterObjectType} from '../../../../types/filter-object.type';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {ParamsObjectType} from '../../../../types/params-object.type';
 
 @Component({
@@ -59,8 +59,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   constructor(private eventService: EventService,
               private _snackBar: MatSnackBar,
-              private activateRoute: ActivatedRoute,
-              private router: Router,) {
+              private activateRoute: ActivatedRoute,) {
   }
 
   ngOnInit() {
@@ -158,8 +157,5 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.getFiltersSubscription?.unsubscribe();
   }
 
-  clearAllFilters () {
-    this.router.navigate([]).then();
-  }
 }
 
