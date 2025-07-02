@@ -9,7 +9,7 @@
 
   <div class="param-slider" [ngStyle]="{'z-index': zIndex, 'position': 'relative'}">
     <div class="swiper-container">
-      <div class="swiper-wrapper">
+      <div class="swiper-wrapper" [ngClass]="{'_open': filterOpened}">
         <param-filter-item *ngFor="let filter of filterObjects; index as i"
                            [filterTitle]="filter.title"
                            [filterName]="filter.name"

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ParamFilterItemComponent} from './param-filter-item/param-filter-item.component';
-import {NgForOf, NgStyle} from '@angular/common';
+import {NgClass, NgForOf, NgStyle} from '@angular/common';
 import {FilterObjectType} from '../../../../types/filter-object.type';
 import {Router} from '@angular/router';
 
@@ -9,7 +9,8 @@ import {Router} from '@angular/router';
   imports: [
     ParamFilterItemComponent,
     NgForOf,
-    NgStyle
+    NgStyle,
+    NgClass
   ],
   standalone: true,
   templateUrl: './param-filter.component.html',
@@ -18,6 +19,7 @@ import {Router} from '@angular/router';
 export class ParamFilterComponent implements OnInit {
 
   zIndex: number = 0;
+  filterOpened: boolean = false;
 
   @Input()
   filterObjects: FilterObjectType[] = []
@@ -40,6 +42,7 @@ export class ParamFilterComponent implements OnInit {
     } else {
       this.zIndex = val ? 7 : 1
     }
+    this.filterOpened = val;
   }
 
   clearAllFilters () {
