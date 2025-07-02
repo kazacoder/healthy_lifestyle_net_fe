@@ -2,11 +2,10 @@
 
 .modal-bg{
     position: fixed;
-    top: -300px;
+    top: 0;
     left: 0;
     width: 100vw;
-    //height: $vh;
-    height: calc(100 * var(--vh) + 300px);
+    height: $vh;
     background-color: $black;
     opacity: .4;
 }
