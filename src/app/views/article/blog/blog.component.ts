@@ -32,7 +32,7 @@ export class BlogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
-      this.filtersSelected = Object.keys(params).length > 0;
+      this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
     })
   }
 

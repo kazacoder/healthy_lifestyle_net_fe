@@ -66,7 +66,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.getFiltersResponse();
     this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
       this.params = params;
-      this.filtersSelected = Object.keys(this.params).length > 0;
+      this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
       this.getEventsResponse();
     })
   }
@@ -109,7 +109,6 @@ export class EventsListComponent implements OnInit, OnDestroy {
           this._snackBar.open(error);
           throw new Error(error);
         }
-        console.log(data)
         const filters = data as FiltersDataType
         // toDo Формат мероприятия не выводится в карточках мероприятия и в детальной информации
         this.filterObjects.push({title: 'Формат', name: 'formats', options: filters.formats, search: false});

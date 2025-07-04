@@ -83,7 +83,7 @@ export class MastersListComponent implements OnInit, OnDestroy {
     })
 
     this.activatedRouterSubscription = this.activatedRoute.queryParams.subscribe(params => {
-      this.filtersSelected = Object.keys(params).length > 0;
+      this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
       this.mastersListSubscription = this.masterService.getMastersList(params)
         .subscribe({
           next: (data: MasterInfoType[] | DefaultResponseType) => {
