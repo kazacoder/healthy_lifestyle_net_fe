@@ -15,6 +15,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {CommonUtils, highlightWeekend} from '../../../../shared/utils/common-utils';
+import {UserGenderType} from '../../../../../types/user-gender.type';
 
 @Component({
   selector: 'user-form',
@@ -50,9 +51,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
   oldState: null | { [key: string]: string | {} } = null;
   getProfileInfoSubscription: Subscription | null = null;
   getSpecialityListSubscription: Subscription | null = null;
+  getGenderListSubscription: Subscription | null = null;
   updateUserSpecialityListSubscription: Subscription | null = null;
   specialityList: SpecialityType[] = [];
+  genderList: UserGenderType[] = [];
   specialityObj: { [key: number]: string } = {};
+  genderObj: { [key: string]: string } = {};
   isOpenPasswordModal: boolean = false;
 
 
@@ -71,6 +75,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     phone: [{value: '', disabled: true,}, Validators.required],
     about_me: [{value: '', disabled: true,}, Validators.maxLength(500)],
     short_description: [{value: '', disabled: true,}, Validators.maxLength(75)],
+    gender: [{value: '', disabled: true,}, Validators.required],
     specialities: this.fb.array([
       this.fb.group({
         speciality: {value: '', disabled: true,},
@@ -98,6 +103,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
         const receivedSpecialityList = data as SpecialityType[]
         this.specialityList = receivedSpecialityList;
+        console.log(this.specialityList);
         receivedSpecialityList.forEach(item => {
           this.specialityObj[item.id] = item.title
         })
@@ -109,7 +115,30 @@ export class UserFormComponent implements OnInit, OnDestroy {
           this._snackBar.open('Ошибка получения данных')
         }
       }
-    })
+    });
+
+    this.getGenderListSubscription = this.userService.getGenderList().subscribe({
+      next: (data: UserGenderType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        const receivedGenderList = data as UserGenderType[]
+        this.genderList = receivedGenderList;
+        console.log(this.genderList)
+        receivedGenderList.forEach(item => {
+          this.genderObj[item.value] = item.label
+        })
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    });
 
   }
 
@@ -322,6 +351,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.getProfileInfoSubscription?.unsubscribe();
     this.getSpecialityListSubscription?.unsubscribe();
+    this.getGenderListSubscription?.unsubscribe();
     this.updateUserSpecialityListSubscription?.unsubscribe();
   }
 

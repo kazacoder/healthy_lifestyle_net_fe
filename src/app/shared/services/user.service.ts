@@ -9,6 +9,7 @@ import {SpecialityType, UserSpecialityUpdateType} from '../../../types/specialit
 import {UserPhotoDeleteType, UserPhotoType} from '../../../types/user-photo.type';
 import {UserChangePassType} from '../../../types/user-change-pass.type';
 import {AdditionalImageType} from '../../../types/additional-image.type';
+import {UserGenderType} from '../../../types/user-gender.type';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,10 @@ export class UserService {
 
   getProfileInfo(user_id: string): Observable<UserFullInfoType | DefaultResponseType> {
     return this.http.get<UserFullInfoType | DefaultResponseType>(environment.api + 'users/' + user_id + '/');
+  }
+
+  getGenderList(): Observable<UserGenderType[] | DefaultResponseType> {
+    return this.http.get<UserGenderType[] | DefaultResponseType>(environment.api + 'user/gender-choices/');
   }
 
   getAdditionalPhoto(): Observable<AdditionalImageType[] | DefaultResponseType> {

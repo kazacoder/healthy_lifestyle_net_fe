@@ -71,6 +71,7 @@ export class MastersListComponent implements OnInit, OnDestroy {
             search: true,
             multi: true
           },
+          {title: 'Пол', name: 'gender', options: [{id: 'male', title: 'Мужчина'}, {id: 'female', title: 'Женщина'}], search: false, defaultOption: 'Любой'},
         ]
       },
       error: (errorResponse: HttpErrorResponse) => {

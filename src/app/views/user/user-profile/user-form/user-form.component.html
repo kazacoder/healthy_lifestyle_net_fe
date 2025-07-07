@@ -10,6 +10,21 @@
     <label>Фамилия</label>
     <input type="text" placeholder="Например: Иванов" formControlName="last_name">
   </div>
+  <div class="fg">
+    <div class="label-flex">
+      <label>Пол</label>
+    </div>
+    <ng-select
+      [items]="genderList"
+      bindLabel="label"
+      bindValue="value"
+      [searchable]="true"
+      [clearable]="false"
+      [formControlName]="'gender'"
+      placeholder="Выберите пол">
+    </ng-select>
+    <input type="hidden" [formControlName]="'gender'">
+  </div>
   <ng-container *ngIf="isMaster">
     <div class="text18 semi-bold-text font2">
       Направление работы
