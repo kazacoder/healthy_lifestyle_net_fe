@@ -27,15 +27,18 @@
     </div>
     <div class="footer-categories">
       <div class="footer-categories__items">
-        <a routerLink="/" class="footer-categories__item" *ngFor="let category of categories">{{ category }}</a>
+        <a [routerLink]="['/events']"
+           [queryParams]="{categories: category.id}"
+           class="footer-categories__item" *ngFor="let category of categoriesShowed">{{ category.title }}</a>
       </div>
-      <div class="footer-categories__nav">
-        <a routerLink="/" class="footer-categories__link">
+      <div class="footer-categories__nav" *ngIf="categoriesShowed.length < categories.length">
+        <button class="footer-categories__link"
+                (click)="showAllTags()">
           <span class="text12">Смотреть все</span>
           <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3.99994 6.22224C3.9592 6.22228 3.91886 6.21427 3.88122 6.19867C3.84359 6.18308 3.80941 6.1602 3.78064 6.13135L0.678794 3.0295C0.557589 2.9083 0.557589 2.71203 0.678794 2.5909C0.799999 2.46978 0.996268 2.4697 1.1174 2.5909L3.99994 5.47345L6.88249 2.5909C7.0037 2.4697 7.19997 2.4697 7.32109 2.5909C7.44222 2.71211 7.4423 2.90838 7.32109 3.0295L4.21924 6.13135C4.19048 6.1602 4.1563 6.18308 4.11866 6.19867C4.08103 6.21427 4.04068 6.22228 3.99994 6.22224Z" fill="#BDDA13" />
           </svg>
-        </a>
+        </button>
       </div>
     </div>
     <div class="footer__bottom">
