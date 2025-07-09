@@ -10,6 +10,7 @@ import {AnswerResponseType} from '../../../types/answer-response.type';
 import {EventResponseType} from '../../../types/event-response.type';
 import {FiltersDataType} from '../../../types/filters-data.type';
 import {ParamsObjectType} from '../../../types/params-object.type';
+import {BookingResponseType} from '../../../types/booking-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,14 @@ export class EventService {
 
   getEvent(id: string): Observable<EventType | DefaultResponseType> {
     return this.http.get<EventType | DefaultResponseType>(environment.api + 'event/' + id + '/');
+  }
+
+  getBookedEventPlacesByUser(id: string): Observable<{places: number} | DefaultResponseType> {
+    return this.http.get<{places: number} | DefaultResponseType>(environment.api + 'events/' + id + '/user-booking-places/');
+  }
+
+  bookEvent(eventId: string): Observable<BookingResponseType | DefaultResponseType> {
+    return this.http.post<BookingResponseType | DefaultResponseType>(environment.api + 'bookings/', {event: eventId, places: 1});
   }
 
   getQuestion(questionId: string): Observable<QuestionExtendedType | DefaultResponseType> {

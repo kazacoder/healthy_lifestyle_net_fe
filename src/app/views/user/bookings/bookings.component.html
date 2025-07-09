@@ -1,0 +1,28 @@
+<div class="notes _tabs-parent">
+  <div class="notes__top _flex-between">
+    <h1 class="h1">
+      Мои записи
+    </h1>
+    <div class="notes__links">
+      <div class="_tab notes__link _active m-btn-bounce" data-tab="_tab1">
+        <span>Текущие</span>
+      </div>
+      <div class="_tab notes__link m-btn-bounce" data-tab="_tab2">
+        <span>Прошедшие</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content _tab1 _active">
+    <div class="notes__grid">
+      <note-card [title]="'Парная Йога'" [image]="'note.jpg'"></note-card>
+      <note-card [title]="'Ретрит'" [image]="'note2.jpg'"></note-card>
+    </div>
+  </div>
+
+  <div class="tab-content _tab2">
+    <div class="notes__grid">
+      <note-card [title]="'Ретрит'" [image]="'note2.jpg'"></note-card>
+    </div>
+  </div>
+</div>

@@ -13,12 +13,13 @@
         </div>
       </div>
       <div class="event-desc__col2">
-        <div class="event-desc__status" *ngIf="alreadyBooked">
+        <div class="event-desc__status" *ngIf="placesBooked">
           <img src="assets/img/success.svg" alt="">
           <span class="text14">Вы уже участник мероприятия</span>
+          <span>&nbsp; ({{ placesBooked }})</span>
         </div>
-        <button class="event-desc__btn m-btn m-btn-primary m-btn-bounce">
-          <span>Забронировать <ng-container *ngIf="alreadyBooked">еще места</ng-container></span>
+        <button class="event-desc__btn m-btn m-btn-primary m-btn-bounce" (click)="book()">
+          <span>Забронировать <ng-container *ngIf="placesBooked">еще места</ng-container></span>
         </button>
       </div>
     </div>

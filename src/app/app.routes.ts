@@ -16,6 +16,7 @@ import {PublicationComponent} from './views/user/publication/detail/publication.
 import {PublicationsComponent} from './views/user/publication/list/publications/publications.component';
 import {EventDetailComponent} from './views/event/event-detail/event-detail.component';
 import {BlogItemComponent} from './views/article/blog-item/blog-item.component';
+import {BookingsComponent} from './views/user/bookings/bookings.component';
 
 export const routes: Routes = [
   {
@@ -42,7 +43,7 @@ export const routes: Routes = [
           {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
           {path: 'publication/:url', component: PublicationComponent, title: 'Редактирование публикации'},
           {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},
-          {path: 'notes', component: PageUnderConstructionComponent, title: 'Записи'},
+          {path: 'notes', component: BookingsComponent, title: 'Записи'},
           {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
         ]
       },
