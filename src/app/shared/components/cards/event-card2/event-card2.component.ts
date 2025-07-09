@@ -23,7 +23,7 @@ import {CommonUtils} from '../../../utils/common-utils';
 export class EventCard2Component implements OnInit {
   @Input() event: EventType | null = null;
   periodLabel: string = '';
-
+  month: string = ''
   tagsOpen: boolean = false;
 
   private wasInside = false;
@@ -43,6 +43,7 @@ export class EventCard2Component implements OnInit {
 
   ngOnInit() {
     this.periodLabel = CommonUtils.getDurationLabel(this.event!.duration, this.event!.time_period)
+    this.month = CommonUtils.getRussianMonthName(this.event!.date);
   }
 
   clickTagsButton() {
