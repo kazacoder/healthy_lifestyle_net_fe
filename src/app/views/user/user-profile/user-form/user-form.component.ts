@@ -103,7 +103,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
         const receivedSpecialityList = data as SpecialityType[]
         this.specialityList = receivedSpecialityList;
-        console.log(this.specialityList);
         receivedSpecialityList.forEach(item => {
           this.specialityObj[item.id] = item.title
         })
@@ -126,7 +125,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
         const receivedGenderList = data as UserGenderType[]
         this.genderList = receivedGenderList;
-        console.log(this.genderList)
         receivedGenderList.forEach(item => {
           this.genderObj[item.value] = item.label
         })

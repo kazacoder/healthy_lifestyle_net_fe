@@ -1,17 +1,22 @@
 <div class="note-card">
-  <a href="" class="note-card__img m-backdrop _scale-img">
-    <img src="assets/img/{{ image }}" alt="">
+  <a [routerLink]="'/event/' + booking?.event"
+     class="note-card__img m-backdrop _scale-img">
+    <img src="{{ booking?.event_detail?.image }}" alt="">
   </a>
   <div class="day-badge _big">
-    <div class="text24 bold-text font2">15</div>
-    <div class="text12">Декабря</div>
+    <div class="text24 bold-text font2">{{ booking?.event_detail?.day }}</div>
+    <div class="text12">{{ month }}</div>
   </div>
-  <a href="" class="note-card__info _flex">
-    <div class="avatar m-btn-bounce">
-      <img src="assets/img/avatar.webp" alt="">
-    </div>
+  <a
+    [routerLink]="'/event/' + booking?.event"
+    class="note-card__info _flex">
+    <a
+      [routerLink]="'/master/' + booking?.event_detail?.author"
+      class="avatar m-btn-bounce">
+      <img src="{{ booking?.event_detail?.author_photo }}" alt="master photo">
+    </a>
     <div class="note-card__title">
-      <span>{{ title }}</span>
+      <span>{{ booking?.event_detail?.title }}</span>
     </div>
   </a>
 </div>

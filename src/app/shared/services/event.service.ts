@@ -56,6 +56,10 @@ export class EventService {
     return this.http.get<{places: number} | DefaultResponseType>(environment.api + 'events/' + id + '/user-booking-places/');
   }
 
+  getBookedEventsByUser(period: string): Observable<BookingResponseType[] | DefaultResponseType> {
+    return this.http.get<BookingResponseType[] | DefaultResponseType>(environment.api + 'bookings/' + period + '/');
+  }
+
   bookEvent(eventId: string): Observable<BookingResponseType | DefaultResponseType> {
     return this.http.post<BookingResponseType | DefaultResponseType>(environment.api + 'bookings/', {event: eventId, places: 1});
   }

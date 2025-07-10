@@ -43,7 +43,8 @@ export const routes: Routes = [
           {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
           {path: 'publication/:url', component: PublicationComponent, title: 'Редактирование публикации'},
           {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},
-          {path: 'notes', component: BookingsComponent, title: 'Записи'},
+          {path: 'notes', component: BookingsComponent, title: 'Предстоящие записи'},
+          {path: 'notes/past', component: BookingsComponent, title: 'Прошедшие записи'},
           {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
         ]
       },
