@@ -1,22 +1,26 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {DateItemComponent} from '../../cards/date-item/date-item.component';
 import {SwiperContainer} from 'swiper/element/bundle';
 // import 'swiper/css/navigation'
 import 'swiper'
-import {NgClass, NgForOf} from '@angular/common';
+import {CommonModule, DatePipe, NgClass, NgForOf} from '@angular/common';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'date-feed',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [DateItemComponent, NgForOf, NgClass],
+  imports: [DateItemComponent, NgForOf, NgClass, CommonModule],
+  providers: [DatePipe],
   templateUrl: './date-feed.component.html',
   styleUrl: './date-feed.component.scss'
 })
-export class DateFeedComponent implements AfterViewInit {
+export class DateFeedComponent implements OnInit, AfterViewInit {
   daysOffset = 30;
-  daysInDateFeed = 100 ;
-  dates: {date: string, month: string, class: string, weekDay: string}[] = [];
+  daysInDateFeed = 100;
+  activatedRouterSubscription: Subscription | null = null;
+  dates: { date: string | null, day: string, month: string, class: string, weekDay: string }[] = [];
   dateSwiper: SwiperContainer | null = null;
   dateSwiperParams = {
     slidesPerView: 26,
@@ -50,11 +54,29 @@ export class DateFeedComponent implements AfterViewInit {
       },
       navigationNext: function () {
         console.log('navigation next');
+      },
+      click: () => {
+        const idx = this.dateSwiper?.swiper.clickedIndex;
+        if (idx) {
+          if (this.dates.filter(item => item.class.includes('_selected')).length > 1) {
+            this.dates.map(item => {
+              if (item.class.includes('_weekend')) {
+                item.class = '_weekend'
+              } else {
+                item.class = ''
+              }
+            })
+          }
+          this.dates[idx].class = '_selected';
+          console.log(this.dates[idx].date);
+        }
       }
     }
   };
 
-  constructor() {
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private datePipe: DatePipe,) {
     const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август",
       "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
@@ -67,13 +89,40 @@ export class DateFeedComponent implements AfterViewInit {
       className += (day === 0 || day === 6 ? '_weekend' : '')
       className += (dateDay === 1 || i === 0 ? ' _first-day' : '')
       this.dates.push({
-        date: dateDay.toString(),
+        date: this.datePipe.transform(today, 'yyyy-MM-dd'),
+        day: dateDay.toString(),
         month: months[today.getMonth()],
         weekDay: days[day],
         class: className
       });
       today.setDate(today.getDate() + 1);
     }
+  }
+
+  ngOnInit() {
+    this.activatedRouterSubscription = this.activatedRoute.queryParams.subscribe(params => {
+      const dateForm = params['date_from']
+      const dateTo = params['date_to']
+      console.log(new Date(dateForm))
+      console.log(this.dates[35].date)
+      const dateFromIndex = this.dates.findIndex(item => item.date === dateForm)
+      const dateToIndex = this.dates.findIndex(item => item.date === dateTo)
+
+      this.dates.map(item => {
+        if (item.class.includes('_weekend')) {
+          item.class = '_weekend'
+        } else {
+          item.class = ''
+        }
+      })
+
+      if (dateFromIndex !== -1) {
+        this.dates[dateFromIndex].class = '_selected';
+        if (dateTo) {
+          this.dates[dateToIndex].class = '_selected';
+        }
+      }
+    });
   }
 
   ngAfterViewInit() {

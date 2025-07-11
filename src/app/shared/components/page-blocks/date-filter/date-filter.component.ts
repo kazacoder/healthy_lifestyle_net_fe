@@ -1,21 +1,27 @@
-import {Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, OnDestroy, OnInit, Output} from '@angular/core';
 import AirDatepicker from 'air-datepicker';
 import localeRu from 'air-datepicker/locale/ru'
-import {NgClass} from '@angular/common';
+import {CommonModule, DatePipe, NgClass} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'date-filter',
   standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    CommonModule,
   ],
+  providers: [DatePipe],
   templateUrl: './date-filter.component.html',
   styleUrl: './date-filter.component.scss'
 })
-export class DateFilterComponent implements OnInit {
+export class DateFilterComponent implements OnInit, OnDestroy {
   dateFilter: HTMLInputElement | null = null;
   @Output() onCalendarToggle = new EventEmitter<boolean>(false);
   calendarActive: boolean = false;
+  activatedRouterSubscription: Subscription | null = null;
+  datePicker: AirDatepicker | null = null;
 
   // Closing dropdown calendar if click outside
   @HostListener('document:click', ['$event'])
@@ -26,11 +32,17 @@ export class DateFilterComponent implements OnInit {
     }
   }
 
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private datePipe: DatePipe,) {
+  }
+
+
   ngOnInit(): void {
     this.dateFilter = document.querySelector('.date-input input');
 
     if (this.dateFilter) {
-      new AirDatepicker(this.dateFilter, {
+      this.datePicker = new AirDatepicker(this.dateFilter, {
         locale: localeRu,
         autoClose: true,
         inline: true,
@@ -49,6 +61,7 @@ export class DateFilterComponent implements OnInit {
             onClick: (dp: any) => {
               let today = new Date();
               dp.selectDate(today);
+              dp.selectDate(today);
               dp.setViewDate(today);
             }
           },
@@ -61,6 +74,7 @@ export class DateFilterComponent implements OnInit {
               let tomorrow = new Date();
               tomorrow.setDate(tomorrow.getDate() + 1);
               dp.selectDate(tomorrow);
+              dp.selectDate(tomorrow);
               dp.setViewDate(tomorrow);
             }
           },
@@ -72,11 +86,14 @@ export class DateFilterComponent implements OnInit {
             onClick: (dp: any) => {
               let now = new Date();
               let weekend = new Date();
+              let saturday = new Date();
               let day = now.getDay();
               let difference = day === 0 ? 0 : 7 - day; // Если сегодня воскресенье, выбираем его
               weekend.setDate(now.getDate() + difference);
+              saturday.setDate(now.getDate() + difference - 1);
+              dp.selectDate(saturday);
               dp.selectDate(weekend);
-              dp.setViewDate(weekend);
+              // dp.setViewDate(weekend);
             }
           },
           {
@@ -85,11 +102,34 @@ export class DateFilterComponent implements OnInit {
               class: 'button-apply large'
             },
             onClick: (dp) => {
-              // Здесь ваша логика для кнопки "Применить"
-              console.log('Выбранная дата:', dp.selectedDates);
+              const dateFrom = this.datePipe.transform(dp.selectedDates[0], 'yyyy-MM-dd');
+              const dateTo = this.datePipe.transform(dp.selectedDates[1], 'yyyy-MM-dd');
+              const queryParams = {
+                ...this.activatedRoute.snapshot.queryParams, ['date_from']: dateFrom, ['date_to']: dateTo
+              };
+
+              this.router.navigate([], {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling: 'merge'
+              }).then();
+              this.toggleCalendar();
             }
           }
         ],
+      });
+
+      this.activatedRouterSubscription = this.activatedRoute.queryParams.subscribe(params => {
+        const dateForm = params['date_from']
+        const dateTo = params['date_to']
+        this.datePicker?.clear()
+
+        if (dateForm) {
+            this.datePicker?.selectDate(dateForm)
+          if (dateTo) {
+            this.datePicker?.selectDate(dateTo)
+          }
+        }
       });
     }
   }
@@ -105,6 +145,10 @@ export class DateFilterComponent implements OnInit {
       document.querySelector(".m-page")?.classList.toggle("fixed-body")
       document.querySelector(".m-page")?.classList.toggle("open-calendar")
     }
+  }
+
+  ngOnDestroy() {
+    this.activatedRouterSubscription?.unsubscribe();
   }
 }
 
