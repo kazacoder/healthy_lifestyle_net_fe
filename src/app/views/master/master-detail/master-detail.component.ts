@@ -101,7 +101,6 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               instagram: this.master.instagram,
             }
             this.hideNavigation = (+!!this.master.photo + this.master.additional_images.length) < 2;
-            console.log(this.hideNavigation);
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.detail) {

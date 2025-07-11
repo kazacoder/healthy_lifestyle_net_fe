@@ -21,7 +21,7 @@ export class SortComponent implements OnInit, OnDestroy {
   componentClass = '.sort';
 
   @Input() sortOptions: { label: string, value: string }[] = [
-    {label: 'По популярности', value: 'popularity'},
+    {label: 'По популярности', value: '-rating'},
     {label: 'По стоимости', value: 'price'},
     {label: 'По дате', value: 'date'},
   ]
