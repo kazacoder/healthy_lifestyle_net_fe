@@ -129,7 +129,7 @@
         opacity: 1;
       }
     }
-    &~._selected{
+    &~._selected {
       .date-item__inner{
         &:before{
           display: none;
@@ -137,6 +137,21 @@
         &:after{
           opacity: 1;
           right: 100%;
+        }
+      }
+      &~.date-item{
+        .date-item__inner{
+          &:after,
+          &:before{
+            opacity: 0;
+          }
+        }
+      }
+    }
+    &.exact {
+      .date-item__inner{
+        &:before{
+          display: none;
         }
       }
       &~.date-item{
