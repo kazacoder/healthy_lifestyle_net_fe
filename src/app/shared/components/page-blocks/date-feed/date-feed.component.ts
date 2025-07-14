@@ -54,7 +54,6 @@ export class DateFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       navigationNext: function () {
-        console.log('navigation next');
       },
       click: () => {
         const idx = this.dateSwiper?.swiper.clickedIndex;
@@ -91,7 +90,6 @@ export class DateFeedComponent implements OnInit, AfterViewInit, OnDestroy {
           if (dateTo === dateFrom) {
             this.period = []
           }
-          console.log(this.period)
 
           this.router.navigate([], {
             relativeTo: this.activatedRoute,
@@ -143,7 +141,6 @@ export class DateFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       })
 
-      console.log(123)
       if (dateFromIndex !== -1) {
         this.dates[dateFromIndex].class = '_selected';
         if (dateTo) {
