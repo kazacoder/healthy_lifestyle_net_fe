@@ -17,6 +17,10 @@ import {PublicationsComponent} from './views/user/publication/list/publications/
 import {EventDetailComponent} from './views/event/event-detail/event-detail.component';
 import {BlogItemComponent} from './views/article/blog-item/blog-item.component';
 import {BookingsComponent} from './views/user/bookings/bookings.component';
+import {FavoriteComponent} from './views/user/favorite/favorite.component';
+import {FavoriteEventsComponent} from './views/user/favorite/favorite-events/favorite-events.component';
+import {FavoriteMastersComponent} from './views/user/favorite/favorite-masters/favorite-masters.component';
+import {FavoriteArticlesComponent} from './views/user/favorite/favorite-articles/favorite-articles.component';
 
 export const routes: Routes = [
   {
@@ -45,7 +49,11 @@ export const routes: Routes = [
           {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},
           {path: 'notes', component: BookingsComponent, title: 'Предстоящие записи'},
           {path: 'notes/past', component: BookingsComponent, title: 'Прошедшие записи'},
-          {path: 'favorite', component: PageUnderConstructionComponent, title: 'Избранное'},
+          {path: 'favorite', component: FavoriteComponent, title: 'Избранное', children: [
+              {path: '', component: FavoriteEventsComponent},
+              {path: 'masters', component: FavoriteMastersComponent},
+              {path: 'articles', component: FavoriteArticlesComponent},
+            ]},
         ]
       },
       {path: '**', component: PageNotFoundComponent, title: '404'},

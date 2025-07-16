@@ -1,0 +1,23 @@
+<div class="favourite _tabs-parent">
+  <h1 class="h1">
+    Избранное
+  </h1>
+
+  <div class="tabs">
+    <a routerLink="/profile/favorite" routerLinkActive="_active" [routerLinkActiveOptions]="{exact: true}"
+       class="tab _tab _active m-btn-bounce" data-tab="_tab1">
+      <span>Мероприятия</span>
+    </a>
+    <a routerLink="masters" routerLinkActive="_active" class="tab _tab m-btn-bounce" data-tab="_tab2">
+      <span>Мастера</span>
+    </a>
+    <a routerLink="articles" routerLinkActive="_active" class="tab _tab m-btn-bounce" data-tab="_tab3">
+      <span>Статьи</span>
+    </a>
+  </div>
+
+  <div class="tab-content _tab1 _active">
+      <router-outlet style="display: none"></router-outlet>
+  </div>
+
+</div>
