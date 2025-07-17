@@ -149,6 +149,12 @@ export class CommonUtils {
     }
   }
 
+  static getRandomItems<T>(array: T[], count: number): T[] {
+    const minCount = Math.min(count, array.length)
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, minCount);
+  }
+
 }
 
 export const highlightWeekend: MatCalendarCellClassFunction<Date> = (cellDate, view) => {

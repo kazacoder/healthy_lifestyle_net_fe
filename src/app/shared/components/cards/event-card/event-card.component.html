@@ -1,21 +1,23 @@
-<a routerLink="/event/1" class="event-card__img m-backdrop _scale-img">
-  <img src="assets/img/{{event?.img}}.webp" alt="">
+<a routerLink="/event/{{ event?.id }}" class="event-card__img m-backdrop _scale-img">
+  <img src="{{event?.image}}" alt="">
 </a>
 <div class="day-badge">
   <div class="text24 text20-tablet bold-text font2">{{ event?.day }}</div>
-  <div class="text12 text10-tablet">{{event?.month}}</div>
+  <div class="text12 text10-tablet">{{ month }}</div>
 </div>
-<button class="favourite-btn _absolute m-btn-bounce">
+<button class="favourite-btn _absolute m-btn-bounce"
+        (click)="toggleFavorite()"
+        [ngClass]="{'_added': event?.is_favorite}">
   <img src="assets/img/favourite.svg" alt="" class="_view1">
   <img src="assets/img/favourite2.svg" alt="" class="_view2">
 </button>
 <div class="event-card__bottom">
-  <div class="m-badge">
-    <img src="assets/img/{{event?.typeIcon}}.svg" alt="">
-    <span>{{event?.type}}</span>
+  <div class="m-badge" *ngFor="let category of event?.categories">
+    <img src="{{ category.image }}" alt="">
+    <span>{{ category.title }}</span>
   </div>
   <div class="event-card__title">
-    <a routerLink="/events/1" class="text28 text18-tablet bold-text">
+    <a routerLink="/event/{{ event?.id }}" class="text28 text18-tablet bold-text">
       {{ event?.title }}
     </a>
   </div>

@@ -22,6 +22,7 @@ import {EventType} from '../../../types/event.type';
 import {EventService} from '../../shared/services/event.service';
 import {EventResponseType} from '../../../types/event-response.type';
 import {AuthService} from '../../core/auth/auth.service';
+import {CommonUtils} from '../../shared/utils/common-utils';
 
 @Component({
   selector: 'app-main',
@@ -35,9 +36,9 @@ import {AuthService} from '../../core/auth/auth.service';
 
 export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
-  //ToDo add filter to nearestEvents, replace eventsTempData
-  eventsTempData = events
+  //ToDo add filter to nearestEvents,
   nearestEvents: EventType[] = [];
+  topEventsList: EventType[] = [];
   mastersList: MasterInfoType[] = [];
   mastersListSubscription: Subscription | null = null;
   getEventsSubscription: Subscription | null = null;
@@ -124,6 +125,7 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
             throw new Error(error);
           }
           this.nearestEvents = (data as EventResponseType).results;
+          this.topEventsList = CommonUtils.getRandomItems((data as EventResponseType).results, 7)
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
@@ -134,9 +136,6 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
         }
       });
     });
-
-
-
   }
 
   ngAfterViewInit() {
@@ -177,72 +176,23 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
     this.chosenCity = value;
   }
 
+  updateTopEventsList (eventId: number, isFavorite: boolean) {
+    const currentEvent = this.topEventsList.filter(item => item.id === eventId)
+    if (currentEvent.length > 0) {
+      currentEvent[0].is_favorite = isFavorite;
+    }
+  }
+
+  updateNearestEventsList (eventId: number, isFavorite: boolean) {
+    const currentEvent = this.nearestEvents.filter(item => item.id === eventId)
+    if (currentEvent.length > 0) {
+      currentEvent[0].is_favorite = isFavorite;
+    }
+  }
+
   ngOnDestroy() {
     this.mastersListSubscription?.unsubscribe();
     this.getEventsSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
   }
 }
-
-
-//ToDo remove after backend is ready
-
-const events = [
-  {
-    img: "event",
-    day: "4",
-    month: "Марта",
-    type: "Йога",
-    typeIcon: "type-icon",
-    title: "Центр йоги №1",
-  },
-  {
-    img: "event2",
-    day: "25",
-    month: "Мая",
-    type: "Баня",
-    typeIcon: "type-icon2",
-    title: "Перовские бани",
-  },
-  {
-    img: "event3",
-    day: "8",
-    month: "Апреля",
-    type: "Йога",
-    typeIcon: "type-icon",
-    title: "Центр йоги №1",
-  },
-  {
-    img: "event3",
-    day: "8",
-    month: "Апреля",
-    type: "Йога",
-    typeIcon: "type-icon",
-    title: "Центр йоги №1",
-  },
-  {
-    img: "event2",
-    day: "25",
-    month: "Мая",
-    type: "Баня",
-    typeIcon: "type-icon2",
-    title: "Перовские бани",
-  },
-  {
-    img: "event3",
-    day: "8",
-    month: "Апреля",
-    type: "Йога",
-    typeIcon: "type-icon",
-    title: "Центр йоги №1",
-  },
-  {
-    img: "event3",
-    day: "8",
-    month: "Апреля",
-    type: "Йога",
-    typeIcon: "type-icon",
-    title: "Центр йоги №1",
-  }
-]
-

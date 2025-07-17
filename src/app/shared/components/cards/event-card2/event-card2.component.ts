@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {EventType} from '../../../../../types/event.type';
@@ -27,6 +27,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class EventCard2Component implements OnInit, OnDestroy {
   @Input() event: EventType | null = null;
+  @Output() onChangeFavorite: EventEmitter<{ eventId: number, isFavorite: boolean }> = new EventEmitter();
   periodLabel: string = '';
   month: string = ''
   tagsOpen: boolean = false;
@@ -72,8 +73,10 @@ export class EventCard2Component implements OnInit, OnDestroy {
                 throw new Error(error);
               }
               this.event = data as EventType;
+              this.onChangeFavorite.emit({eventId: this.event.id, isFavorite: true});
             } else {
               this.event!.is_favorite = false;
+              this.onChangeFavorite.emit({eventId: this.event!.id, isFavorite: false});
             }
           },
           error: (errorResponse: HttpErrorResponse) => {
