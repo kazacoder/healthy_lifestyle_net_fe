@@ -1,21 +1,23 @@
 <div class="note-card note-card2">
   <div class="note-card2__top">
-    <a href="" class="note-card__img m-backdrop _scale-img">
-      <img src="assets/img/{{ image }}" alt="">
+    <a href="/event/{{ event?.id }}" class="note-card__img m-backdrop _scale-img">
+      <img src="{{ event?.image }}" alt="">
     </a>
     <div class="day-badge _big">
-      <div class="text24 bold-text font2">15</div>
-      <div class="text12">Декабря</div>
+      <div class="text24 bold-text font2">{{ event?.day }}</div>
+      <div class="text12">{{ month }}</div>
     </div>
-    <a href="" class="note-card__info _flex">
-      <div class="avatar m-btn-bounce">
-        <img src="assets/img/avatar.webp" alt="">
-      </div>
+    <a routerLink="/event/{{ event?.id }}" class="note-card__info _flex">
+      <a routerLink="/master/{{ event?.author }}" class="avatar m-btn-bounce">
+        <img src="{{ event?.author_photo }}" alt="">
+      </a>
       <div class="note-card__title">
-        <span>{{ title }}</span>
+        <span>{{ event?.title }}</span>
       </div>
     </a>
-    <button class="favourite-btn _absolute _added m-btn-bounce">
+    <button class="favourite-btn _absolute m-btn-bounce"
+            (click)="toggleFavorite()"
+            [ngClass]="{'_added': event?.is_favorite}">
       <img src="assets/img/favourite.svg" alt="" class="_view1">
       <img src="assets/img/favourite2.svg" alt="" class="_view2">
     </button>
@@ -26,7 +28,8 @@
         Получать уведомления?
       </div>
       <div class="m-switch">
-        <input type="checkbox">
+<!--        ToDo доработать функционал -->
+        <input type="checkbox" disabled>
         <label></label>
       </div>
     </div>

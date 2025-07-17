@@ -13,6 +13,7 @@ export type EventType = {
   suit_image: string,
   format_title: string,
   is_master: boolean,
+  is_favorite: boolean,
   title: string,
   image: string,
   phone: string,

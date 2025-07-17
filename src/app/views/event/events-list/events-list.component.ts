@@ -21,6 +21,7 @@ import {FiltersDataType} from '../../../../types/filters-data.type';
 import {FilterObjectType} from '../../../../types/filter-object.type';
 import {ActivatedRoute} from '@angular/router';
 import {ParamsObjectType} from '../../../../types/params-object.type';
+import {AuthService} from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-events-list',
@@ -54,21 +55,28 @@ export class EventsListComponent implements OnInit, OnDestroy {
   activatedRouterSubscription: Subscription | null = null;
   getEventsSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
+  isLoggedSubscription: Subscription | null = null;
   protected readonly filterObjects: FilterObjectType[] = [];
 
 
   constructor(private eventService: EventService,
               private _snackBar: MatSnackBar,
-              private activateRoute: ActivatedRoute,) {
+              private activateRoute: ActivatedRoute,
+              private authService: AuthService,) {
   }
 
   ngOnInit() {
     this.getFiltersResponse();
-    this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
-      this.params = params;
-      this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
-      this.getEventsResponse();
-    })
+
+
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe(() => {
+      this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
+        this.params = params;
+        this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
+        this.getEventsResponse();
+      });
+    });
+
   }
 
   getEventsResponse(offset: number = 0) {
@@ -154,6 +162,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.activatedRouterSubscription?.unsubscribe();
     this.getEventsSubscription?.unsubscribe();
     this.getFiltersSubscription?.unsubscribe();
+    this.isLoggedSubscription?.unsubscribe();
   }
 
 }

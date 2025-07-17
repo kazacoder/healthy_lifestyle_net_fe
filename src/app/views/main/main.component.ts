@@ -21,6 +21,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {EventType} from '../../../types/event.type';
 import {EventService} from '../../shared/services/event.service';
 import {EventResponseType} from '../../../types/event-response.type';
+import {AuthService} from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-main',
@@ -40,6 +41,7 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   mastersList: MasterInfoType[] = [];
   mastersListSubscription: Subscription | null = null;
   getEventsSubscription: Subscription | null = null;
+  isLoggedSubscription: Subscription | null = null;
 
   isCityModalOpened:boolean = false;
   isParamModalOpened:boolean = false;
@@ -89,7 +91,8 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   constructor(private eventService: EventService,
               private masterService: MasterService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private authService: AuthService,) {
   }
 
   ngOnInit() {
@@ -112,23 +115,27 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
         }
       });
 
-    this.getEventsSubscription = this.eventService.getEventsList().subscribe({
-      next: (data: EventResponseType | DefaultResponseType) => {
-        if ((data as DefaultResponseType).detail !== undefined) {
-          const error = (data as DefaultResponseType).detail;
-          this._snackBar.open(error);
-          throw new Error(error);
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe(() => {
+      this.getEventsSubscription = this.eventService.getEventsList().subscribe({
+        next: (data: EventResponseType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.nearestEvents = (data as EventResponseType).results;
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
         }
-        this.nearestEvents = (data as EventResponseType).results;
-      },
-      error: (errorResponse: HttpErrorResponse) => {
-        if (errorResponse.error && errorResponse.error.detail) {
-          this._snackBar.open(errorResponse.error.detail)
-        } else {
-          this._snackBar.open('Ошибка получения данных')
-        }
-      }
-    })
+      });
+    });
+
+
 
   }
 
@@ -173,6 +180,7 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   ngOnDestroy() {
     this.mastersListSubscription?.unsubscribe();
     this.getEventsSubscription?.unsubscribe();
+    this.isLoggedSubscription?.unsubscribe();
   }
 }
 

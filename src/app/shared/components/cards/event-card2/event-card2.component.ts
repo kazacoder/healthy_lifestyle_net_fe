@@ -49,4 +49,10 @@ export class EventCard2Component implements OnInit {
   clickTagsButton() {
     this.tagsOpen = !this.tagsOpen;
   }
+
+  toggleFavorite() {
+    if (this.event) {
+      this.event.is_favorite = !this.event.is_favorite;
+    }
+  }
 }

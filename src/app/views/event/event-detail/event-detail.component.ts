@@ -89,7 +89,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             this._snackBar.open('Ошибка получения данных')
           }
         }
-      })
+      });
     }
   }
 

@@ -31,13 +31,15 @@
   </div>
 </div>
 
-<button class="favourite-btn _absolute m-btn-bounce">
+<button class="favourite-btn _absolute m-btn-bounce"
+        (click)="toggleFavorite()"
+        [ngClass]="{'_added': event?.is_favorite}">
   <img src="assets/img/favourite.svg" alt="" class="_view1">
   <img src="assets/img/favourite2.svg" alt="" class="_view2">
 </button>
 <div class="event-card2__bottom">
   <div class="event-card2__wrap _flex-between">
-    <a routerLink="/masters/{{ event?.author }}" class="event-card2__master _flex m-btn-bounce">
+    <a routerLink="/master/{{ event?.author }}" class="event-card2__master _flex m-btn-bounce">
       <div class="avatar">
         <img src="{{ event?.author_photo }}" alt="">
       </div>
