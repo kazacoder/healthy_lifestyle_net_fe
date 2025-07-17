@@ -177,16 +177,22 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   }
 
   updateTopEventsList (eventId: number, isFavorite: boolean) {
-    const currentEvent = this.topEventsList.filter(item => item.id === eventId)
-    if (currentEvent.length > 0) {
-      currentEvent[0].is_favorite = isFavorite;
+    const currentEventIdx = this.topEventsList.findIndex(item => item.id === eventId)
+    if (currentEventIdx !== -1) {
+      this.topEventsList[currentEventIdx] = {
+        ...this.topEventsList[currentEventIdx],
+        is_favorite: isFavorite
+      };
     }
   }
 
   updateNearestEventsList (eventId: number, isFavorite: boolean) {
-    const currentEvent = this.nearestEvents.filter(item => item.id === eventId)
-    if (currentEvent.length > 0) {
-      currentEvent[0].is_favorite = isFavorite;
+    const currentEventIdx = this.nearestEvents.findIndex(item => item.id === eventId)
+    if (currentEventIdx !== -1) {
+      this.nearestEvents[currentEventIdx] = {
+        ...this.nearestEvents[currentEventIdx],
+        is_favorite: isFavorite
+      };
     }
   }
 
