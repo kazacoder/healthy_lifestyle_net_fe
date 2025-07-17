@@ -29,6 +29,10 @@ export class FavoriteEventsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getFavoriteEventList();
+  }
+
+  getFavoriteEventList() {
     this.getFavoriteEventSubscription = this.favoriteService.getFavoriteEventsList().subscribe({
       next: (data: EventType[] | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
@@ -37,7 +41,6 @@ export class FavoriteEventsComponent implements OnInit, OnDestroy {
           throw new Error(error);
         }
         this.favoriteEvents = data as EventType[];
-        console.log(this.favoriteEvents);
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {

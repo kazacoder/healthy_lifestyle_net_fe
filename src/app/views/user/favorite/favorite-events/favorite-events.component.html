@@ -1,3 +1,3 @@
 <div class="notes__grid">
-  <note-card2 [event]="event" *ngFor="let event of favoriteEvents"></note-card2>
+  <note-card2 (removeEventFromFavoriteIndicator)="getFavoriteEventList()" [event]="event" *ngFor="let event of favoriteEvents"></note-card2>
 </div>
