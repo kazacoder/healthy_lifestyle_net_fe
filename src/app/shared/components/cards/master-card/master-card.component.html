@@ -2,7 +2,9 @@
   <img src="assets/img/profile-default-img.svg" alt="" *ngIf="!master?.photo">
   <img src="{{master?.photo}}" alt="Фото мастера" *ngIf="master?.photo">
 </a>
-<button class="favourite-btn _absolute m-btn-bounce">
+<button class="favourite-btn _absolute m-btn-bounce"
+        (click)="toggleFavorite()"
+        [ngClass]="{'_added': favorite}">
   <img src="assets/img/favourite.svg" alt="" class="_view1">
   <img src="assets/img/favourite2.svg" alt="" class="_view2">
 </button>

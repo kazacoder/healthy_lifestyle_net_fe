@@ -17,12 +17,17 @@ import {MasterInfoType} from '../../../../../types/master-info.type';
 })
 export class MasterCardComponent {
   tagsOpen: boolean = false;
+  favorite: boolean = false;
 
   @Input()
   master: MasterInfoType | null = null;
 
   tagButtonProceed() {
     this.tagsOpen = !this.tagsOpen;
+  }
+
+  toggleFavorite() {
+    this.favorite = !this.favorite;
   }
 
 }

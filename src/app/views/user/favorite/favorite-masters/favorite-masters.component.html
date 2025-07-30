@@ -1,4 +1,3 @@
 <div class="notes__grid">
-  <note-card3 [title]="'Парная йога'" [image]="'master.jpg'"></note-card3>
-  <note-card3 [title]="'Ретрит'" [image]="'master4.jpg'"></note-card3>
+  <note-card3 [master]="master" *ngFor="let master of favoriteMasters"></note-card3>
 </div>

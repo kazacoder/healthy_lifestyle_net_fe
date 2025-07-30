@@ -1,14 +1,16 @@
 <div class="note-card note-card2">
   <div class="note-card2__top">
     <a href="" class="note-card__img m-backdrop _scale-img">
-      <img src="assets/img/{{ image }}" alt="">
+      <img src="{{ master?.photo }}" alt="">
     </a>
     <div class="note-card__info _flex">
       <div class="note-card__title">
-        <span>{{ title }}</span>
+        <span>{{ master?.full_name }}</span>
       </div>
     </div>
-    <button class="favourite-btn _absolute _added m-btn-bounce">
+    <button class="favourite-btn _absolute m-btn-bounce"
+            (click)="toggleFavorite()"
+            [ngClass]="{'_added': favorite}">
       <img src="assets/img/favourite.svg" alt="" class="_view1">
       <img src="assets/img/favourite2.svg" alt="" class="_view2">
     </button>

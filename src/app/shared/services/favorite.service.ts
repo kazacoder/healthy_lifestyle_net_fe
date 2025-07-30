@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {EventType} from '../../../types/event.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
+import {MasterInfoType} from '../../../types/master-info.type';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class FavoriteService {
       return this.removeEventFromFavorite(event_id)
     }
     return this.addEventToFavorite(event_id);
+  }
+
+  getFavoriteMastersList(): Observable<MasterInfoType[] | DefaultResponseType> {
+    return this.http.get<MasterInfoType[] | DefaultResponseType>(environment.api + 'favorite-masters/');
   }
 }
