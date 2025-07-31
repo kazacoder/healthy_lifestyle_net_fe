@@ -35,4 +35,19 @@ export class FavoriteService {
   getFavoriteMastersList(): Observable<MasterInfoType[] | DefaultResponseType> {
     return this.http.get<MasterInfoType[] | DefaultResponseType>(environment.api + 'favorite-masters/');
   }
+
+  addMasterToFavorite(id: number): Observable<MasterInfoType | DefaultResponseType> {
+    return this.http.post<MasterInfoType | DefaultResponseType>(environment.api + 'favorite-masters/', {master: id});
+  }
+
+  removeMasterFromFavorite(id: number): Observable<null | DefaultResponseType> {
+    return this.http.delete<null | DefaultResponseType>(environment.api + 'favorite-masters/' + id.toString() + '/');
+  }
+
+  toggleFavoriteMaster(is_favorite: boolean, event_id: number): Observable<null | MasterInfoType | DefaultResponseType> {
+    if (is_favorite) {
+      return this.removeMasterFromFavorite(event_id)
+    }
+    return this.addMasterToFavorite(event_id);
+  }
 }

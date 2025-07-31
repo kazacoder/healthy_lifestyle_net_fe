@@ -27,10 +27,10 @@ export class FavoriteMastersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getFavoriteEventList();
+    this.getFavoriteMasterList();
   }
 
-  getFavoriteEventList() {
+  getFavoriteMasterList() {
     this.getFavoriteMasterSubscription = this.favoriteService.getFavoriteMastersList().subscribe({
       next: (data: MasterInfoType[] | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
@@ -39,7 +39,6 @@ export class FavoriteMastersComponent implements OnInit, OnDestroy {
           throw new Error(error);
         }
         this.favoriteMasters = data as MasterInfoType[];
-        console.log(this.favoriteMasters);
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {

@@ -16,5 +16,6 @@ export type MasterInfoType = {
   vk: string,
   instagram: string,
   is_master: boolean,
+  is_favorite: boolean,
   additional_images: AdditionalImageType[]
 }
