@@ -3,24 +3,22 @@
     <div class="container">
       <div class="blog-preview">
         <div class="blog-preview__img m-backdrop">
-          <img src="assets/img/blog5.jpg" alt="">
+          <img src="{{ article?.image }}" alt="">
         </div>
         <div class="blog-preview__badges">
           <div class="blog-card__type">
-            <span>Интервью</span>
+            <span>{{ article?.type_title }}</span>
           </div>
         </div>
         <div class="blog-preview__badges2">
-          <div class="m-badge">
-            <img src="assets/img/type-icon.svg" alt="">
-            <span>Йога</span>
-          </div>
-          <div class="m-badge">
-            <img src="assets/img/type-icon2.svg" alt="">
-            <span>Баня</span>
+          <div class="m-badge" *ngFor="let category of article?.categories">
+            <img src="{{ category.image }}" alt="">
+            <span>{{ category.title }}</span>
           </div>
         </div>
-        <button class="favourite-btn _absolute m-btn-bounce">
+        <button class="favourite-btn _absolute m-btn-bounce"
+                (click)="toggleFavorite()"
+                [ngClass]="{'_added': article?.is_favorite}">
           <img src="assets/img/favourite.svg" alt="" class="_view1">
           <img src="assets/img/favourite2.svg" alt="" class="_view2">
         </button>
@@ -28,77 +26,20 @@
 
       <div class="article">
         <div class="article__date">
-          20 мая
+          {{ article?.day }} {{ month }}
         </div>
-        <h1 class="h1">
-          «На свои деньги в Дубае ничего, кроме гаража, построить нельзя»: Дмитрий Блинов об открытии Duo в Эмиратах
-        </h1>
-        <div class="text">
-          <blockquote>
-            Главный хулиган ресторанного Петербурга господин Блинов открыл ресторан в Дубае. Гастрономический дуализм
-            воплотился в проект Duo, который предположительно должен стать успешнее своего неплохо живущего
-            петербургского старшего брата.
-          </blockquote>
-
-          <h3>
-            — Почему вы выбрали этот район — Dubai Hills?
-          </h3>
-          <p>— Изначально я хотел найти что-нибудь в центре, в Даунтауне. Но оказалось, что там ничего приличного не
-            найти — либо очень дорого, либо очень плохо. Сначала я планировал строить «Харвест» — 50 Best,
-            sustainability, овощи, рыба, средиземноморский вайб, чуть-чуть лакшери. Но пока я здесь жил и искал
-            помещение, я месяц ходил по ресторанам каждый день и понял, что хороших дорогих ресторанов типа Gaia, LPM,
-            La Maison Ani довольно много. Там хороший сервис, хорошая кухня, хорошая посуда, стекло. Видно, что люди
-            знают, как тратить деньги. Но еда везде примерно одинаковая: кальмары, осьминог, баклажаны… Либо паназия,
-            либо средиземноморская еда. Все! А вот прийти просто поужинать после работы с семьей или в будни сходить на
-            обед и не разориться — такого я найти просто не смог. Когда я увидел эту локацию, подумал: ну все, работаем
-            — надо делать ресторан, в который хочется ходить каждый день. Не важно — в обед, на ужин, на завтрак и так
-            далее.</p>
-
-          <hr>
-
-          <img src="assets/img/article.webp" alt="">
-
-          <hr>
-
-          <h3>— Когда вы открыли Duo в Дубае?</h3>
-          <p>— Второго августа 2023 года.</p>
-
-          <hr>
-
-          <h3>— У тебя инвесторы тут есть?</h3>
-          <p>— Да. Из Петербурга.</p>
-
-          <hr>
-
-          <h3>— Почему вы выбрали этот район — Dubai Hills?</h3>
-          <p>— Изначально я хотел найти что-нибудь в центре, в Даунтауне. Но оказалось, что там ничего приличного не
-            найти — либо очень дорого, либо очень плохо. Сначала я планировал строить «Харвест» — 50 Best,
-            sustainability, овощи, рыба, средиземноморский вайб, чуть-чуть лакшери. Но пока я здесь жил и искал
-            помещение, я месяц ходил по ресторанам каждый день и понял, что хороших дорогих ресторанов типа Gaia, LPM,
-            La Maison Ani довольно много. Там хороший сервис, хорошая кухня, хорошая посуда, стекло. Видно, что люди
-            знают, как тратить деньги. Но еда везде примерно одинаковая: кальмары, осьминог, баклажаны… Либо паназия,
-            либо средиземноморская еда. Все! А вот прийти просто поужинать после работы с семьей или в будни сходить на
-            обед и не разориться — такого я найти просто не смог. Когда я увидел эту локацию, подумал: ну все, работаем
-            — надо делать ресторан, в который хочется ходить каждый день. Не важно — в обед, на ужин, на завтрак и так
-            далее.</p>
-          <img src="assets/img/article2.webp" alt="">
-        </div>
+        <h1 class="h1">{{ article?.title }}</h1>
+        <div class="text" [innerHTML]="article?.text"></div>
         <div class="article-summary">
           <div class="text24 bold-text">
             В этой статье:
           </div>
           <div class="article-summary__authors">
-            <a href="" class="event-card2__master _flex">
+            <a routerLink="/master/{{ master.id }}" class="event-card2__master _flex" *ngFor="let master of article?.masters">
               <div class="avatar">
-                <img src="assets/img/avatar.webp" alt="">
+                <img src="{{ master.photo }}" alt="">
               </div>
-              <span class="text16 text14-tablet">Дарья Солодаева</span>
-            </a>
-            <a href="" class="event-card2__master _flex">
-              <div class="avatar">
-                <img src="assets/img/avatar2.webp" alt="">
-              </div>
-              <span class="text16 text14-tablet">Андрей Филоменко</span>
+              <span class="text16 text14-tablet">{{ master.full_name }}</span>
             </a>
           </div>
         </div>

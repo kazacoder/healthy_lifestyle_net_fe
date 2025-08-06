@@ -94,14 +94,17 @@ export class CommonUtils {
     }
   }
 
-  static getRussianMonthName(dateString: string): string {
+  static getRussianMonthName(dateString: string, capitalize: boolean = true): string {
     const date = new Date(dateString);
     const formatted = new Intl.DateTimeFormat('ru-RU', {
       day: 'numeric',
       month: 'long'
     }).format(date);
     const month = formatted.split(' ')[1];
-    return month.charAt(0).toUpperCase() + month.slice(1);
+    if (capitalize) {
+      return month.charAt(0).toUpperCase() + month.slice(1);
+    }
+    return month;
   }
 
   static getTicketWord(count: number): string {
