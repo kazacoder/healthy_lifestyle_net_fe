@@ -3,10 +3,10 @@ import {Observable} from 'rxjs';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {EventResponseType} from '../../../types/event-response.type';
-import {FiltersDataType} from '../../../types/filters-data.type';
+import {FiltersDataTypeArticles} from '../../../types/filters-data.type';
 import {ParamsObjectType} from '../../../types/params-object.type';
 import {ArticleType} from '../../../types/article.type';
+import {ArticleResponseType} from '../../../types/article-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +16,7 @@ export class ArticleService {
   constructor(private http: HttpClient) {
   }
 
-
-  getEventsList(limit?: number, offset?: number, paramsObj?: ParamsObjectType | null): Observable<EventResponseType | DefaultResponseType> {
+  getArticlesList(limit?: number, offset?: number, paramsObj?: ParamsObjectType | null): Observable<ArticleResponseType | DefaultResponseType> {
     let params = new HttpParams();
 
     if (limit !== undefined) {
@@ -41,14 +40,14 @@ export class ArticleService {
       });
     }
 
-    return this.http.get<EventResponseType | DefaultResponseType>(environment.api + 'event/', {params});
+    return this.http.get<ArticleResponseType | DefaultResponseType>(environment.api + 'article/', {params});
   }
 
   getArticle(id: string): Observable<ArticleType | DefaultResponseType> {
     return this.http.get<ArticleType | DefaultResponseType>(environment.api + 'article/' + id + '/');
   }
 
-  getFiltersData(): Observable<FiltersDataType | DefaultResponseType> {
-    return this.http.get<FiltersDataType | DefaultResponseType>(`${environment.api}events/filters/`)
+  getFiltersData(): Observable<FiltersDataTypeArticles | DefaultResponseType> {
+    return this.http.get<FiltersDataTypeArticles | DefaultResponseType>(`${environment.api}articles/filters/`)
   }
 }

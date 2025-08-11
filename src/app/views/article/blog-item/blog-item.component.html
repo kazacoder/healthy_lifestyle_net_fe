@@ -30,7 +30,7 @@
         </div>
         <h1 class="h1">{{ article?.title }}</h1>
         <div class="text" [innerHTML]="article?.text"></div>
-        <div class="article-summary">
+        <div class="article-summary" *ngIf="article?.masters?.length ">
           <div class="text24 bold-text">
             В этой статье:
           </div>
@@ -68,12 +68,7 @@
         <div class="slider__wrap">
           <swiper-container class="article-swiper-similar" init="false">
             <swiper-slide class="swiper-slide" *ngFor="let article of articles">
-              <blog-card [img]="article.img"
-                         [type]="article.type"
-                         [date]="article.date"
-                         [tags]="article.tags"
-                         [favorite]="article.favorite"
-                         [text]="article.text"></blog-card>
+              <blog-card [article]="article"></blog-card>
             </swiper-slide>
           </swiper-container>
         </div>

@@ -2,10 +2,20 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {BlogCardComponent} from '../../../shared/components/cards/blog-card/blog-card.component';
-import {NgClass, NgForOf, NgStyle} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FilterObjectType} from '../../../../types/filter-object.type';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {ArticleType} from '../../../../types/article.type';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../../core/auth/auth.service';
+import {ArticleService} from '../../../shared/services/article.service';
+import {ParamsObjectType} from '../../../../types/params-object.type';
+import {Settings} from '../../../../settings/settings';
+import {DefaultResponseType} from '../../../../types/default-response.type';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ArticleResponseType} from '../../../../types/article-response.type';
+import {FiltersDataTypeArticles} from '../../../../types/filters-data.type';
 
 @Component({
   selector: 'app-blog',
@@ -15,25 +25,91 @@ import {Subscription} from 'rxjs';
     BlogCardComponent,
     NgForOf,
     NgStyle,
-    NgClass
+    NgClass,
+    NgIf
   ],
   standalone: true,
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })
 export class BlogComponent implements OnInit, OnDestroy {
-  protected readonly articles = articles;
-  protected readonly filterObjects = filterObjects;
+  articles: ArticleType[] = [];
+  filterObjects: FilterObjectType[] = [];
+  offset: number = 0;
   filtersSelected: boolean = false;
+  params: ParamsObjectType | null = null;
+  showMoreButton: boolean = false;
   activatedRouterSubscription: Subscription | null = null;
+  getArticlesSubscription: Subscription | null = null;
+  getFiltersSubscription: Subscription | null = null;
+  isLoggedSubscription: Subscription | null = null;
 
-  constructor(private activateRoute: ActivatedRoute,) {
+
+  constructor(private articleService: ArticleService,
+              private _snackBar: MatSnackBar,
+              private activateRoute: ActivatedRoute,
+              private authService: AuthService,) {
   }
 
   ngOnInit() {
+    this.getFiltersResponse();
+
     this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
+      this.params = params;
       this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
+      this.getArticlesResponse();
     })
+  }
+
+  getArticlesResponse(offset: number = 0) {
+    this.getArticlesSubscription = this.articleService.getArticlesList(Settings.articlesDefaultLimit, offset, this.params).subscribe({
+      next: (data: ArticleResponseType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        const eventResponse = data as ArticleResponseType
+
+        if (offset > 0 && eventResponse) {
+          this.articles = Array.prototype.concat(this.articles, eventResponse.results);
+        } else {
+          this.articles = eventResponse.results;
+        }
+
+        this.showMoreButton = eventResponse.count > this.articles.length;
+        this.offset = this.articles.length;
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных')
+        }
+      }
+    })
+  }
+
+  getFiltersResponse() {
+    this.getFiltersSubscription = this.articleService.getFiltersData().subscribe({
+      next: (data: FiltersDataTypeArticles | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          this._snackBar.open(error);
+          throw new Error(error);
+        }
+        const filters = data as FiltersDataTypeArticles
+        this.filterObjects.push({title: 'Тип', name: 'types', options: filters.types, search: false});
+        this.filterObjects.push({title: 'Категории', name: 'categories', options: filters.categories, search: true, multi: true});
+        },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          this._snackBar.open(errorResponse.error.detail)
+        } else {
+          this._snackBar.open('Ошибка получения данных фильтов')
+        }
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -41,143 +117,3 @@ export class BlogComponent implements OnInit, OnDestroy {
   }
 }
 
-// ToDo remove after the Backend is ready
-const articles = [
-  {
-    img: "blog.webp",
-    favorite: true,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog2.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog3.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog4.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog2.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog3.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog4.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog2.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog3.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog4.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog2.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  }, {
-    img: "blog3.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  },
-  {
-    img: "blog4.webp",
-    favorite: false,
-    text: 'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года',
-    type: 'Интервью',
-    date: {day: '22', month: 'Июня'},
-    tags: [{title: 'Йога', img: 'type-icon.svg'}, {title: 'Баня', img: 'type-icon2.svg'},],
-  }
-]
-
-const filterObjects: FilterObjectType[] = [
-  {title: 'Формат', name: 'formats', options: [{id: 1, title: 'Формат 1'}, {id: 2, title: 'Формат 2'}], search: false},
-  {
-    title: 'Категории',
-    name: 'categories',
-    options: [{id: 1, title: 'Баня'}, {id: 2, title: 'Сауна'}],
-    search: true
-  },
-]

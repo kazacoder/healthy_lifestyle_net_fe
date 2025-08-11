@@ -1,7 +1,7 @@
 <div class="blog-card">
   <div class="blog-card__top">
-    <a routerLink="/article/1" class="blog-card__img m-backdrop _scale-img">
-      <img src="assets/img/{{ img }}" alt="">
+    <a routerLink="/article/{{ article?.id }}" class="blog-card__img m-backdrop _scale-img">
+      <img src="{{ article?.image }}" alt="">
     </a>
 
     <button class="favourite-btn _absolute m-btn-bounce"
@@ -12,26 +12,26 @@
     </button>
 
     <div class="blog-card__badges">
-      <div class="m-badge" *ngFor="let tag of tags">
-        <img src="assets/img/{{ tag.img }}" alt="">
-        <span>{{ tag.title }}</span>
+      <div class="m-badge" *ngFor="let category of article?.categories">
+        <img src="{{ category.image }}" alt="">
+        <span>{{ category.title }}</span>
       </div>
     </div>
 
     <div class="blog-card__badges2 _flex">
       <div class="day-badge">
-        <div class="text16 bold-text">{{ date.day }}</div>
-        <div class="text10">{{ date.month }}</div>
+        <div class="text16 bold-text">{{ article?.day }}</div>
+        <div class="text10">{{ month }}</div>
       </div>
       <div class="blog-card__type">
-        <span>{{ type }}</span>
+        <span>{{ article?.type_title }}</span>
       </div>
     </div>
   </div>
 
   <div class="blog-card__content">
     <div class="blog-card__text text16 medium-text">
-      {{ text }}
+      {{ article?.description }}
     </div>
   </div>
 </div>

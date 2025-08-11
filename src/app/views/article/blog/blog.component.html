@@ -13,15 +13,12 @@
       </div>
       <div class="masters-items">
         <blog-card *ngFor="let article of articles"
-                   [img]="article.img"
-                   [type]="article.type"
-                   [date]="article.date"
-                   [tags]="article.tags"
-                   [favorite]="article.favorite"
-                   [text]="article.text"></blog-card>
+                   [article]="article"></blog-card>
       </div>
 
-      <button class="more-btn m-btn m-btn-primary m-btn-bounce">
+      <button class="more-btn m-btn m-btn-primary m-btn-bounce"
+              *ngIf="showMoreButton"
+              (click)="getArticlesResponse(offset)">
         <span>Показать еще</span>
         <img src="assets/img/arrow-bottom.svg" alt="">
       </button>
