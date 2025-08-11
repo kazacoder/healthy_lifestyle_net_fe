@@ -50,12 +50,15 @@ export class SortComponent implements OnInit, OnDestroy {
       let value = params['ordering']
       let desc = false;
       if (value) {
-        if (value.slice(0, 1) === '-') {
+        if (value.slice(0, 1) === '-' && value !== this.sortOptions[0].value) {
           value = value.slice(1, value.length);
           desc = true;
         }
         const currentSortOption = this.sortOptions.filter(item => item.value === value)[0];
         this.currentSortOption = {...currentSortOption, desc: desc};
+        console.log(this.sortOptions)
+        console.log(currentSortOption)
+        console.log(this.currentSortOption)
       }
     })
   }

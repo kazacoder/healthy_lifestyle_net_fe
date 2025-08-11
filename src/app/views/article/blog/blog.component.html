@@ -8,7 +8,7 @@
       <div class="filter" [ngClass]="{'_filters-selected': filtersSelected}">
         <param-filter [filterObjects]="filterObjects"></param-filter>
         <div class="filter__right">
-          <sort></sort>
+          <sort [sortOptions]="sortOptions"></sort>
         </div>
       </div>
       <div class="masters-items">

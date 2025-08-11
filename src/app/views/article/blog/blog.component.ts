@@ -44,6 +44,10 @@ export class BlogComponent implements OnInit, OnDestroy {
   getFiltersSubscription: Subscription | null = null;
   isLoggedSubscription: Subscription | null = null;
 
+  sortOptions: { label: string, value: string }[] = [
+    {label: 'По рейтингу', value: '-rating'},
+    {label: 'По дате', value: 'date'},
+  ]
 
   constructor(private articleService: ArticleService,
               private _snackBar: MatSnackBar,
