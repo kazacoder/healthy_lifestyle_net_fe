@@ -6,7 +6,7 @@
 
     <button class="favourite-btn _absolute m-btn-bounce"
             (click)="toggleFavorite()"
-            [ngClass]="{'_added': favorite}">
+            [ngClass]="{'_added': article?.is_favorite}">
       <img src="assets/img/favourite.svg" alt="" class="_view1">
       <img src="assets/img/favourite2.svg" alt="" class="_view2">
     </button>

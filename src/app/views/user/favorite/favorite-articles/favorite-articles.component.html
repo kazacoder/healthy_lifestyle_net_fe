@@ -1,16 +1,4 @@
 <div class="notes__grid">
-<!--  <blog-card [img]="'blog.jpg'"-->
-<!--             [type]="'Интервью'"-->
-<!--             [date]="''"-->
-<!--             [categories]="[]"-->
-<!--             [description]="'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года'"-->
-<!--             [favorite]="true">-->
-<!--  </blog-card>-->
-<!--  <blog-card [img]="'blog2.jpg'"-->
-<!--             [type]="'Интервью'"-->
-<!--             [date]="''"-->
-<!--             [categories]="[]"-->
-<!--             [description]="'Современное искусство, исследование города и монстр-желе: как «Якитория» удивляет своих гостей уже 24 года'"-->
-<!--             [favorite]="true">-->
-<!--  </blog-card>-->
+  <blog-card (removeArticleFromFavoriteIndicator)="getFavoriteArticleList()" [article]="article" *ngFor="let article of favoriteArticles">
+  </blog-card>
 </div>

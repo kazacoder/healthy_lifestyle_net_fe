@@ -5,6 +5,7 @@ import {EventType} from '../../../types/event.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {MasterInfoType} from '../../../types/master-info.type';
+import {ArticleType} from '../../../types/article.type';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,25 @@ export class FavoriteService {
       return this.removeEventFromFavorite(event_id)
     }
     return this.addEventToFavorite(event_id);
+  }
+
+  getFavoriteArticleList(): Observable<ArticleType[] | DefaultResponseType> {
+    return this.http.get<ArticleType[] | DefaultResponseType>(environment.api + 'favorite-article/');
+  }
+
+  addArticleToFavorite(id: number): Observable<ArticleType | DefaultResponseType> {
+    return this.http.post<ArticleType | DefaultResponseType>(environment.api + 'favorite-article/', {article: id});
+  }
+
+  removeArticleFromFavorite(id: number): Observable<null | DefaultResponseType> {
+    return this.http.delete<null | DefaultResponseType>(environment.api + 'favorite-article/' + id.toString() + '/');
+  }
+
+  toggleFavoriteEventArticle(is_favorite: boolean, article_id: number): Observable<null | ArticleType | DefaultResponseType> {
+    if (is_favorite) {
+      return this.removeArticleFromFavorite(article_id)
+    }
+    return this.addArticleToFavorite(article_id);
   }
 
   getFavoriteMastersList(): Observable<MasterInfoType[] | DefaultResponseType> {
