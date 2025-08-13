@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {ArticleType} from '../../../../../types/article.type';
 import {CommonUtils} from '../../../utils/common-utils';
@@ -14,7 +14,8 @@ import {FavoriteService} from '../../../services/favorite.service';
   imports: [
     NgForOf,
     NgClass,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   standalone: true,
   templateUrl: './blog-card.component.html',
@@ -23,6 +24,7 @@ import {FavoriteService} from '../../../services/favorite.service';
 export class BlogCardComponent implements OnInit, OnDestroy {
   @Input() article: ArticleType | null = null;
   @Output() removeArticleFromFavoriteIndicator: EventEmitter<boolean> = new EventEmitter();
+  @Input() isLogged: boolean = false;
   month: string = '';
   toggleFavoriteArticleSubscription: Subscription | null = null;
 

@@ -13,6 +13,7 @@
       </div>
       <div class="masters-items">
         <blog-card *ngFor="let article of articles"
+                   [isLogged]="isLogged"
                    [article]="article"></blog-card>
       </div>
 
@@ -24,6 +25,4 @@
       </button>
     </div>
   </div>
-
-
 </main>

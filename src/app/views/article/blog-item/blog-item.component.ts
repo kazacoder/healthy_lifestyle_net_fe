@@ -16,6 +16,7 @@ import {ArticleService} from '../../../shared/services/article.service';
 import {ArticleType} from '../../../../types/article.type';
 import {CommonUtils} from '../../../shared/utils/common-utils';
 import {FavoriteService} from '../../../shared/services/favorite.service';
+import {AuthService} from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'blog-item',
@@ -58,14 +59,17 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
   }
   article: ArticleType | null = null;
   articleId: string | null | undefined = null;
-  month: string= ''
+  month: string= '';
+  isLogged: boolean = false;
+  isLoggedSubscription: Subscription | null = null;
   getArticleSubscription: Subscription | null = null;
   toggleFavoriteArticleSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,
               private articleService: ArticleService,
               private _snackBar: MatSnackBar,
-              private favoriteService: FavoriteService,) {
+              private favoriteService: FavoriteService,
+              private authService: AuthService,) {
   }
 
   ngAfterViewInit(): void {
@@ -78,6 +82,13 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.articleId = this.activatedRoute.snapshot.paramMap.get('url');
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
+      this.isLogged = isLogged;
+      this.getArticle();
+    });
+  }
+
+  getArticle() {
     if (this.articleId) {
       this.getArticleSubscription = this.articleService.getArticle(this.articleId).subscribe({
         next: (data: ArticleType | DefaultResponseType) => {
@@ -102,7 +113,6 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
       });
     }
   }
-
 
   toggleFavorite() {
     if (this.article) {
@@ -133,6 +143,7 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getArticleSubscription?.unsubscribe();
+    this.isLoggedSubscription?.unsubscribe();
     this.toggleFavoriteArticleSubscription?.unsubscribe();
   }
 }

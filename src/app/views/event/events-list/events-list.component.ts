@@ -56,7 +56,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   getEventsSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
   isLoggedSubscription: Subscription | null = null;
-  isLogged: boolean = false
+  isLogged: boolean = false;
   protected readonly filterObjects: FilterObjectType[] = [];
 
 

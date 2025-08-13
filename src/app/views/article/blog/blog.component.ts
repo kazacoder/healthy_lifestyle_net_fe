@@ -43,6 +43,7 @@ export class BlogComponent implements OnInit, OnDestroy {
   getArticlesSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
   isLoggedSubscription: Subscription | null = null;
+  isLogged: boolean = false;
 
   sortOptions: { label: string, value: string }[] = [
     {label: 'По рейтингу', value: '-rating'},
@@ -58,11 +59,14 @@ export class BlogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getFiltersResponse();
 
-    this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
-      this.params = params;
-      this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
-      this.getArticlesResponse();
-    })
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged) => {
+      this.isLogged = isLogged;
+      this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
+        this.params = params;
+        this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');
+        this.getArticlesResponse();
+      })
+    });
   }
 
   getArticlesResponse(offset: number = 0) {
@@ -118,6 +122,7 @@ export class BlogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.activatedRouterSubscription?.unsubscribe();
+    this.isLoggedSubscription?.unsubscribe();
   }
 }
 
