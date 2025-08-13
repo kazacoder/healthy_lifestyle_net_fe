@@ -67,6 +67,10 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           })
       }
     });
+    this.getEvent()
+  }
+
+  getEvent() {
     if (this.eventId) {
       this.getEventSubscription = this.eventService.getEvent(this.eventId).subscribe({
         next: (data: EventType | DefaultResponseType) => {

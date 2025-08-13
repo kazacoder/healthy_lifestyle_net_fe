@@ -43,6 +43,7 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   mastersListSubscription: Subscription | null = null;
   getEventsSubscription: Subscription | null = null;
   isLoggedSubscription: Subscription | null = null;
+  isLogged:boolean = false;
 
   isCityModalOpened:boolean = false;
   isParamModalOpened:boolean = false;
@@ -116,7 +117,8 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
         }
       });
 
-    this.isLoggedSubscription = this.authService.isLogged$.subscribe(() => {
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged) => {
+      this.isLogged = isLogged;
       this.getEventsSubscription = this.eventService.getEventsList().subscribe({
         next: (data: EventResponseType | DefaultResponseType) => {
           if ((data as DefaultResponseType).detail !== undefined) {

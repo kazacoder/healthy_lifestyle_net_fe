@@ -6,6 +6,7 @@
           <swiper-container class="event-swiper" init="false">
             <swiper-slide class="swiper-slide" *ngFor="let event of topEventsList">
               <event-card
+                [isLogged]="isLogged"
                 (onChangeFavorite)="updateNearestEventsList($event.eventId, $event.isFavorite)"
                 [event]="event" class="event-card"></event-card>
             </swiper-slide>
@@ -90,6 +91,7 @@
           <swiper-container class="event-swiper nearest-events" init="false">
             <swiper-slide class="swiper-slide" *ngFor="let event of nearestEvents">
               <event-card2
+                [isLogged]="isLogged"
                 (onChangeFavorite)="updateTopEventsList($event.eventId, $event.isFavorite)"
                 [event]="event" class="event-card2"></event-card2>
             </swiper-slide>

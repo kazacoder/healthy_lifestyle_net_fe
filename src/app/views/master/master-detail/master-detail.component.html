@@ -94,7 +94,9 @@
               </div>
             </div>
             <div class="event-action">
-              <button class="favourite-btn _absolute m-btn-bounce">
+              <button class="favourite-btn _absolute m-btn-bounce"
+                      (click)="toggleFavorite()"
+                      [ngClass]="{'_added': master?.is_favorite}">
                 <img src="assets/img/favourite3.svg" alt="" class="_view1">
                 <img src="assets/img/favourite2.svg" alt="" class="_view2">
               </button>

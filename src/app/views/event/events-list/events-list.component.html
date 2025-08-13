@@ -20,7 +20,7 @@
     </div>
 
     <div class="events-items">
-      <event-card2 *ngFor="let event of events" [event]="event" class="event-card2"></event-card2>
+      <event-card2 *ngFor="let event of events" [event]="event" [isLogged]="isLogged" class="event-card2"></event-card2>
     </div>
 
     <button class="more-btn m-btn m-btn-primary m-btn-bounce"

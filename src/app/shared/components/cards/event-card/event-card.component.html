@@ -6,6 +6,7 @@
   <div class="text12 text10-tablet">{{ month }}</div>
 </div>
 <button class="favourite-btn _absolute m-btn-bounce"
+        *ngIf="isLogged"
         (click)="toggleFavorite()"
         [ngClass]="{'_added': event?.is_favorite}">
   <img src="assets/img/favourite.svg" alt="" class="_view1">

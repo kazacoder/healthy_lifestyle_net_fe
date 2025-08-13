@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {EventType} from '../../../../../types/event.type';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {CommonUtils} from '../../../utils/common-utils';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -14,7 +14,8 @@ import {FavoriteService} from '../../../services/favorite.service';
   imports: [
     RouterLink,
     NgForOf,
-    NgClass
+    NgClass,
+    NgIf
   ],
   standalone: true,
   templateUrl: './event-card.component.html',
@@ -24,6 +25,7 @@ import {FavoriteService} from '../../../services/favorite.service';
 
 export class EventCardComponent implements OnInit, OnDestroy {
   @Input() event: EventType | null = null;
+  @Input() isLogged: boolean = false;
   @Output() onChangeFavorite: EventEmitter<{ eventId: number, isFavorite: boolean }> = new EventEmitter();
   month: string = '';
   toggleFavoriteEventSubscription: Subscription | null = null;

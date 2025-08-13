@@ -27,6 +27,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class EventCard2Component implements OnInit, OnDestroy {
   @Input() event: EventType | null = null;
+  @Input() isLogged: boolean = false;
   @Output() onChangeFavorite: EventEmitter<{ eventId: number, isFavorite: boolean }> = new EventEmitter();
   periodLabel: string = '';
   month: string = ''

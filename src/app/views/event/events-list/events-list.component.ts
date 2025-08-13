@@ -56,6 +56,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   getEventsSubscription: Subscription | null = null;
   getFiltersSubscription: Subscription | null = null;
   isLoggedSubscription: Subscription | null = null;
+  isLogged: boolean = false
   protected readonly filterObjects: FilterObjectType[] = [];
 
 
@@ -69,7 +70,8 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.getFiltersResponse();
 
 
-    this.isLoggedSubscription = this.authService.isLogged$.subscribe(() => {
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged) => {
+      this.isLogged = isLogged;
       this.activatedRouterSubscription = this.activateRoute.queryParams.subscribe(params => {
         this.params = params;
         this.filtersSelected = Object.keys(params).length > 1 || (Object.keys(params).length === 1 &&  Object.keys(params)[0] !== 'ordering');

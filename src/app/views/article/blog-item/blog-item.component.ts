@@ -15,6 +15,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ArticleService} from '../../../shared/services/article.service';
 import {ArticleType} from '../../../../types/article.type';
 import {CommonUtils} from '../../../shared/utils/common-utils';
+import {FavoriteService} from '../../../shared/services/favorite.service';
 
 @Component({
   selector: 'blog-item',
@@ -59,10 +60,12 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
   articleId: string | null | undefined = null;
   month: string= ''
   getArticleSubscription: Subscription | null = null;
+  toggleFavoriteArticleSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,
               private articleService: ArticleService,
-              private _snackBar: MatSnackBar,) {
+              private _snackBar: MatSnackBar,
+              private favoriteService: FavoriteService,) {
   }
 
   ngAfterViewInit(): void {
@@ -102,11 +105,35 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
 
 
   toggleFavorite() {
-    console.log('todo')
+    if (this.article) {
+      this.toggleFavoriteArticleSubscription = this.favoriteService.toggleFavoriteEventArticle(this.article.is_favorite, this.article.id)
+        .subscribe({
+          next: (data: ArticleType | null | DefaultResponseType) => {
+            if (data) {
+              if ((data as DefaultResponseType).detail !== undefined) {
+                const error = (data as DefaultResponseType).detail;
+                this._snackBar.open(error);
+                throw new Error(error);
+              }
+              this.article = data as ArticleType;
+            } else {
+              this.article!.is_favorite = false;
+            }
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.detail) {
+              this._snackBar.open(errorResponse.error.detail)
+            } else {
+              this._snackBar.open('Ошибка обработки избранного')
+            }
+          }
+        })
+    }
   }
 
   ngOnDestroy() {
     this.getArticleSubscription?.unsubscribe();
+    this.toggleFavoriteArticleSubscription?.unsubscribe();
   }
 }
 

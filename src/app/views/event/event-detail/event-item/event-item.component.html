@@ -68,7 +68,10 @@
     </div>
     <div class="event-item__col2">
       <div class="event-action">
-        <button class="favourite-btn _absolute m-btn-bounce">
+        <button class="favourite-btn _absolute m-btn-bounce"
+                *ngIf="isLoggedIn"
+                (click)="toggleFavorite()"
+                [ngClass]="{'_added': event?.is_favorite}">
           <img src="assets/img/favourite3.svg" alt="" class="_view1">
           <img src="assets/img/favourite2.svg" alt="" class="_view2">
         </button>

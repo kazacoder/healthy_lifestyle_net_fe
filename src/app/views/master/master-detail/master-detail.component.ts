@@ -14,6 +14,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ParagraphTextPipe} from '../../../shared/pipes/paragraph-text.pipe';
 import {SocialObjectType} from '../../../../types/social-object.type';
 import {CommonUtils} from '../../../shared/utils/common-utils';
+import {FavoriteService} from '../../../shared/services/favorite.service';
 
 @Component({
   selector: 'app-master-detail',
@@ -35,6 +36,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
 
   activatedRouteSubscription: Subscription | null = null;
   masterDetailSubscription: Subscription | null = null;
+  toggleFavoriteMasterSubscription: Subscription | null = null;
   master: MasterInfoType | null = null;
   hideNavigation: boolean = false;
   socialObject: SocialObjectType | null = null
@@ -65,7 +67,8 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(private masterService: MasterService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private favoriteService: FavoriteService,) {
   }
 
   ngOnInit() {
@@ -125,8 +128,36 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  toggleFavorite() {
+    if (this.master) {
+      this.toggleFavoriteMasterSubscription = this.favoriteService.toggleFavoriteMaster(this.master.is_favorite, this.master.id)
+        .subscribe({
+          next: (data: MasterInfoType | null | DefaultResponseType) => {
+            if (data) {
+              if ((data as DefaultResponseType).detail !== undefined) {
+                const error = (data as DefaultResponseType).detail;
+                this._snackBar.open(error);
+                throw new Error(error);
+              }
+              this.master = data as MasterInfoType;
+            } else {
+              this.master!.is_favorite = false;
+            }
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.detail) {
+              this._snackBar.open(errorResponse.error.detail)
+            } else {
+              this._snackBar.open('Ошибка обработки избранного')
+            }
+          }
+        })
+    }
+  }
+
   ngOnDestroy() {
     this.activatedRouteSubscription?.unsubscribe();
     this.masterDetailSubscription?.unsubscribe();
+    this.toggleFavoriteMasterSubscription?.unsubscribe();
   }
 }
