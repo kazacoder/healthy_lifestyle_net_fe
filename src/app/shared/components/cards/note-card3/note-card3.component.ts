@@ -6,11 +6,13 @@ import {FavoriteService} from '../../../services/favorite.service';
 import {Subscription} from 'rxjs';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'note-card3',
   imports: [
-    NgClass
+    NgClass,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './note-card3.component.html',
