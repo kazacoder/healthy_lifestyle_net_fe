@@ -16,10 +16,12 @@
       </div>
 
       <div class="masters-items">
-        <master-card *ngFor="let master of mastersList" [master]="master" class="master-card"></master-card>
+        <master-card *ngFor="let master of mastersList" [master]="master" [isLogged]="isLogged" class="master-card"></master-card>
       </div>
 
-      <button class="more-btn m-btn m-btn-primary m-btn-bounce">
+      <button class="more-btn m-btn m-btn-primary m-btn-bounce"
+              *ngIf="showMoreButton"
+              (click)="getMastersResponse(offset)">
         <span>Показать еще</span>
         <img src="assets/img/arrow-bottom.svg" alt="">
       </button>

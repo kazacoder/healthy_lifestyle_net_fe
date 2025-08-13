@@ -25,6 +25,7 @@ export class MasterCardComponent implements OnDestroy {
   toggleFavoriteMasterSubscription: Subscription | null = null;
 
   @Input() master: MasterInfoType | null = null;
+  @Input() isLogged: boolean = false;
 
   constructor(private _snackBar: MatSnackBar,
               private favoriteService: FavoriteService,) {

@@ -128,7 +128,7 @@
         <div class="slider__wrap">
           <swiper-container class="master-swiper" init="false">
             <swiper-slide class="swiper-slide" *ngFor="let master of mastersList">
-              <master-card [master]="master" class="master-card"></master-card>
+              <master-card [master]="master" [isLogged]="isLogged" class="master-card"></master-card>
             </swiper-slide>
           </swiper-container>
         </div>

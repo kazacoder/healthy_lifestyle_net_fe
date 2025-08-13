@@ -9,5 +9,6 @@ export const Settings = {
   questionDefaultLimit: 4,
   eventDefaultLimit: 9,
   articlesDefaultLimit: 8,
+  masterDefaultLimit: 4,
   maxCategoryTagCount: 10,
 }

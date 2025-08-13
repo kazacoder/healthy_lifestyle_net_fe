@@ -1,4 +1,4 @@
 <div class="notes__grid">
-  <blog-card (removeArticleFromFavoriteIndicator)="getFavoriteArticleList()" [article]="article" *ngFor="let article of favoriteArticles">
+  <blog-card (removeArticleFromFavoriteIndicator)="getFavoriteArticleList()" [isLogged]="true" [article]="article" *ngFor="let article of favoriteArticles">
   </blog-card>
 </div>

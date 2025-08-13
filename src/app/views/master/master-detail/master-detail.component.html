@@ -95,6 +95,7 @@
             </div>
             <div class="event-action">
               <button class="favourite-btn _absolute m-btn-bounce"
+                      *ngIf="isLogged"
                       (click)="toggleFavorite()"
                       [ngClass]="{'_added': master?.is_favorite}">
                 <img src="assets/img/favourite3.svg" alt="" class="_view1">
@@ -115,8 +116,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
   </div>
 
@@ -140,5 +139,4 @@
       </button>
     </div>
   </div>
-
 </main>

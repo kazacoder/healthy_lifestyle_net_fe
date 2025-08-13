@@ -15,6 +15,7 @@ import {ParagraphTextPipe} from '../../../shared/pipes/paragraph-text.pipe';
 import {SocialObjectType} from '../../../../types/social-object.type';
 import {CommonUtils} from '../../../shared/utils/common-utils';
 import {FavoriteService} from '../../../shared/services/favorite.service';
+import {AuthService} from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-master-detail',
@@ -33,20 +34,21 @@ import {FavoriteService} from '../../../shared/services/favorite.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
-
-  activatedRouteSubscription: Subscription | null = null;
   masterDetailSubscription: Subscription | null = null;
   toggleFavoriteMasterSubscription: Subscription | null = null;
+  isLogged: boolean = false;
+  isLoggedSubscription: Subscription | null = null;
+  masterId: string | null | undefined = null;
   master: MasterInfoType | null = null;
   hideNavigation: boolean = false;
   socialObject: SocialObjectType | null = null
   masterSlider: SwiperContainer | null = null;
-  specialityList: {speciality: string, experience: string}[] = []
+  specialityList: { speciality: string, experience: string }[] = []
   masterSliderParams = {
     slidesPerView: "auto",
     spaceBetween: 0,
     watchSlidesProgress: true,
-    preventClicks :true,
+    preventClicks: true,
     a11y: false,
     observer: true,
     observeParents: true,
@@ -68,12 +70,21 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private _snackBar: MatSnackBar,
-              private favoriteService: FavoriteService,) {
+              private favoriteService: FavoriteService,
+              private authService: AuthService,) {
   }
 
   ngOnInit() {
-    this.activatedRouteSubscription = this.activatedRoute.params.subscribe(params => {
-      this.masterDetailSubscription = this.masterService.getMaster(params['url'])
+    this.masterId = this.activatedRoute.snapshot.paramMap.get('url');
+    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
+      this.isLogged = isLogged;
+      this.getMasterDetail();
+    });
+  }
+
+  getMasterDetail() {
+    if (this.masterId) {
+      this.masterDetailSubscription = this.masterService.getMaster(this.masterId)
         .subscribe({
           next: (data: MasterInfoType | DefaultResponseType) => {
             if ((data as DefaultResponseType).detail !== undefined) {
@@ -116,8 +127,8 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               this._snackBar.open('Ошибка получения данных')
             }
           }
-        })
-    })
+        });
+    }
   }
 
   ngAfterViewInit() {
@@ -156,8 +167,8 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activatedRouteSubscription?.unsubscribe();
     this.masterDetailSubscription?.unsubscribe();
     this.toggleFavoriteMasterSubscription?.unsubscribe();
+    this.isLoggedSubscription?.unsubscribe();
   }
 }
