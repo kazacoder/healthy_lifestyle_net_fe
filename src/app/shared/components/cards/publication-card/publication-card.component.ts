@@ -29,7 +29,11 @@ export class PublicationCardComponent implements OnInit, OnDestroy {
   @Input()
   publication: PublicationType | null = null;
   @Output() deletedPublicationId = new EventEmitter<number>();
-  @Output() onParticipantsModalOpen = new EventEmitter<{isOpened: boolean, participantsList: PublicationParticipantType[]}>();
+  @Output() onParticipantsModalOpen = new EventEmitter<{
+    isOpened: boolean,
+    participantsList: PublicationParticipantType[]
+  }>();
+  @Output() onQuestionsAnswersModalOpen = new EventEmitter<{ isOpened: boolean, eventId: number }>();
 
   day = 0;
   month = '';
@@ -74,9 +78,15 @@ export class PublicationCardComponent implements OnInit, OnDestroy {
         }
       });
     }
-
-
   }
+
+  openQuestionsAnswersModal(eventId: number | undefined) {
+    if (eventId) {
+      this.onQuestionsAnswersModalOpen.emit({isOpened: true, eventId: eventId});
+      WindowsUtils.fixBody(true);
+    }
+  }
+
 
   deletePublication(id: number | undefined) {
     if (id) {

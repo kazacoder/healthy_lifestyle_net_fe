@@ -1,0 +1,87 @@
+<div class="modal faq-modal" [ngClass]="isOpened ? '_active _active2' : ''" id="faqModal">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top">
+      <div class="text30 text24-tablet semi-bold-text">
+        Вопросы/ответы
+      </div>
+    </div>
+    <div class="modal__scroll">
+      <div class="faq-group">
+        <div class="text18 semi-bold-text">
+          Вопросы без ответа
+        </div>
+        <div class="faq-group__items">
+          <question-card
+            [question]="question"
+            *ngFor="let question of questions"></question-card>
+        </div>
+      </div>
+      <div class="faq-group">
+        <div class="text18 semi-bold-text">
+          Ответы
+        </div>
+        <div class="faq-group__items">
+          <div class="faq-card _answered">
+            <div class="faq-card__top _flex">
+              <div class="avatar">
+                <img src="assets/img/avatar.svg" alt="">
+              </div>
+              <div class="faq-card__info">
+                <div class="faq-card__wrap _flex">
+                  <div class="faq-card__name">
+                    Алиса
+                  </div>
+                  <div class="faq-card__badge">
+                    <span>Новый вопрос</span>
+                  </div>
+                </div>
+                <div class="faq-card__date">
+                  <span>12.01.2023, 12:43</span>
+                </div>
+              </div>
+            </div>
+            <div class="faq-card__desc text16">
+              Вопрос о мероприятие. Подскажите будут ли обсуждены вопросы о..?
+            </div>
+            <div class="answer">
+              <div class="answer__top _flex">
+                <div class="answer__name text16 semi-bold-text">
+                  Дарья Солодаева
+                </div>
+                <div class="answer__badge _flex">
+                  <img src="assets/img/crone2.svg" alt="">
+                  <span class="text12">Мастер</span>
+                </div>
+              </div>
+              <div class="answer__info">
+                <div class="answer__info-text">
+                  <div class="answer__desc text16">
+                    Ответ в 2 строки. Подскажите подходит ли под данную модель?Ответ о товаре в 2-4 строки. Подскажите подходит ли под данную модель? Подскажите подходит ли .....
+                    Ответ в 2 строки. Подскажите подходит ли под данную модель?Ответ о товаре в 2-4 строки. Подскажите подходит ли под данную модель? Подскажите подходит ли .....
+                  </div>
+                </div>
+                <button class="answer__more">
+                  еще
+                </button>
+              </div>
+              <div class="answer__nav _flex-between">
+                <button class="answer__edit m-btn m-btn-black m-btn-bounce">
+                  <img src="assets/img/edit2.svg" alt="">
+                  <span>Редактировать ответ</span>
+                </button>
+                <button class="publication-card__btn publication-card__btn--delete m-btn m-btn-bounce">
+                  <img src="assets/img/delete.svg" alt="">
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

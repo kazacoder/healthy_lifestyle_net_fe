@@ -1,0 +1,46 @@
+<div class="faq-card" [ngClass]="{_new: true}">
+  <div class="faq-card__top _flex">
+    <div class="avatar">
+      <img src="{{ question?.author_photo }}" alt="">
+    </div>
+    <div class="faq-card__info">
+      <div class="faq-card__wrap _flex">
+        <div class="faq-card__name">
+          {{ question?.author_full_name }}
+        </div>
+        <div class="faq-card__badge">
+          <span>Новый вопрос</span>
+        </div>
+      </div>
+      <div class="faq-card__date">
+        <span>{{ question?.created_at | date: 'dd.MM.yyyy, HH:mm' }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="faq-card__desc text16">
+    {{ question?.text }}
+  </div>
+  <div class="faq-card__nav">
+    <button class="faq-card__btn _toggle-faq-answer m-btn m-btn-primary m-btn-bounce">
+      <span>Ответить</span>
+    </button>
+  </div>
+  <div class="faq-card__answer">
+    <div class="fg question-form__field m-text-field">
+      <textarea maxlength="1000" data-id="1" placeholder="Напишите ответ на вопрос"></textarea>
+    </div>
+    <div class="question-form__nav">
+      <div class="question-form__buttons">
+        <button class="question-form__btn m-btn m-btn-primary">
+          <span>Ответить</span>
+        </button>
+        <button class="_toggle-faq-answer question-form__btn m-btn m-btn-gray">
+          <span>Отменить</span>
+        </button>
+      </div>
+      <div class="question-form__info">
+        Всего символов <span class="question-form__field-count" data-id="1">0</span>/1000
+      </div>
+    </div>
+  </div>
+</div>
