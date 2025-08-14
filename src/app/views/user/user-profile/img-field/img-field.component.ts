@@ -37,7 +37,6 @@ export class ImgFieldComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.userPhotoUrl) {
       this.userPhoto = this.userPhotoUrl
-      console.log(this.userPhoto )
     }
   }
 

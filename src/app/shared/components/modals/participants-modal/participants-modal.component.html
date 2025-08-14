@@ -1,0 +1,26 @@
+<div class="modal participant-modal" [ngClass]="isOpened ? '_active _active2' : ''" id="participantModal">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top">
+      <div class="text30 text20-tablet semi-bold-text">
+        Список участников
+      </div>
+    </div>
+    <div class="modal__scroll">
+      <div class="participant-modal__items">
+        <div *ngIf="!participants.length" style="text-align: center">Здесь пока никого нет</div>
+        <div class="participant-item" *ngFor="let participant of participants">
+          <div class="avatar">
+            <img src="{{ participant.user_photo }}" alt="Фото пользователя">
+          </div>
+          <span>{{ participant.user_full_name }}</span>
+          <div class="publication-card__answer-count">{{ participant.places }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

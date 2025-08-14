@@ -58,10 +58,10 @@
       <div class="publication-card__answer-title">Вопросы/ответы</div>
       <div class="publication-card__answer-count">15 новых</div>
     </a>
-    <a routerLink="{{ publication?.id }}/members" class="publication-card__answer _type2 m-btn-primary m-btn-bounce">
+    <button class="publication-card__answer _type2 m-btn-primary m-btn-bounce" (click)="openParticipantsModal(publication?.id)">
       <div class="publication-card__answer-title">Смотреть участников</div>
-      <div class="publication-card__answer-count">15</div>
-    </a>
+      <div class="publication-card__answer-count">{{ publication?.total_booked }}</div>
+    </button>
   </div>
 </div>
 

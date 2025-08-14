@@ -10,6 +10,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 import {PublicationService} from '../../../services/publication.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {PublicationParticipantType} from '../../../../../types/publication-participant.type';
 
 @Component({
   selector: 'publication-card',
@@ -28,12 +29,14 @@ export class PublicationCardComponent implements OnInit, OnDestroy {
   @Input()
   publication: PublicationType | null = null;
   @Output() deletedPublicationId = new EventEmitter<number>();
+  @Output() onParticipantsModalOpen = new EventEmitter<{isOpened: boolean, participantsList: PublicationParticipantType[]}>();
 
   day = 0;
   month = '';
   tickets = ''
   isOpenConfirmModal: boolean = false
   removePublicationSubscription: Subscription | null = null;
+  getPublicationParticipantsSubscription: Subscription | null = null;
 
   constructor(private publicationService: PublicationService,
               private _snackBar: MatSnackBar,) {
@@ -48,6 +51,31 @@ export class PublicationCardComponent implements OnInit, OnDestroy {
   toggleDeleteModal(val: boolean) {
     this.isOpenConfirmModal = val;
     WindowsUtils.fixBody(val);
+  }
+
+  openParticipantsModal(eventId: number | undefined) {
+    if (eventId) {
+      this.getPublicationParticipantsSubscription = this.publicationService.getPublicationParticipantsList(eventId).subscribe({
+        next: (data: PublicationParticipantType[] | DefaultResponseType) => {
+          if (data && (data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.onParticipantsModalOpen.emit({isOpened: true, participantsList: data as PublicationParticipantType[]});
+          WindowsUtils.fixBody(true);
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      });
+    }
+
+
   }
 
   deletePublication(id: number | undefined) {
@@ -70,11 +98,12 @@ export class PublicationCardComponent implements OnInit, OnDestroy {
             this._snackBar.open('Ошибка удаления события')
           }
         }
-      })
+      });
     }
   }
 
   ngOnDestroy() {
-    this.removePublicationSubscription?.unsubscribe()
+    this.removePublicationSubscription?.unsubscribe();
+    this.getPublicationParticipantsSubscription?.unsubscribe();
   }
 }

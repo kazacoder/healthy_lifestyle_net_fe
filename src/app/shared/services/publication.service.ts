@@ -8,6 +8,7 @@ import {PublicationType} from '../../../types/publication.type';
 import {SuitType} from '../../../types/suit.type';
 import {FormatType} from '../../../types/format.type';
 import {TimePeriodType} from '../../../types/time-period.type';
+import {PublicationParticipantType} from '../../../types/publication-participant.type';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,9 @@ export class PublicationService {
 
   updatePublication (id: number, formData: FormData): Observable<PublicationType | DefaultResponseType> {
     return this.http.patch<PublicationType | DefaultResponseType>(environment.api + 'publication/' + id.toString() + '/', formData);
+  }
+
+  getPublicationParticipantsList (eventId: number): Observable<PublicationParticipantType[] | DefaultResponseType> {
+    return this.http.get<PublicationParticipantType[] | DefaultResponseType>(environment.api + 'event-participants/' + eventId.toString() + '/');
   }
 }

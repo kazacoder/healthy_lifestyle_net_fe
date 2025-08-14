@@ -12,9 +12,15 @@
 
     <div class="publication__grid">
       <publication-card
+        (onParticipantsModalOpen)="proceedParticipantsModal($event.isOpened, $event.participantsList)"
         [publication] = publication
         (deletedPublicationId)="onPublicationDeleted($event)"
         *ngFor="let publication of publications"></publication-card>
     </div>
   </div>
 </div>
+
+<participants-modal
+  [participants]="participantList"
+  [isOpened]="isParticipantsModalOpened"
+  (onCloseModal)="proceedParticipantsModal($event)"></participants-modal>

@@ -5,6 +5,7 @@ export type PublicationType = {
   id: number,
   additional_images: AdditionalImageType[],
   categories: CategoryType[],
+  total_booked: number,
   title: string,
   image: string,
   phone: string,

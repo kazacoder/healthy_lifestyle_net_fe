@@ -10,13 +10,19 @@ import {PublicationService} from '../../../../../shared/services/publication.ser
 import {Subscription} from 'rxjs';
 import {PublicationType} from '../../../../../../types/publication.type';
 import {NgForOf} from '@angular/common';
+import {
+  ParticipantsModalComponent
+} from '../../../../../shared/components/modals/participants-modal/participants-modal.component';
+import {WindowsUtils} from '../../../../../shared/utils/windows-utils';
+import {PublicationParticipantType} from '../../../../../../types/publication-participant.type';
 
 @Component({
   selector: 'app-publications',
   imports: [
     RouterLink,
     PublicationCardComponent,
-    NgForOf
+    NgForOf,
+    ParticipantsModalComponent
   ],
   standalone: true,
   templateUrl: './publications.component.html',
@@ -26,7 +32,8 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   getEventsListSubscription: Subscription | null = null;
   publications: PublicationType[] = [];
-
+  isParticipantsModalOpened:boolean = false;
+  participantList: PublicationParticipantType[] = [];
 
   constructor(private _snackBar: MatSnackBar,
               private publicationService: PublicationService,) {
@@ -53,6 +60,13 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     })
   }
 
+  proceedParticipantsModal(value: boolean, participantList?: PublicationParticipantType[]) {
+    if (participantList) {
+     this.participantList = participantList;
+    }
+    this.isParticipantsModalOpened = value;
+    WindowsUtils.fixBody(value)
+  }
 
   onPublicationDeleted(deletedId: number) {
     this.publications = this.publications.filter(publication => publication.id !== deletedId);
@@ -61,5 +75,4 @@ export class PublicationsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.getEventsListSubscription?.unsubscribe();
   }
-
 }
