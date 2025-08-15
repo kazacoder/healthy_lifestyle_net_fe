@@ -17,6 +17,7 @@
         </div>
         <div class="faq-group__items">
           <question-card
+            (onSaveAnswer)="updateQuestions($event)"
             [question]="question"
             *ngFor="let question of questions"></question-card>
         </div>

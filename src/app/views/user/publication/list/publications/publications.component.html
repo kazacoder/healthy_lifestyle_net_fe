@@ -30,4 +30,5 @@
   [isOpened]="isQuestionsAnswersModalOpened"
   [questions]="questions"
   [questionsWithAnswer]="questionsWithAnswer"
+  (onSaveAnswer)="getEventQuestionResponse($event)"
   (onCloseModal)="proceedQuestionsAnswersModal({isOpened: $event})"></questions-answers-modal>

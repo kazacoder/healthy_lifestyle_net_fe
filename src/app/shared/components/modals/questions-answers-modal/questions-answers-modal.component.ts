@@ -23,12 +23,17 @@ export class QuestionsAnswersModalComponent {
   @Input() questions: QuestionExtendedType[] = [];
   @Input() questionsWithAnswer: QuestionExtendedType[] = [];
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter();
+  @Output() onSaveAnswer: EventEmitter<string> = new EventEmitter();
 
   edit: boolean = false;
 
   closeModal() {
     this.onCloseModal.emit(false);
     this.isOpened = false;
+  }
+
+  updateQuestions(eventId: string | undefined) {
+    this.onSaveAnswer.emit(eventId);
   }
 
   proceedEdit() {
