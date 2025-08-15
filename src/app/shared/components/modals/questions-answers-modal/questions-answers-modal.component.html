@@ -26,53 +26,69 @@
           Ответы
         </div>
         <div class="faq-group__items">
-          <div class="faq-card _answered">
+          <div class="faq-card _answered" *ngFor="let question of questionsWithAnswer">
             <div class="faq-card__top _flex">
               <div class="avatar">
-                <img src="assets/img/avatar.svg" alt="">
+                <img src="{{ question.author_photo }}" alt="">
               </div>
               <div class="faq-card__info">
                 <div class="faq-card__wrap _flex">
                   <div class="faq-card__name">
-                    Алиса
+                    {{ question.author_full_name }}
                   </div>
                   <div class="faq-card__badge">
                     <span>Новый вопрос</span>
                   </div>
                 </div>
                 <div class="faq-card__date">
-                  <span>12.01.2023, 12:43</span>
+                  <span>{{ question.created_at | date: 'dd.MM.yyyy, HH:mm' }}</span>
                 </div>
               </div>
             </div>
             <div class="faq-card__desc text16">
-              Вопрос о мероприятие. Подскажите будут ли обсуждены вопросы о..?
+              {{ question.text }}
             </div>
             <div class="answer">
               <div class="answer__top _flex">
                 <div class="answer__name text16 semi-bold-text">
-                  Дарья Солодаева
+                  {{ question.answer.author_full_name }}
                 </div>
-                <div class="answer__badge _flex">
+                <div class="answer__badge _flex" *ngIf="question.answer.is_master">
                   <img src="assets/img/crone2.svg" alt="">
                   <span class="text12">Мастер</span>
                 </div>
               </div>
-              <div class="answer__info">
+              <div class="answer__info" *ngIf="!edit">
                 <div class="answer__info-text">
                   <div class="answer__desc text16">
-                    Ответ в 2 строки. Подскажите подходит ли под данную модель?Ответ о товаре в 2-4 строки. Подскажите подходит ли под данную модель? Подскажите подходит ли .....
-                    Ответ в 2 строки. Подскажите подходит ли под данную модель?Ответ о товаре в 2-4 строки. Подскажите подходит ли под данную модель? Подскажите подходит ли .....
+                      {{ question.answer.text }}
                   </div>
                 </div>
                 <button class="answer__more">
                   еще
                 </button>
               </div>
+              <div class="answer__info" *ngIf="edit">
+                <div class="answer__info-text">
+                  <div class="answer__desc text16">
+                    <div class="fg question-form__field m-text-field">
+                      <textarea cols="30" rows="10">{{ question.answer.text }}</textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="answer__nav _flex-between">
-                <button class="answer__edit m-btn m-btn-black m-btn-bounce">
+                <button class="answer__edit m-btn m-btn-black m-btn-bounce"
+                        *ngIf="!edit"
+                        (click)="proceedEdit()">
                   <img src="assets/img/edit2.svg" alt="">
                   <span>Редактировать ответ</span>
+                </button>
+                <button class="answer__edit m-btn m-btn-primary m-btn-bounce"
+                        *ngIf="edit"
+                        (click)="proceedEdit()">
+                  <img src="assets/img/edit2.svg" alt="">
+                  <span>Сохранить</span>
                 </button>
                 <button class="publication-card__btn publication-card__btn--delete m-btn m-btn-bounce">
                   <img src="assets/img/delete.svg" alt="">

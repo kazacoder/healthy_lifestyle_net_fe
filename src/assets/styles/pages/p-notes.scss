@@ -150,7 +150,17 @@
   }
   &__answer{
     padding-top: 1.875em;
-    display: none;
+    //display: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .5s ease-in-out;
+  }
+  &._open{
+    .faq-card__answer {
+      //display: block;
+      max-height: 700px;
+
+    }
   }
   .question-form__field{
     margin: 0;

@@ -18,10 +18,9 @@ import {PublicationParticipantType} from '../../../../../../types/publication-pa
 import {
   QuestionsAnswersModalComponent
 } from '../../../../../shared/components/modals/questions-answers-modal/questions-answers-modal.component';
-import {Settings} from '../../../../../../settings/settings';
-import {EventQuestionResponseType} from '../../../../../../types/event-question-response.type';
 import {EventService} from '../../../../../shared/services/event.service';
 import {QuestionExtendedType} from '../../../../../../types/question-extended.type';
+import {EventQuestionsAnswersResponseType} from '../../../../../../types/event-questions-answers-response.type';
 
 @Component({
   selector: 'app-publications',
@@ -45,6 +44,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
   participantList: PublicationParticipantType[] = [];
   questionsSubscription: Subscription | null = null;
   questions: QuestionExtendedType[] = [];
+  questionsWithAnswer: QuestionExtendedType[] = [];
 
   constructor(private _snackBar: MatSnackBar,
               private publicationService: PublicationService,
@@ -88,18 +88,19 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     WindowsUtils.fixBody(value.isOpened)
   }
 
-  getEventQuestionResponse(eventId: string, offset: number = 0) {
+  getEventQuestionResponse(eventId: string) {
     this.questionsSubscription = this.eventService
-      .getQuestionsWithAnswers(eventId, Settings.questionDefaultLimit, offset)
+      .getQuestionsWithAnswersAnwWithout(eventId)
       .subscribe({
-        next: (data: EventQuestionResponseType | DefaultResponseType) => {
+        next: (data: EventQuestionsAnswersResponseType | DefaultResponseType) => {
           if ((data as DefaultResponseType).detail !== undefined) {
             const error = (data as DefaultResponseType).detail;
             this._snackBar.open(error);
             throw new Error(error);
           }
-          this.questions = (data as EventQuestionResponseType).results;
-          console.log(this.questions)
+          this.questions = (data as EventQuestionsAnswersResponseType).questions_without_answers;
+          this.questionsWithAnswer = (data as EventQuestionsAnswersResponseType).questions_with_answers;
+          console.log(this.questionsWithAnswer)
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {

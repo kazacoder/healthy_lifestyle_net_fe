@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {QuestionCardComponent} from '../../cards/question-card/question-card.component';
-import {NgClass, NgForOf} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {QuestionExtendedType} from '../../../../../types/question-extended.type';
 
 @Component({
@@ -10,7 +10,9 @@ import {QuestionExtendedType} from '../../../../../types/question-extended.type'
     CloseBtnMobComponent,
     QuestionCardComponent,
     NgClass,
-    NgForOf
+    NgForOf,
+    NgIf,
+    DatePipe
   ],
   standalone: true,
   templateUrl: './questions-answers-modal.component.html',
@@ -19,10 +21,17 @@ import {QuestionExtendedType} from '../../../../../types/question-extended.type'
 export class QuestionsAnswersModalComponent {
   @Input() isOpened: boolean = false;
   @Input() questions: QuestionExtendedType[] = [];
+  @Input() questionsWithAnswer: QuestionExtendedType[] = [];
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter();
+
+  edit: boolean = false;
 
   closeModal() {
     this.onCloseModal.emit(false);
     this.isOpened = false;
+  }
+
+  proceedEdit() {
+    this.edit = !this.edit;
   }
 }

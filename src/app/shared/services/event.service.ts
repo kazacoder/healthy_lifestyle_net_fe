@@ -11,6 +11,7 @@ import {EventResponseType} from '../../../types/event-response.type';
 import {FiltersDataType} from '../../../types/filters-data.type';
 import {ParamsObjectType} from '../../../types/params-object.type';
 import {BookingResponseType} from '../../../types/booking-response.type';
+import {EventQuestionsAnswersResponseType} from '../../../types/event-questions-answers-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -96,6 +97,11 @@ export class EventService {
     return this.http.get<EventQuestionResponseType | DefaultResponseType>(
       `${environment.api}events/${eventId}/questions/`,
       { params });
+  }
+
+  getQuestionsWithAnswersAnwWithout(eventId: string): Observable<EventQuestionsAnswersResponseType | DefaultResponseType> {
+    return this.http.get<EventQuestionsAnswersResponseType | DefaultResponseType>(
+      `${environment.api}events/${eventId}/questions_answers/`, );
   }
 
   getFiltersData(): Observable<FiltersDataType | DefaultResponseType> {

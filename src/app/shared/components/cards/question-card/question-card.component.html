@@ -1,4 +1,4 @@
-<div class="faq-card" [ngClass]="{_new: true}">
+<div class="faq-card" [ngClass]="{_new: true, _open: isAnswerFormOpened}">
   <div class="faq-card__top _flex">
     <div class="avatar">
       <img src="{{ question?.author_photo }}" alt="">
@@ -21,7 +21,9 @@
     {{ question?.text }}
   </div>
   <div class="faq-card__nav">
-    <button class="faq-card__btn _toggle-faq-answer m-btn m-btn-primary m-btn-bounce">
+    <button
+      (click)="toggleAnswerForm()"
+      class="faq-card__btn _toggle-faq-answer m-btn m-btn-primary m-btn-bounce">
       <span>Ответить</span>
     </button>
   </div>

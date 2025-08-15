@@ -14,4 +14,10 @@ import {QuestionExtendedType} from '../../../../../types/question-extended.type'
 })
 export class QuestionCardComponent {
   @Input() question: QuestionExtendedType | null = null;
+  isAnswerFormOpened: boolean = false;
+
+
+  toggleAnswerForm(): void {
+    this.isAnswerFormOpened = !this.isAnswerFormOpened;
+  }
 }
