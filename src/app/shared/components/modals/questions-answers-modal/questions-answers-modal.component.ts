@@ -3,6 +3,7 @@ import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.compone
 import {QuestionCardComponent} from '../../cards/question-card/question-card.component';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {QuestionExtendedType} from '../../../../../types/question-extended.type';
+import {AnswerCardComponent} from '../../cards/answer-card/answer-card.component';
 
 @Component({
   selector: 'questions-answers-modal',
@@ -12,7 +13,8 @@ import {QuestionExtendedType} from '../../../../../types/question-extended.type'
     NgClass,
     NgForOf,
     NgIf,
-    DatePipe
+    DatePipe,
+    AnswerCardComponent
   ],
   standalone: true,
   templateUrl: './questions-answers-modal.component.html',
@@ -25,8 +27,6 @@ export class QuestionsAnswersModalComponent {
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter();
   @Output() onSaveAnswer: EventEmitter<string> = new EventEmitter();
 
-  edit: boolean = false;
-
   closeModal() {
     this.onCloseModal.emit(false);
     this.isOpened = false;
@@ -34,9 +34,5 @@ export class QuestionsAnswersModalComponent {
 
   updateQuestions(eventId: string | undefined) {
     this.onSaveAnswer.emit(eventId);
-  }
-
-  proceedEdit() {
-    this.edit = !this.edit;
   }
 }

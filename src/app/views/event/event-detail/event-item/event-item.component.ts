@@ -57,7 +57,9 @@ export class EventItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.event?.duration && this.event?.time_period) {
       this.periodLabel = CommonUtils.getDurationLabel(this.event!.duration, this.event!.time_period)
     }
-    this.month = CommonUtils.getRussianMonthName(this.event!.date);
+    if (this.event?.date) {
+      this.month = CommonUtils.getRussianMonthName(this.event.date);
+    }
   }
 
   toggleFavorite() {

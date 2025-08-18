@@ -27,6 +27,13 @@
       <span>Ответить</span>
     </button>
   </div>
+  <div class="faq-card__nav" *ngIf="isAnswerFormOpened">
+    <button
+      (click)="toggleAnswerForm()"
+      class="faq-card__btn _toggle-faq-answer m-btn m-btn-gray m-btn-bounce">
+      <span>Отменить</span>
+    </button>
+  </div>
   <div class="faq-card__answer fg" [formGroup]="answerForm"
        [ngClass]="{'_error': (answerForm.get('answer')?.invalid || !hasChanged) &&
        (answerForm.get('answer')?.dirty && answerForm.get('answer')?.touched)}">

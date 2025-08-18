@@ -100,7 +100,6 @@ export class PublicationsComponent implements OnInit, OnDestroy {
           }
           this.questions = (data as EventQuestionsAnswersResponseType).questions_without_answers;
           this.questionsWithAnswer = (data as EventQuestionsAnswersResponseType).questions_with_answers;
-          console.log(this.questionsWithAnswer)
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
