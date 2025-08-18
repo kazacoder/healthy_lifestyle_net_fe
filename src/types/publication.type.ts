@@ -26,7 +26,8 @@ export type PublicationType = {
   author: number,
   time_period: number,
   suit: number,
-  format: number
+  format: number,
+  number_new_questions: number
 }
 
 

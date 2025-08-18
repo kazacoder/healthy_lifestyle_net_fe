@@ -30,6 +30,8 @@ export class QuestionsAnswersModalComponent {
   closeModal() {
     this.onCloseModal.emit(false);
     this.isOpened = false;
+    this.questions = [];
+    this.questionsWithAnswer = [];
   }
 
   updateQuestions(eventId: string | undefined) {

@@ -56,7 +56,9 @@
   <div class="publication-card__bottom">
     <button class="publication-card__answer m-btn-primary m-btn-bounce" (click)="openQuestionsAnswersModal(publication?.id)">
       <div class="publication-card__answer-title">Вопросы/ответы</div>
-      <div class="publication-card__answer-count">15 новых</div>
+      <div class="publication-card__answer-count" *ngIf="publication?.number_new_questions">
+        {{ publication?.number_new_questions | numberToString }}
+      </div>
     </button>
     <button class="publication-card__answer _type2 m-btn-primary m-btn-bounce" (click)="openParticipantsModal(publication?.id)">
       <div class="publication-card__answer-title">Смотреть участников</div>

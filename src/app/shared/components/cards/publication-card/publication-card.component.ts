@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {PublicationService} from '../../../services/publication.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PublicationParticipantType} from '../../../../../types/publication-participant.type';
+import {NumberToStringPipe} from '../../../pipes/number-to-string.pipe';
 
 @Component({
   selector: 'publication-card',
@@ -19,15 +20,15 @@ import {PublicationParticipantType} from '../../../../../types/publication-parti
     NgForOf,
     RouterLink,
     ConfirmModalComponent,
-    NgClass
+    NgClass,
+    NumberToStringPipe
   ],
   standalone: true,
   templateUrl: './publication-card.component.html',
   styleUrl: './publication-card.component.scss'
 })
 export class PublicationCardComponent implements OnInit, OnDestroy {
-  @Input()
-  publication: PublicationType | null = null;
+  @Input() publication: PublicationType | null = null;
   @Output() deletedPublicationId = new EventEmitter<number>();
   @Output() onParticipantsModalOpen = new EventEmitter<{
     isOpened: boolean,

@@ -124,6 +124,20 @@ export class CommonUtils {
     return `${count.toString()} билетов`;
   }
 
+  static getNewWord(count: number): string {
+    const abs = Math.abs(count);       // учитываем возможный минус
+    const mod100 = abs % 100;
+    const mod10 = abs % 10;
+
+    if (mod100 >= 11 && mod100 <= 14) {
+      return  `${count.toString()} новых`;
+    }
+    if (mod10 === 1) {
+      return `${count.toString()} новый`;
+    }
+    return `${count.toString()} новых`;
+  }
+
   static formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0');

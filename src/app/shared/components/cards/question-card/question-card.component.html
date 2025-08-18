@@ -1,4 +1,4 @@
-<div class="faq-card" [ngClass]="{_new: true, _open: isAnswerFormOpened}">
+<div class="faq-card" [ngClass]="{_new: !question?.read_by_author, _open: isAnswerFormOpened}">
   <div class="faq-card__top _flex">
     <div class="avatar">
       <img src="{{ question?.author_photo }}" alt="">

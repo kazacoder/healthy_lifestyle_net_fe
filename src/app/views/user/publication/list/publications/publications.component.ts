@@ -53,6 +53,10 @@ export class PublicationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getPublicationsList();
+  }
+
+  getPublicationsList() {
     this.getEventsListSubscription = this.publicationService.getPublicationsList().subscribe({
       next: (data: PublicationType[] | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
@@ -86,6 +90,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     }
     this.isQuestionsAnswersModalOpened = value.isOpened;
     WindowsUtils.fixBody(value.isOpened)
+    if (!value.isOpened) {
+      this.getPublicationsList();
+    }
   }
 
   getEventQuestionResponse(eventId: string) {
@@ -98,8 +105,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
             this._snackBar.open(error);
             throw new Error(error);
           }
-          this.questions = (data as EventQuestionsAnswersResponseType).questions_without_answers;
-          this.questionsWithAnswer = (data as EventQuestionsAnswersResponseType).questions_with_answers;
+          const response = data as EventQuestionsAnswersResponseType
+          this.questions = response.questions_without_answers;
+          this.questionsWithAnswer = response.questions_with_answers;
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
