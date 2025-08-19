@@ -1,0 +1,19 @@
+<div class="modal" id="thankModal" [ngClass]="{'_active _active2': isOpen}">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top text-center">
+      <div class="text30 text24-tablet semi-bold-text text-center">
+        {{ title }}
+      </div>
+      <div class="text16 font2 medium-text" [innerHTML]="text"></div>
+    </div>
+    <button class="modal__btn m-btn m-btn-primary m-btn-bounce" (click)="closeModal()">
+      <span>{{ btnTitle }}</span>
+<!--      <span>На главную</span>-->
+    </button>
+  </div>
+</div>

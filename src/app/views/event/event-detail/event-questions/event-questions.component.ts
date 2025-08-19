@@ -11,6 +11,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {EventQuestionResponseType} from '../../../../../types/event-question-response.type';
 import {QuestionExtendedType} from '../../../../../types/question-extended.type';
 import {Settings} from '../../../../../settings/settings';
+import {ClaimModalComponent} from '../../../../shared/components/modals/claim-modal/claim-modal.component';
+import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'event-questions',
@@ -18,7 +20,8 @@ import {Settings} from '../../../../../settings/settings';
     EventQuestionItemComponent,
     FormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    ClaimModalComponent
   ],
   standalone: true,
   templateUrl: './event-questions.component.html',
@@ -35,6 +38,7 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
   createQuestionSubscription: Subscription | null = null;
   offset: number = 0;
   showMoreButton: boolean = false;
+  isClaimModalOpen: boolean = false;
   @Input() eventId: string | undefined | null = null;
   @Input() eventAuthor: number | undefined | null = null;
 
@@ -105,6 +109,11 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
         }
       })
     }
+  }
+
+  toggleClaimModal(val: boolean) {
+    this.isClaimModalOpen = val;
+    WindowsUtils.fixBody(val);
   }
 
   ngOnDestroy() {

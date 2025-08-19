@@ -133,10 +133,17 @@
 
   <div class="master-claim">
     <div class="container">
-      <button class="question-form__claim m-btn m-btn-gray m-btn-bounce">
+      <button class="question-form__claim m-btn m-btn-gray m-btn-bounce" (click)="toggleClaimModal(true)">
         <img src="assets/img/info-icon.svg" alt="">
         <span>Пожаловаться на мастера</span>
       </button>
     </div>
   </div>
 </main>
+
+
+<claim-modal
+  type="master"
+  (onCloseModal)="toggleClaimModal($event)"
+  [isOpen]="isClaimModalOpen">
+</claim-modal>

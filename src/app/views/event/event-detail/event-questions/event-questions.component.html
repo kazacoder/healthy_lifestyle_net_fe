@@ -40,7 +40,7 @@
         Всего символов <span class="question-form__field-count" data-id="1">{{ question.length }}</span>/{{ maxQuestionLength }}
       </div>
     </div>
-    <button class="question-form__claim m-btn m-btn-gray m-btn-bounce">
+    <button class="question-form__claim m-btn m-btn-gray m-btn-bounce" (click)="toggleClaimModal(true)">
       <img src="assets/img/info-icon.svg" alt="">
       <span>Пожаловаться на мероприятие</span>
     </button>
@@ -51,3 +51,10 @@
     </div>
   </div>
 </div>
+
+
+<claim-modal
+  type="event"
+  (onCloseModal)="toggleClaimModal($event)"
+  [isOpen]="isClaimModalOpen">
+</claim-modal>

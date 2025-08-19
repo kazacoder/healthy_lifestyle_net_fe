@@ -16,18 +16,21 @@ import {SocialObjectType} from '../../../../types/social-object.type';
 import {CommonUtils} from '../../../shared/utils/common-utils';
 import {FavoriteService} from '../../../shared/services/favorite.service';
 import {AuthService} from '../../../core/auth/auth.service';
+import {ClaimModalComponent} from "../../../shared/components/modals/claim-modal/claim-modal.component";
+import {WindowsUtils} from '../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'app-master-detail',
-  imports: [
-    SwiperNavComponent,
-    SocialsComponent,
-    EventCardComponent,
-    NgForOf,
-    NgIf,
-    ParagraphTextPipe,
-    NgClass
-  ],
+    imports: [
+        SwiperNavComponent,
+        SocialsComponent,
+        EventCardComponent,
+        NgForOf,
+        NgIf,
+        ParagraphTextPipe,
+        NgClass,
+        ClaimModalComponent
+    ],
   standalone: true,
   templateUrl: './master-detail.component.html',
   styleUrl: './master-detail.component.scss',
@@ -37,6 +40,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   masterDetailSubscription: Subscription | null = null;
   toggleFavoriteMasterSubscription: Subscription | null = null;
   isLogged: boolean = false;
+  isClaimModalOpen: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   masterId: string | null | undefined = null;
   master: MasterInfoType | null = null;
@@ -164,6 +168,11 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
           }
         })
     }
+  }
+
+  toggleClaimModal(val: boolean) {
+    this.isClaimModalOpen = val;
+    WindowsUtils.fixBody(val);
   }
 
   ngOnDestroy() {

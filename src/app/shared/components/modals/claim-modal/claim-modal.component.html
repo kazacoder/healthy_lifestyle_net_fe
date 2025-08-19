@@ -1,0 +1,38 @@
+<div class="modal delete-confirm" id="confirmDeleteModal" [ngClass]="{'_active _active2': isOpen}">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top text-center">
+      <div class="text30 text24-tablet semi-bold-text">
+        {{ title }}
+      </div>
+    </div>
+    <form class="modal-form fg" [formGroup]="claimForm"
+          [ngClass]="{'_error': (claimForm.get('claimText')?.invalid) &&
+       (claimForm.get('claimText')?.dirty && claimForm.get('claimText')?.touched)}">
+      <div class="fg">
+        <label>{{ label }}</label>
+        <textarea placeholder="Напишите.." formControlName="claimText"></textarea>
+      </div>
+      <div class="fg__error-text" *ngIf="claimForm.get('claimText')?.errors?.['maxlength']">
+        <div class="text12">Максимальная длина {{ maxClaimLength }} символов!</div>
+      </div>
+      <div class="fg__error-text" *ngIf="claimForm.get('claimText')?.errors?.['required']">
+        <div class="text12">Обязательное поле</div>
+      </div>
+    </form>
+    <button class="modal__btn m-btn m-btn-primary m-btn-bounce" [disabled]="claimForm.invalid" (click)="proceed()">
+      <span>Отправить</span>
+    </button>
+  </div>
+</div>
+
+<info-modal
+  [text]="infoModalText"
+  [title]="infoModalLabel"
+  [isOpen]="isInfoModalOpen"
+  (onCloseModal)="toggleInfoModal($event)">
+</info-modal>
