@@ -23,6 +23,7 @@ import {FavoriteMastersComponent} from './views/user/favorite/favorite-masters/f
 import {FavoriteArticlesComponent} from './views/user/favorite/favorite-articles/favorite-articles.component';
 import {NotificationsComponent} from './views/user/notifications/notifications.component';
 import {PaymentComponent} from './views/user/payment/payment.component';
+import {ChatComponent} from './views/user/chat/chat.component';
 
 export const routes: Routes = [
   {
@@ -44,7 +45,7 @@ export const routes: Routes = [
         children: [
           {path: '', component: UserProfileComponent, title: 'Профиль'},
           {path: 'notifications', component: NotificationsComponent, title: 'Уведомления'},
-          {path: 'messages', component: PageUnderConstructionComponent, title: 'Сообщения'},
+          {path: 'messages', component: ChatComponent, title: 'Сообщения'},
           {path: 'publication', component: PublicationsComponent, title: 'Публикации'},
           {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
           {path: 'publication/:url', component: PublicationComponent, title: 'Редактирование публикации'},
