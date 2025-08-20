@@ -22,6 +22,7 @@ import {FavoriteEventsComponent} from './views/user/favorite/favorite-events/fav
 import {FavoriteMastersComponent} from './views/user/favorite/favorite-masters/favorite-masters.component';
 import {FavoriteArticlesComponent} from './views/user/favorite/favorite-articles/favorite-articles.component';
 import {NotificationsComponent} from './views/user/notifications/notifications.component';
+import {PaymentComponent} from './views/user/payment/payment.component';
 
 export const routes: Routes = [
   {
@@ -47,7 +48,7 @@ export const routes: Routes = [
           {path: 'publication', component: PublicationsComponent, title: 'Публикации'},
           {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
           {path: 'publication/:url', component: PublicationComponent, title: 'Редактирование публикации'},
-          {path: 'payment', component: PageUnderConstructionComponent, title: 'Оплата'},
+          {path: 'payment', component: PaymentComponent, title: 'Оплата'},
           {path: 'notes', component: BookingsComponent, title: 'Предстоящие записи'},
           {path: 'notes/past', component: BookingsComponent, title: 'Прошедшие записи'},
           {path: 'favorite', component: FavoriteComponent, title: 'Избранное', children: [
