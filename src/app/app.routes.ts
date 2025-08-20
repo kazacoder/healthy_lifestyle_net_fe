@@ -21,6 +21,7 @@ import {FavoriteComponent} from './views/user/favorite/favorite.component';
 import {FavoriteEventsComponent} from './views/user/favorite/favorite-events/favorite-events.component';
 import {FavoriteMastersComponent} from './views/user/favorite/favorite-masters/favorite-masters.component';
 import {FavoriteArticlesComponent} from './views/user/favorite/favorite-articles/favorite-articles.component';
+import {NotificationsComponent} from './views/user/notifications/notifications.component';
 
 export const routes: Routes = [
   {
@@ -41,7 +42,7 @@ export const routes: Routes = [
         canActivate: [AuthForwardGuard],
         children: [
           {path: '', component: UserProfileComponent, title: 'Профиль'},
-          {path: 'notifications', component: PageUnderConstructionComponent, title: 'Уведомления'},
+          {path: 'notifications', component: NotificationsComponent, title: 'Уведомления'},
           {path: 'messages', component: PageUnderConstructionComponent, title: 'Сообщения'},
           {path: 'publication', component: PublicationsComponent, title: 'Публикации'},
           {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
