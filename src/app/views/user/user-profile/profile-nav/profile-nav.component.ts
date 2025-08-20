@@ -4,6 +4,8 @@ import {AuthService} from '../../../../core/auth/auth.service';
 import {UserService} from '../../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NgClass, NgIf} from '@angular/common';
+import {ConfirmModalComponent} from '../../../../shared/components/modals/confirm-modal/confirm-modal.component';
+import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'profile-nav',
@@ -11,7 +13,8 @@ import {NgClass, NgIf} from '@angular/common';
     RouterLink,
     RouterLinkActive,
     NgClass,
-    NgIf
+    NgIf,
+    ConfirmModalComponent
   ],
   standalone: true,
   templateUrl: './profile-nav.component.html',
@@ -21,6 +24,7 @@ export class ProfileNavComponent implements AfterContentChecked {
 
   isMaster: boolean = false;
   isOpened: boolean = false;
+  isOpenConfirmModal: boolean = false;
   activeMenuItem: string | undefined = '';
 
   constructor(private authService: AuthService,
@@ -43,6 +47,11 @@ export class ProfileNavComponent implements AfterContentChecked {
     this.userService.removeUserInfo();
     this.router.navigate(['/']).then();
     this._snackBar.open('Вы вышли из системы')
+  }
+
+  toggleExitModal(val: boolean) {
+    this.isOpenConfirmModal = val;
+    WindowsUtils.fixBody(val);
   }
 
   toggleNav(): void {
