@@ -28,6 +28,7 @@
         </div>
         <answer-card
           *ngFor="let question of questionsWithAnswer"
+          (onDeleteAnswer)="updateQuestions($event)"
           [questionsWithAnswer]="question"></answer-card>
       </div>
     </div>

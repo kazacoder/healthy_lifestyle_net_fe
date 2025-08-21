@@ -154,6 +154,9 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height .5s ease-in-out;
+    &._open {
+      max-height: 700px;
+    }
   }
   &._open{
     .faq-card__answer {

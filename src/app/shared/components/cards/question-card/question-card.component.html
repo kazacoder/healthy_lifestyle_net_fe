@@ -35,11 +35,10 @@
     </button>
   </div>
   <div class="faq-card__answer fg" [formGroup]="answerForm"
-       [ngClass]="{'_error': (answerForm.get('answer')?.invalid || !hasChanged) &&
+       [ngClass]="{'_error': answerForm.get('answer')?.invalid &&
        (answerForm.get('answer')?.dirty && answerForm.get('answer')?.touched)}">
     <div class="fg question-form__field m-text-field">
       <textarea maxlength="{{ maxAnswerLength }}"
-                (input)="onAnswerChange()"
                 placeholder="Введите ответ на вопрос. Минимум символов: {{ minAnswerLength }}"
                 formControlName="answer"></textarea>
     </div>
@@ -48,9 +47,6 @@
     </div>
     <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['maxlength']">
       <div class="text12">Максимальная длина ответа {{ maxAnswerLength }} символов!</div>
-    </div>
-    <div class="fg__error-text" *ngIf="!hasChanged && answerSaved">
-      <div class="text12">Ответ не изменен</div>
     </div>
     <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['required']">
       <div class="text12">Обязательное поле</div>

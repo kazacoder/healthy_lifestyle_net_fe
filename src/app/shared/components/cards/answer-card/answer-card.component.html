@@ -31,23 +31,34 @@
           <span class="text12">Мастер</span>
         </div>
       </div>
-      <div class="answer__info" *ngIf="!edit">
+      <div #answerInfo class="answer__info _open" *ngIf="!edit">
         <div class="answer__info-text">
-          <div class="answer__desc text16">
+          <div class="answer__desc text16" [id]="questionsWithAnswer?.id">
             {{ questionsWithAnswer?.answer?.text }}
           </div>
         </div>
-        <button class="answer__more">
-          еще
-        </button>
+        <button class="answer__more" (click)="showMore(answerInfo)">еще</button>
       </div>
-      <div class="answer__info" *ngIf="edit">
-        <div class="answer__info-text">
-          <div class="answer__desc text16">
-            <div class="fg question-form__field m-text-field">
-              <textarea cols="30" rows="10">{{ questionsWithAnswer?.answer?.text }}</textarea>
-            </div>
-          </div>
+      <div class="faq-card__answer _open fg" *ngIf="edit" [formGroup]="answerForm"
+           [ngClass]="{'_error': answerForm.get('answer')?.invalid &&
+       (answerForm.get('answer')?.dirty && answerForm.get('answer')?.touched)}">
+        <div class="fg question-form__field m-text-field">
+          <textarea maxlength="{{ maxAnswerLength }}"
+                    (input)="onAnswerChange()"
+                    placeholder="Введите ответ на вопрос. Минимум символов: {{ minAnswerLength }}"
+                    formControlName="answer"></textarea>
+        </div>
+        <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['minlength']">
+          <div class="text12">Введите минимум {{ minAnswerLength }} символов!</div>
+        </div>
+        <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['maxlength']">
+          <div class="text12">Максимальная длина ответа {{ maxAnswerLength }} символов!</div>
+        </div>
+        <div class="fg__error-text" *ngIf="!hasChanged && answerSaved">
+          <div class="text12">Ответ не изменен</div>
+        </div>
+        <div class="fg__error-text" *ngIf="answerForm.get('answer')?.errors?.['required']">
+          <div class="text12">Обязательное поле</div>
         </div>
       </div>
       <div class="answer__nav _flex-between">
@@ -83,7 +94,7 @@
           </button>
           <button class="answer__edit m-btn m-btn-gray m-btn-bounce"
                   *ngIf="edit"
-                  (click)="toggleEdit()">
+                  (click)="cancel()">
             <span>Отменить</span>
           </button>
         </div>
@@ -99,6 +110,10 @@
 
 <confirm-modal
   (onCloseModal)="toggleDeleteModal($event)"
-  (onConfirmClick)="removeAnswer()"
+  (onConfirmClick)="removeAnswer(questionsWithAnswer?.event?.toString())"
   [isOpen]="isOpenConfirmModal"
   [text]="'Вы действительно хотите удалить ответ?'"></confirm-modal>
+
+
+
+

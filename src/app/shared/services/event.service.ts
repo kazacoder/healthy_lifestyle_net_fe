@@ -83,6 +83,10 @@ export class EventService {
       {text: text})
   }
 
+  deleteAnswer(answerId: number): Observable<null | DefaultResponseType> {
+    return this.http.delete<null | DefaultResponseType>(`${environment.api}event-answers/${answerId}/`)
+  }
+
   getQuestionsWithAnswers(eventId: string, limit?: number, offset?: number): Observable<EventQuestionResponseType | DefaultResponseType> {
     let params = new HttpParams();
 
