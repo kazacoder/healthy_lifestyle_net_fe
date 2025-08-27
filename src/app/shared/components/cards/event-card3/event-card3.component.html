@@ -1,13 +1,13 @@
 <div class="event-card2 event-card3" *ngIf="event">
   <div class="event-card2__top">
-    <a href="" class="event-card2__img m-backdrop _scale-img">
-      <img src="/assets/img/{{ event?.img }}.webp" alt="">
+    <a routerLink="/event/{{ event.id }}" class="event-card2__img m-backdrop _scale-img">
+      <img src="{{ event.image }}" alt="">
     </a>
   </div>
   <div class="event-card2__badges">
     <div class="day-badge">
       <div class="text24 text14-tablet bold-text font2">{{ event?.day }}</div>
-      <div class="text12 text14-tablet">{{ event?.month }}</div>
+      <div class="text12 text14-tablet">{{ getRussianMonthName(event.date) }}</div>
     </div>
   </div>
   <div class="event-card3__title">

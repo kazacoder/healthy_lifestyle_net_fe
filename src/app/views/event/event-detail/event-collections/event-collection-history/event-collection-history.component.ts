@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, Input} from '@angular/core';
+import {AfterContentChecked, Component, CUSTOM_ELEMENTS_SCHEMA, Input} from '@angular/core';
 import {SwiperNavComponent} from '../../../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element';
 import {EventCard3Component} from '../../../../../shared/components/cards/event-card3/event-card3.component';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {EventType} from '../../../../../../types/event.type';
 
 @Component({
   selector: 'event-collection-history',
@@ -10,16 +11,17 @@ import {NgClass, NgForOf} from '@angular/common';
     SwiperNavComponent,
     EventCard3Component,
     NgForOf,
-    NgClass
+    NgClass,
+    NgIf
   ],
   standalone: true,
   templateUrl: './event-collection-history.component.html',
   styleUrl: './event-collection-history.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class EventCollectionHistoryComponent implements AfterViewInit {
+export class EventCollectionHistoryComponent implements AfterContentChecked {
   @Input() title: string = '';
-  protected readonly tmpEvent = tmpEvent;
+  @Input() events: EventType[] = [];
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
@@ -37,7 +39,7 @@ export class EventCollectionHistoryComponent implements AfterViewInit {
     },
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentChecked(): void {
     this.eventSwiper = document.querySelector('.event-swiper-history');
     if (this.eventSwiper) {
       Object.assign(this.eventSwiper, this.eventSwiperParams);
@@ -46,18 +48,3 @@ export class EventCollectionHistoryComponent implements AfterViewInit {
   }
 }
 
-
-const tmpEvent = [
-  {
-    img: "event4",
-    day: "15",
-    month: "Декабря",
-    title: "Парная йога",
-  },
-  {
-    img: "event5",
-    day: "15",
-    month: "Декабря",
-    title: "Парная йога",
-  },
-]

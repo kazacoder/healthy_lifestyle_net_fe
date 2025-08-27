@@ -18,19 +18,26 @@ import {FavoriteService} from '../../../shared/services/favorite.service';
 import {AuthService} from '../../../core/auth/auth.service';
 import {ClaimModalComponent} from "../../../shared/components/modals/claim-modal/claim-modal.component";
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
+import {
+  EventCollectionMasterComponent
+} from '../../event/event-detail/event-collections/event-collection-master/event-collection-master.component';
+import {EventService} from '../../../shared/services/event.service';
+import {EventResponseType} from '../../../../types/event-response.type';
+import {EventType} from '../../../../types/event.type';
 
 @Component({
   selector: 'app-master-detail',
-    imports: [
-        SwiperNavComponent,
-        SocialsComponent,
-        EventCardComponent,
-        NgForOf,
-        NgIf,
-        ParagraphTextPipe,
-        NgClass,
-        ClaimModalComponent
-    ],
+  imports: [
+    SwiperNavComponent,
+    SocialsComponent,
+    EventCardComponent,
+    NgForOf,
+    NgIf,
+    ParagraphTextPipe,
+    NgClass,
+    ClaimModalComponent,
+    EventCollectionMasterComponent
+  ],
   standalone: true,
   templateUrl: './master-detail.component.html',
   styleUrl: './master-detail.component.scss',
@@ -38,6 +45,7 @@ import {WindowsUtils} from '../../../shared/utils/windows-utils';
 })
 export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   masterDetailSubscription: Subscription | null = null;
+  mastersEventSubscription: Subscription | null = null;
   toggleFavoriteMasterSubscription: Subscription | null = null;
   isLogged: boolean = false;
   isClaimModalOpen: boolean = false;
@@ -47,7 +55,9 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   hideNavigation: boolean = false;
   socialObject: SocialObjectType | null = null
   masterSlider: SwiperContainer | null = null;
-  specialityList: { speciality: string, experience: string }[] = []
+  specialityList: { speciality: string, experience: string }[] = [];
+  pastMasterEvents: EventType[] = [];
+  upcomingMasterEvents: EventType[] = [];
   masterSliderParams = {
     slidesPerView: "auto",
     spaceBetween: 0,
@@ -75,7 +85,8 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private _snackBar: MatSnackBar,
               private favoriteService: FavoriteService,
-              private authService: AuthService,) {
+              private authService: AuthService,
+              private eventService: EventService) {
   }
 
   ngOnInit() {
@@ -83,6 +94,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
       this.isLogged = isLogged;
       this.getMasterDetail();
+      this.getMastersEvents();
     });
   }
 
@@ -119,6 +131,42 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               instagram: this.master.instagram,
             }
             this.hideNavigation = (+!!this.master.photo + this.master.additional_images.length) < 2;
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            if (errorResponse.error && errorResponse.error.detail) {
+              if (errorResponse.status === 404) {
+                this.router.navigate(['404']).then()
+              } else {
+                this._snackBar.open(errorResponse.error.detail)
+              }
+            } else {
+              this._snackBar.open('Ошибка получения данных')
+            }
+          }
+        });
+    }
+  }
+
+  getMastersEvents() {
+    if (this.masterId) {
+      this.mastersEventSubscription = this.eventService.getEventsList(100, 0, {ordering: ['-date'], master: [this.masterId]})
+        .subscribe({
+          next: (data: EventResponseType | DefaultResponseType) => {
+            if ((data as DefaultResponseType).detail !== undefined) {
+              const error = (data as DefaultResponseType).detail;
+              this._snackBar.open(error);
+              throw new Error(error);
+            }
+            const events = (data as EventResponseType).results;
+            const today = new Date();
+            today.setHours(3, 0, 0, 0);
+            this.pastMasterEvents = events.filter(item => {
+              return new Date(item.date) < today;
+            });
+            this.upcomingMasterEvents = events.filter(item => {
+              return new Date(item.date) >= today;
+            });
+            this.upcomingMasterEvents.sort((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf())
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.detail) {
@@ -177,6 +225,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.masterDetailSubscription?.unsubscribe();
+    this.mastersEventSubscription?.unsubscribe();
     this.toggleFavoriteMasterSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
   }

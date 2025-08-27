@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container"  *ngIf="events.length > 0">
   <div class="events2__top">
     <a href="" class="title-link">
             <span class="text34 text20-tablet">
@@ -9,7 +9,7 @@
   <div class="events-slider2 events-slider3 slider events-slider-history" [ngClass]="{'_hide-buttons': true}">
     <div class="slider__wrap">
       <swiper-container class="event-swiper-history" init="false">
-        <swiper-slide class="swiper-slide" *ngFor="let event of tmpEvent">
+        <swiper-slide class="swiper-slide" *ngFor="let event of events">
           <event-card3 [event]="event"></event-card3>
         </swiper-slide>
       </swiper-container>

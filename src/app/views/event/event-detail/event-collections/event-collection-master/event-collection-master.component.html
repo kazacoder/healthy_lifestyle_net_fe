@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="events.length > 0">
   <div class="events2__top">
     <a href="" class="title-link">
             <span class="text34 text20-tablet">
@@ -6,15 +6,15 @@
             </span>
     </a>
   </div>
-  <div class="events-slider2 events-slider3 slider events-slider-master" *ngIf="tmpEvent">
+  <div class="events-slider2 events-slider3 slider events-slider-master">
     <div class="slider__wrap">
-      <swiper-container class="event-swiper-master" init="false">
-        <swiper-slide class="swiper-slide" *ngFor="let event of tmpEvent">
+      <swiper-container class="event-swiper-master{{ index }}" init="false">
+        <swiper-slide class="swiper-slide" *ngFor="let event of events">
           <event-card3 [event]="event"></event-card3>
         </swiper-slide>
       </swiper-container>
     </div>
-    <swiper-nav></swiper-nav>
+    <swiper-nav [index]="index"></swiper-nav>
   </div>
 </div>
 

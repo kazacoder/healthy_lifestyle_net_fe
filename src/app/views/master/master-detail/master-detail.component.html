@@ -120,15 +120,17 @@
   </div>
 
   <div class="events2">
-    <!--    @@include('components/events/_events-collection.html',{-->
-    <!--    "title":"Ближайшие мероприятия мастера"-->
-    <!--    })-->
+    <event-collection-master
+      [events]="upcomingMasterEvents"
+      [title]="'Ближайшие мероприятия мастера'"
+      index="1"></event-collection-master>
   </div>
 
   <div class="events2">
-    <!--    @@include('components/events/_events-collection.html',{-->
-    <!--    "title":"Прошедшие мероприятия мастера"-->
-    <!--    })-->
+    <event-collection-master
+      [events]="pastMasterEvents"
+      [title]="'Прошедшие мероприятия мастера'"
+      index="2"></event-collection-master>
   </div>
 
   <div class="master-claim">

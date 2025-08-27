@@ -12,6 +12,8 @@ import {EventService} from '../../../shared/services/event.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../../core/auth/auth.service';
+import {EventResponseType} from '../../../../types/event-response.type';
+import {CommonUtils} from '../../../shared/utils/common-utils';
 
 @Component({
   selector: 'app-event-detail',
@@ -28,6 +30,9 @@ import {AuthService} from '../../../core/auth/auth.service';
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: EventType | null = null;
+  masterEvents: EventType[] = [];
+  // ToDo доделать историю
+  historyEvents: EventType[] = [];
   address: string = ''
   eventId: string | null | undefined = null;
   placesBooked: number = 0;
@@ -35,6 +40,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   getBookedPlacesCountSubscription: Subscription | null = null;
+  mastersEventSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,
               private eventService: EventService,
@@ -67,7 +73,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           })
       }
     });
-    this.getEvent()
+    this.getEvent();
   }
 
   getEvent() {
@@ -80,6 +86,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             throw new Error(error);
           }
           this.event = data as EventType;
+          this.getMastersEvents(this.event.author.toString());
           this.address = this.event.city ? `г. ${this.event.city}` : '';
           this.address += this.event.street ? `, ул. ${this.event.street}` : '';
           this.address += this.event.house ? `, д. ${this.event.house}` : '';
@@ -97,8 +104,32 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  getMastersEvents(masterId: string) {
+    this.mastersEventSubscription = this.eventService.getEventsList(100, 0,
+      {ordering: ['date'], master: [masterId], date_from: [CommonUtils.formatDate(new Date())]}
+    )
+      .subscribe({
+        next: (data: EventResponseType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.masterEvents = (data as EventResponseType).results
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      });
+  }
+
   ngOnDestroy() {
     this.getEventSubscription?.unsubscribe();
+    this.mastersEventSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
     this.getBookedPlacesCountSubscription?.unsubscribe();
   }
