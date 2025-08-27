@@ -49,31 +49,33 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.eventId = this.activatedRoute.snapshot.paramMap.get('url');
-    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
-      this.isLogged = isLogged;
-      if (this.eventId && isLogged) {
-        this.getBookedPlacesCountSubscription = this.eventService.getBookedEventPlacesByUser(this.eventId)
-          .subscribe({
-            next: (data: { places: number } | DefaultResponseType) => {
-              if ((data as DefaultResponseType).detail !== undefined) {
-                const error = (data as DefaultResponseType).detail;
-                this._snackBar.open(error);
-                throw new Error(error);
+    this.activatedRoute.params.subscribe(param => {
+      this.eventId = param['url'];
+      this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
+        this.isLogged = isLogged;
+        if (this.eventId && isLogged) {
+          this.getBookedPlacesCountSubscription = this.eventService.getBookedEventPlacesByUser(this.eventId)
+            .subscribe({
+              next: (data: { places: number } | DefaultResponseType) => {
+                if ((data as DefaultResponseType).detail !== undefined) {
+                  const error = (data as DefaultResponseType).detail;
+                  this._snackBar.open(error);
+                  throw new Error(error);
+                }
+                this.placesBooked = (data as { places: number }).places;
+              },
+              error: (errorResponse: HttpErrorResponse) => {
+                if (errorResponse.error && errorResponse.error.detail) {
+                  this._snackBar.open(errorResponse.error.detail)
+                } else {
+                  this._snackBar.open('Ошибка получения данных')
+                }
               }
-              this.placesBooked = (data as { places: number }).places;
-            },
-            error: (errorResponse: HttpErrorResponse) => {
-              if (errorResponse.error && errorResponse.error.detail) {
-                this._snackBar.open(errorResponse.error.detail)
-              } else {
-                this._snackBar.open('Ошибка получения данных')
-              }
-            }
-          })
-      }
-    });
-    this.getEvent();
+            })
+        }
+      });
+      this.getEvent();
+    })
   }
 
   getEvent() {
@@ -115,7 +117,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             this._snackBar.open(error);
             throw new Error(error);
           }
-          this.masterEvents = (data as EventResponseType).results
+          this.masterEvents = (data as EventResponseType).results.filter(item => item.id.toString() !== this!.eventId)
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
