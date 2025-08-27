@@ -13,6 +13,7 @@ import {QuestionExtendedType} from '../../../../../types/question-extended.type'
 import {Settings} from '../../../../../settings/settings';
 import {ClaimModalComponent} from '../../../../shared/components/modals/claim-modal/claim-modal.component';
 import {WindowsUtils} from '../../../../shared/utils/windows-utils';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'event-questions',
@@ -39,26 +40,33 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
   offset: number = 0;
   showMoreButton: boolean = false;
   isClaimModalOpen: boolean = false;
-  @Input() eventId: string | undefined | null = null;
+  eventId: string | undefined | null = null;
   @Input() eventAuthor: number | undefined | null = null;
 
   constructor(private userService: UserService,
               private eventService: EventService,
-              private _snackBar: MatSnackBar,) {
+              private _snackBar: MatSnackBar,
+              private activatedRoute: ActivatedRoute,) {
 
   }
 
   ngOnInit() {
     this.isLoggedSubscription = this.userService.isLoggedObservable.subscribe(isLogged => {
       this.isLogged = isLogged;
+    });
+
+    this.activatedRoute.params.subscribe(param => {
+      this.eventId = param['url'];
+      if (this.eventId) {
+        this.getEventQuestionResponse(this.eventId);
+      }
     })
-    this.getEventQuestionResponse();
   }
 
-  getEventQuestionResponse(offset: number = 0) {
-    if (this.eventId) {
+  getEventQuestionResponse(eventId: string, offset: number = 0) {
+    if (eventId) {
       this.answersSubscription = this.eventService
-        .getQuestionsWithAnswers(this.eventId, Settings.questionDefaultLimit, offset)
+        .getQuestionsWithAnswers(eventId, Settings.questionDefaultLimit, offset)
         .subscribe({
           next: (data: EventQuestionResponseType | DefaultResponseType) => {
             if ((data as DefaultResponseType).detail !== undefined) {
@@ -98,7 +106,7 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
           }
           this._snackBar.open('Ваш вопрос успешно отправлен');
           this.question = '';
-          this.getEventQuestionResponse();
+          this.getEventQuestionResponse(this.eventId!);
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
