@@ -36,6 +36,7 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
   isLoggedSubscription: Subscription | null = null;
   questionResponse: EventQuestionResponseType | null = null;
   answersSubscription: Subscription | null = null;
+  activatedRouterSubscription: Subscription | null = null;
   createQuestionSubscription: Subscription | null = null;
   offset: number = 0;
   showMoreButton: boolean = false;
@@ -55,7 +56,7 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
       this.isLogged = isLogged;
     });
 
-    this.activatedRoute.params.subscribe(param => {
+    this.activatedRouterSubscription = this.activatedRoute.params.subscribe(param => {
       this.eventId = param['url'];
       if (this.eventId) {
         this.getEventQuestionResponse(this.eventId);
@@ -126,6 +127,7 @@ export class EventQuestionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.isLoggedSubscription?.unsubscribe()
+    this.activatedRouterSubscription?.unsubscribe()
     this.createQuestionSubscription?.unsubscribe()
     this.answersSubscription?.unsubscribe()
   }

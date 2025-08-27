@@ -40,6 +40,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   getBookedPlacesCountSubscription: Subscription | null = null;
+  activatedRouterSubscription: Subscription | null = null;
   mastersEventSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -49,7 +50,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(param => {
+    this.activatedRouterSubscription = this.activatedRoute.params.subscribe(param => {
       this.eventId = param['url'];
       this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
         this.isLogged = isLogged;
@@ -131,6 +132,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getEventSubscription?.unsubscribe();
+    this.activatedRouterSubscription?.unsubscribe();
     this.mastersEventSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
     this.getBookedPlacesCountSubscription?.unsubscribe();
