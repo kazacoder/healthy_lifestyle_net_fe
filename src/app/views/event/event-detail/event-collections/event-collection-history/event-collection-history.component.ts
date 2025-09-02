@@ -25,15 +25,10 @@ export class EventCollectionHistoryComponent implements AfterContentChecked {
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
-    slidesPerView: "auto",
     spaceBetween: 0,
+    slidesPerView: "auto",
+    freeMode: true,
     watchSlidesProgress: true,
-    preventClicks :true,
-    a11y: false,
-    observer: true,
-    observeParents: true,
-    observeSlideChildren: true,
-    cssMode: true,
     navigation: {
       nextEl: `.events-slider-history .swiper-button-next`,
       prevEl: `.events-slider-history .swiper-button-prev`,
