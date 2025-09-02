@@ -42,6 +42,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   getBookedPlacesCountSubscription: Subscription | null = null;
   activatedRouterSubscription: Subscription | null = null;
   mastersEventSubscription: Subscription | null = null;
+  recentEventSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,
               private eventService: EventService,
@@ -76,6 +77,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         }
       });
       this.getEvent();
+      this.getRecentEvents();
     })
   }
 
@@ -130,10 +132,32 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  getRecentEvents() {
+    this.recentEventSubscription = this.eventService.getRecentEventList()
+      .subscribe({
+        next: (data: EventType[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.historyEvents = (data as EventType[]).filter(item => item.id.toString() !== this!.eventId)
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      });
+  }
+
   ngOnDestroy() {
     this.getEventSubscription?.unsubscribe();
     this.activatedRouterSubscription?.unsubscribe();
     this.mastersEventSubscription?.unsubscribe();
+    this.recentEventSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
     this.getBookedPlacesCountSubscription?.unsubscribe();
   }
