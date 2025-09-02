@@ -33,6 +33,7 @@ export class EventCollectionHistoryComponent implements AfterContentChecked {
     observer: true,
     observeParents: true,
     observeSlideChildren: true,
+    cssMode: true,
     navigation: {
       nextEl: `.events-slider-history .swiper-button-next`,
       prevEl: `.events-slider-history .swiper-button-prev`,

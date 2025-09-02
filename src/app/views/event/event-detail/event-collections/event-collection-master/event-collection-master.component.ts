@@ -33,6 +33,7 @@ export class EventCollectionMasterComponent implements AfterContentChecked {
     observer: true,
     observeParents: true,
     observeSlideChildren: true,
+    cssMode: true,
     navigation: {
       nextEl: `.events-slider-master .swiper-button-next`,
       prevEl: `.events-slider-master .swiper-button-prev`,
@@ -53,37 +54,6 @@ export class EventCollectionMasterComponent implements AfterContentChecked {
       this.eventSwiper.initialize();
     }
   }
-
-  protected readonly tmpEvent = tmpEvent;
 }
 
 
-const tmpEvent = [
-  {
-    img: "event4",
-    day: "15",
-    month: "Декабря",
-    title: "Парная йога",
-  },
-
-  {
-    img: "event5",
-    day: "15",
-    month: "Декабря",
-    title: "Парная йога",
-  },
-
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    title: "Баня с Валентиной Солодкиной",
-  },
-
-  {
-    img: "event6",
-    day: "15",
-    month: "Декабря",
-    title: "Баня с Валентиной Солодкиной",
-  },
-]
