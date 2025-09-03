@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit} from '@angular/core';
 import {SwiperNavComponent} from '../../../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {NgForOf, NgIf} from '@angular/common';
@@ -18,7 +18,7 @@ import {EventType} from '../../../../../../types/event.type';
   styleUrl: './event-collection-master.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class EventCollectionMasterComponent implements OnInit {
+export class EventCollectionMasterComponent implements OnInit, AfterViewChecked {
   @Input() title: string = '';
   @Input() index: string = '';
   @Input() events: EventType[] = [];
@@ -35,7 +35,11 @@ export class EventCollectionMasterComponent implements OnInit {
     },
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+  }
+
+  ngAfterViewChecked(): void {
     this.eventSwiper = document.querySelector('.event-swiper-master' + this.index);
     if (this.index) {
       this.eventSwiperParams.navigation = {

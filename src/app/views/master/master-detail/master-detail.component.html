@@ -119,18 +119,48 @@
     </div>
   </div>
 
-  <div class="events2">
-    <event-collection-master
-      [events]="upcomingMasterEvents"
-      [title]="'Ближайшие мероприятия мастера'"
-      index="1"></event-collection-master>
+  <div class="events2" *ngIf="showUpcomingEventsSlider">
+    <div class="container">
+      <div class="events2__top">
+        <a href="" class="title-link">
+            <span class="text34 text20-tablet">
+                Ближайшие мероприятия мастера
+            </span>
+        </a>
+      </div>
+      <div class="events-slider2 events-slider3 slider events-slider-master">
+        <div class="slider__wrap">
+          <swiper-container class="event-swiper-master-upcoming" init="false">
+            <swiper-slide class="swiper-slide swiper-slide-padding" *ngFor="let event of upcomingMasterEvents">
+              <event-card3 [event]="event"></event-card3>
+            </swiper-slide>
+          </swiper-container>
+        </div>
+        <swiper-nav [index]="'upcoming'"></swiper-nav>
+      </div>
+    </div>
   </div>
 
-  <div class="events2">
-    <event-collection-master
-      [events]="pastMasterEvents"
-      [title]="'Прошедшие мероприятия мастера'"
-      index="2"></event-collection-master>
+  <div class="events2" *ngIf="showPastEventsSlider">
+    <div class="container">
+      <div class="events2__top">
+        <a href="" class="title-link">
+            <span class="text34 text20-tablet">
+                Прошедшие мероприятия мастера
+            </span>
+        </a>
+      </div>
+      <div class="events-slider2 events-slider3 slider events-slider-master">
+        <div class="slider__wrap">
+          <swiper-container class="event-swiper-master-past" init="false">
+            <swiper-slide class="swiper-slide swiper-slide-padding" *ngFor="let event of pastMasterEvents">
+              <event-card3 [event]="event"></event-card3>
+            </swiper-slide>
+          </swiper-container>
+        </div>
+        <swiper-nav [index]="'past'"></swiper-nav>
+      </div>
+    </div>
   </div>
 
   <div class="master-claim">

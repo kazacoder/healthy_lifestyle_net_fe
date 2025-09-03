@@ -18,12 +18,10 @@ import {FavoriteService} from '../../../shared/services/favorite.service';
 import {AuthService} from '../../../core/auth/auth.service';
 import {ClaimModalComponent} from "../../../shared/components/modals/claim-modal/claim-modal.component";
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
-import {
-  EventCollectionMasterComponent
-} from '../../event/event-detail/event-collections/event-collection-master/event-collection-master.component';
 import {EventService} from '../../../shared/services/event.service';
 import {EventResponseType} from '../../../../types/event-response.type';
 import {EventType} from '../../../../types/event.type';
+import {EventCard3Component} from '../../../shared/components/cards/event-card3/event-card3.component';
 
 @Component({
   selector: 'app-master-detail',
@@ -36,7 +34,7 @@ import {EventType} from '../../../../types/event.type';
     ParagraphTextPipe,
     NgClass,
     ClaimModalComponent,
-    EventCollectionMasterComponent
+    EventCard3Component
   ],
   standalone: true,
   templateUrl: './master-detail.component.html',
@@ -79,6 +77,32 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       prevEl: `.master-slider2 .swiper-button-prev`,
     },
   }
+
+  pastEventSwiper: SwiperContainer | null = null;
+  pastEventSwiperParams = {
+    spaceBetween: 0,
+    slidesPerView: "auto",
+    freeMode: true,
+    watchSlidesProgress: true,
+    navigation: {
+      nextEl: `#swiper-button-next-past`,
+      prevEl: `#swiper-button-prev-past`,
+    },
+  }
+  showPastEventsSlider: boolean = true;
+
+  upcomingEventSwiper: SwiperContainer | null = null;
+  upcomingEventSwiperParams = {
+    spaceBetween: 0,
+    slidesPerView: "auto",
+    freeMode: true,
+    watchSlidesProgress: true,
+    navigation: {
+      nextEl: `#swiper-button-next-upcoming`,
+      prevEl: `#swiper-button-prev-upcoming`,
+    },
+  }
+  showUpcomingEventsSlider: boolean = true;
 
   constructor(private masterService: MasterService,
               private router: Router,
@@ -163,9 +187,11 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
             this.pastMasterEvents = events.filter(item => {
               return new Date(item.date) < today;
             });
+            this.showPastEventsSlider = this.pastMasterEvents.length > 0
             this.upcomingMasterEvents = events.filter(item => {
               return new Date(item.date) >= today;
             });
+            this.showUpcomingEventsSlider = this.upcomingMasterEvents.length > 0
             this.upcomingMasterEvents.sort((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf())
           },
           error: (errorResponse: HttpErrorResponse) => {
@@ -188,6 +214,18 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.masterSlider) {
       Object.assign(this.masterSlider, this.masterSliderParams);
       this.masterSlider.initialize();
+    }
+
+    this.pastEventSwiper = document.querySelector('.event-swiper-master-past');
+    if (this.pastEventSwiper) {
+      Object.assign(this.pastEventSwiper, this.pastEventSwiperParams);
+      this.pastEventSwiper.initialize();
+    }
+
+    this.upcomingEventSwiper = document.querySelector('.event-swiper-master-upcoming');
+    if (this.upcomingEventSwiper) {
+      Object.assign(this.upcomingEventSwiper, this.upcomingEventSwiperParams);
+      this.upcomingEventSwiper.initialize();
     }
   }
 

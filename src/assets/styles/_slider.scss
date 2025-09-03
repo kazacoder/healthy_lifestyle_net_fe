@@ -14,6 +14,9 @@
     &-slide{
       padding-right: .625em;
       height: auto;
+      &-padding {
+        padding-right: .625em!important;
+      }
     }
     &-button{
       transition: all .3s;

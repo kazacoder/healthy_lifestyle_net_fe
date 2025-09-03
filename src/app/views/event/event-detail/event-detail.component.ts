@@ -3,7 +3,6 @@ import {EventItemComponent} from './event-item/event-item.component';
 import {EventDescComponent} from './event-desc/event-desc.component';
 import {EventQuestionsComponent} from './event-questions/event-questions.component';
 import {EventAddressComponent} from './event-address/event-address.component';
-import {EventCollectionsComponent} from './event-collections/event-collections.component';
 import {EventType} from '../../../../types/event.type';
 import {Subscription} from 'rxjs';
 import {DefaultResponseType} from '../../../../types/default-response.type';
@@ -29,7 +28,6 @@ import {SwiperContainer} from 'swiper/element';
     EventDescComponent,
     EventQuestionsComponent,
     EventAddressComponent,
-    EventCollectionsComponent,
     EventCollectionHistoryComponent,
     EventCard3Component,
     NgForOf,
