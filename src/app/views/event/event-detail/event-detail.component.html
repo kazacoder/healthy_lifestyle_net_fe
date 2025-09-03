@@ -24,7 +24,32 @@
     <event-address></event-address>
   </div>
 
-  <event-collections
-    [historyEvents]="historyEvents"
-    [masterEvents]="masterEvents"></event-collections>
+
+  <div class="container" id="masterEvents">
+    <div class="events2__top">
+      <a href="" class="title-link">
+            <span class="text34 text20-tablet">
+                Другие мероприятия мастера
+            </span>
+      </a>
+    </div>
+    <div class="events-slider2 events-slider3 slider events-slider-master">
+      <div class="slider__wrap">
+        <swiper-container class="event-swiper-master" init="false">
+          <swiper-slide class="swiper-slide" *ngFor="let event of masterEvents">
+            <event-card3 [event]="event"></event-card3>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+      <swiper-nav></swiper-nav>
+    </div>
+  </div>
+
+
+  <div class="events2" id="recentEvents">
+    <event-collection-history
+      [events]="historyEvents"
+      [title]="'Вы смотрели'"></event-collection-history>
+  </div>
+
 </main>

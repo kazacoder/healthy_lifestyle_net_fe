@@ -1,4 +1,4 @@
-import {AfterContentChecked, Component, CUSTOM_ELEMENTS_SCHEMA, Input} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit} from '@angular/core';
 import {SwiperNavComponent} from '../../../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {EventCard3Component} from '../../../../../shared/components/cards/event-card3/event-card3.component';
@@ -19,7 +19,7 @@ import {EventType} from '../../../../../../types/event.type';
   styleUrl: './event-collection-history.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class EventCollectionHistoryComponent implements AfterContentChecked {
+export class EventCollectionHistoryComponent implements OnInit {
   @Input() title: string = '';
   @Input() events: EventType[] = [];
 
@@ -35,7 +35,7 @@ export class EventCollectionHistoryComponent implements AfterContentChecked {
     },
   }
 
-  ngAfterContentChecked(): void {
+  ngOnInit(): void {
     this.eventSwiper = document.querySelector('.event-swiper-history');
     if (this.eventSwiper) {
       Object.assign(this.eventSwiper, this.eventSwiperParams);

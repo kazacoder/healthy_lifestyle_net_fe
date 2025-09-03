@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit} from '@angular/core';
 import {EventItemComponent} from './event-item/event-item.component';
 import {EventDescComponent} from './event-desc/event-desc.component';
 import {EventQuestionsComponent} from './event-questions/event-questions.component';
@@ -14,6 +14,13 @@ import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../../core/auth/auth.service';
 import {EventResponseType} from '../../../../types/event-response.type';
 import {CommonUtils} from '../../../shared/utils/common-utils';
+import {
+  EventCollectionHistoryComponent
+} from './event-collections/event-collection-history/event-collection-history.component';
+import {EventCard3Component} from '../../../shared/components/cards/event-card3/event-card3.component';
+import {NgForOf, NgIf} from '@angular/common';
+import {SwiperNavComponent} from '../../../shared/components/ui/swiper-nav/swiper-nav.component';
+import {SwiperContainer} from 'swiper/element';
 
 @Component({
   selector: 'app-event-detail',
@@ -22,11 +29,17 @@ import {CommonUtils} from '../../../shared/utils/common-utils';
     EventDescComponent,
     EventQuestionsComponent,
     EventAddressComponent,
-    EventCollectionsComponent
+    EventCollectionsComponent,
+    EventCollectionHistoryComponent,
+    EventCard3Component,
+    NgForOf,
+    SwiperNavComponent,
+    NgIf
   ],
   standalone: true,
   templateUrl: './event-detail.component.html',
-  styleUrl: './event-detail.component.scss'
+  styleUrl: './event-detail.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: EventType | null = null;
@@ -43,6 +56,20 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   activatedRouterSubscription: Subscription | null = null;
   mastersEventSubscription: Subscription | null = null;
   recentEventSubscription: Subscription | null = null;
+  masterHistorySwiper: HTMLElement | null = null;
+  recentEventsSwiper: HTMLElement | null = null;
+
+  eventSwiper: SwiperContainer | null = null;
+  eventSwiperParams = {
+    spaceBetween: 0,
+    slidesPerView: "auto",
+    freeMode: true,
+    watchSlidesProgress: true,
+    navigation: {
+      nextEl: `.events-slider-master .swiper-button-next`,
+      prevEl: `.events-slider-master .swiper-button-prev`,
+    },
+  }
 
   constructor(private activatedRoute: ActivatedRoute,
               private eventService: EventService,
@@ -51,6 +78,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.masterHistorySwiper = document.querySelector('#masterEvents');
+    this.recentEventsSwiper = document.querySelector('#recentEvents');
     this.activatedRouterSubscription = this.activatedRoute.params.subscribe(param => {
       this.eventId = param['url'];
       this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
@@ -78,7 +107,14 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       });
       this.getEvent();
       this.getRecentEvents();
-    })
+    });
+
+    this.eventSwiper = document.querySelector('.event-swiper-master');
+    if (this.eventSwiper) {
+      Object.assign(this.eventSwiper, this.eventSwiperParams);
+      this.eventSwiper.initialize();
+    }
+
   }
 
   getEvent() {
@@ -121,6 +157,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             throw new Error(error);
           }
           this.masterEvents = (data as EventResponseType).results.filter(item => item.id.toString() !== this!.eventId)
+          if (this.masterHistorySwiper) {
+            if (this.masterEvents.length < 1) {
+              this.masterHistorySwiper.style.display = 'none';
+            } else {
+              this.masterHistorySwiper.style.display = 'block';
+            }
+          }
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
@@ -142,6 +185,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
             throw new Error(error);
           }
           this.historyEvents = (data as EventType[]).filter(item => item.id.toString() !== this!.eventId)
+          if (this.recentEventsSwiper) {
+            if (this.historyEvents.length < 1) {
+              this.recentEventsSwiper.style.display = 'none';
+            } else {
+              this.recentEventsSwiper.style.display = 'block';
+            }
+          }
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
