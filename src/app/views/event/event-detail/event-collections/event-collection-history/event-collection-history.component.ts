@@ -1,6 +1,6 @@
 import {AfterContentChecked, Component, CUSTOM_ELEMENTS_SCHEMA, Input} from '@angular/core';
 import {SwiperNavComponent} from '../../../../../shared/components/ui/swiper-nav/swiper-nav.component';
-import {SwiperContainer} from 'swiper/element';
+import {SwiperContainer} from 'swiper/element/bundle';
 import {EventCard3Component} from '../../../../../shared/components/cards/event-card3/event-card3.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {EventType} from '../../../../../../types/event.type';

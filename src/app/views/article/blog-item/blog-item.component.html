@@ -78,7 +78,22 @@
     </div>
   </div>
 
-  <div class="events2 _padding-null">
-    <event-collection-history [title]="'Вы смотрели'"></event-collection-history>
+  <div class="blog-collection">
+    <div class="container">
+      <div class="h1">
+        Вы смотрели
+      </div>
+
+      <div class="blog-slider slider articles-swiper-history" [ngClass]="{'_hide-buttons': false}">
+        <div class="slider__wrap">
+          <swiper-container class="article-swiper-history" init="false">
+            <swiper-slide class="swiper-slide" *ngFor="let article of historyArticles">
+              <blog-card [article]="article"></blog-card>
+            </swiper-slide>
+          </swiper-container>
+        </div>
+        <swiper-nav class="blog-slider-nav"></swiper-nav>
+      </div>
+    </div>
   </div>
 </main>

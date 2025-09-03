@@ -24,7 +24,7 @@
     "air-datepicker": "^3.5.3",
     "nouislider": "^15.8.1",
     "rxjs": "~7.8.0",
-    "swiper": "^11.2.6",
+    "swiper": "^11.2.10",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

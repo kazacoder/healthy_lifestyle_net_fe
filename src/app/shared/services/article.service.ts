@@ -50,4 +50,8 @@ export class ArticleService {
   getFiltersData(): Observable<FiltersDataTypeArticles | DefaultResponseType> {
     return this.http.get<FiltersDataTypeArticles | DefaultResponseType>(`${environment.api}articles/filters/`)
   }
+
+  getRecentArticleList(): Observable<ArticleType[] | DefaultResponseType> {
+    return this.http.get<ArticleType[] | DefaultResponseType>(`${environment.api}recent-articles/`)
+  }
 }

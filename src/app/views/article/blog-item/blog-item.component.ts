@@ -57,13 +57,36 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
       },
     },
   }
+  articleSwiperHistory: SwiperContainer | null = null;
+  articleSwiperParamsHistory = {
+    slidesPerView: "auto",
+    spaceBetween: 0,
+    watchSlidesProgress: true,
+    preventClicks :true,
+    a11y: false,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
+    navigation: {
+      nextEl: `.articles-swiper-history .swiper-button-next`,
+      prevEl: `.articles-swiper-history .swiper-button-prev`,
+    },
+    breakpoints: {
+      640: {
+
+      },
+    },
+  }
   article: ArticleType | null = null;
   articleId: string | null | undefined = null;
+  historyArticles: ArticleType[] = [];
   month: string= '';
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   getArticleSubscription: Subscription | null = null;
   toggleFavoriteArticleSubscription: Subscription | null = null;
+  recentArticleSubscription: Subscription | null = null;
+  activatedRouterSubscription: Subscription | null = null;
 
   constructor(private activatedRoute: ActivatedRoute,
               private articleService: ArticleService,
@@ -78,14 +101,23 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
       Object.assign(this.articleSwiper, this.articleSwiperParams);
       this.articleSwiper.initialize();
     }
+
+    this.articleSwiperHistory = document.querySelector('.article-swiper-history');
+    if (this.articleSwiperHistory) {
+      Object.assign(this.articleSwiperHistory, this.articleSwiperParamsHistory);
+      this.articleSwiperHistory.initialize();
+    }
   }
 
   ngOnInit() {
-    this.articleId = this.activatedRoute.snapshot.paramMap.get('url');
-    this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
-      this.isLogged = isLogged;
-      this.getArticle();
-    });
+    this.activatedRouterSubscription = this.activatedRoute.params.subscribe(param => {
+      this.articleId = param['url'];
+      this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
+        this.isLogged = isLogged;
+        this.getArticle();
+        this.getRecentArticles();
+      });
+    })
   }
 
   getArticle() {
@@ -112,6 +144,28 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
         }
       });
     }
+  }
+
+
+  getRecentArticles() {
+    this.recentArticleSubscription = this.articleService.getRecentArticleList()
+      .subscribe({
+        next: (data: ArticleType[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          this.historyArticles = (data as ArticleType[]).filter(item => item.id.toString() !== this!.articleId)
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка получения данных')
+          }
+        }
+      });
   }
 
   toggleFavorite() {
@@ -145,6 +199,8 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
     this.getArticleSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
     this.toggleFavoriteArticleSubscription?.unsubscribe();
+    this.recentArticleSubscription?.unsubscribe();
+    this.activatedRouterSubscription?.unsubscribe();
   }
 }
 
