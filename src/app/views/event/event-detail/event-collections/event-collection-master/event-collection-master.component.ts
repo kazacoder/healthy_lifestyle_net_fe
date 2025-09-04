@@ -5,6 +5,8 @@ import {NgForOf, NgIf} from '@angular/common';
 import {EventCard3Component} from '../../../../../shared/components/cards/event-card3/event-card3.component';
 import {EventType} from '../../../../../../types/event.type';
 
+// ToDo Remove this component
+
 @Component({
   selector: 'event-collection-master',
   imports: [

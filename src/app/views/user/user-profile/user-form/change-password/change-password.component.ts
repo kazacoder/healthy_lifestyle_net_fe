@@ -3,12 +3,14 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Subscription} from 'rxjs';
-import {NgClass} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import {CloseBtnMobComponent} from '../../../../../shared/components/ui/close-btn-mob/close-btn-mob.component';
 import {CommonUtils} from '../../../../../shared/utils/common-utils';
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {UserChangePassType} from '../../../../../../types/user-change-pass.type';
+import {ErrorResponseType} from '../../../../../../types/eroor-response.type';
+import {Settings} from '../../../../../../settings/settings';
 
 @Component({
   selector: 'change-password',
@@ -16,31 +18,26 @@ import {UserChangePassType} from '../../../../../../types/user-change-pass.type'
     NgClass,
     ReactiveFormsModule,
     CloseBtnMobComponent,
+    NgIf,
   ],
   standalone: true,
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.scss'
 })
 export class ChangePasswordComponent implements OnDestroy {
-  @Input()
-  isOpen: boolean = true;
-
+  @Input() isOpen: boolean = true;
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
-
-
+  errors: ErrorResponseType | null = null;
   changePasswordForm = this.fb.group(
     {
       oldPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, ]],
+      newPassword: ['', [Validators.required, Validators.pattern(Settings.passwordRegex)]],
       confirmPassword: '',
     },
     {
       validators: CommonUtils.matchValidator('newPassword', 'confirmPassword')
     }
   )
-
-
-
   changePasswordSubscription: Subscription | null = null;
   isOldPasswordShowed: boolean = false;
   isNewPasswordShowed: boolean = false;
@@ -69,6 +66,7 @@ export class ChangePasswordComponent implements OnDestroy {
           this.closeModal();
         },
         error: (errorResponse: HttpErrorResponse) => {
+          this.errors = errorResponse.error as ErrorResponseType;
           if (errorResponse.error && errorResponse.error.detail) {
             this._snackBar.open(errorResponse.error.detail);
           } else {

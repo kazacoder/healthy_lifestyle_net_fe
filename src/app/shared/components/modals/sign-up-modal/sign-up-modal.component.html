@@ -14,21 +14,33 @@
       <section class="modal-form modal-form3" [formGroup]="signUpForm">
         <div class="fg"
              [ngClass]="{'_error': signUpForm.get('email')?.invalid &&
-             (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched) || (errors && errors.email)}">
+             signUpForm.get('email')?.touched || (errors && errors.email)}">
           <label>E-mail</label>
           <input type="email" placeholder="pochta@mail.ru" formControlName="email" (input)="cleanError('email')">
           <div class="fg__error-text">
-            <div class="text12" *ngIf="signUpForm.get('email')?.invalid">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.errors?.['required']">
+              Обязательное поле
+            </div>
+            <div class="text12" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.errors?.['pattern']">
+              Введите корректный Email: user&#64;domain.name
+            </div>
             <div class="text12" *ngIf="errors && errors?.email">{{ errors.email![0] }}</div>
           </div>
         </div>
         <div class="fg"
-             [ngClass]="{'_error': signUpForm.get('phone')?.invalid &&
-             (signUpForm.get('phone')?.dirty || signUpForm.get('phone')?.touched)}">
+             [ngClass]="{'_error': signUpForm.get('phone')?.invalid
+             && signUpForm.get('phone')?.touched || (errors && errors.phone)}">
           <label>Номер телефона</label>
-          <input type="tel" placeholder="+7" formControlName="phone">
+          <input mask="(000) 000-00-00"
+                 [prefix]="'+7 '"
+                 [instantPrefix]="true"
+                 placeholder="+7 (___) ___-__-__" formControlName="phone">
           <div class="fg__error-text">
-            <div class="text12">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('phone')?.invalid && signUpForm.get('phone')?.errors?.['required']">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('phone')?.invalid && signUpForm.get('phone')?.errors?.['mask']">
+              Формат ввода: {{ signUpForm.get('phone')?.errors?.['mask']?.['requiredMask']}}
+            </div>
+            <div class="text12" *ngIf="errors && errors?.phone">{{ errors.phone![0] }}</div>
           </div>
         </div>
         <div class="fg"
@@ -44,8 +56,8 @@
         <div class="modal-form__pass">
           <fieldset class="fg">
             <label>Пароль</label>
-            <div class="fg" [ngClass]="{'_error': signUpForm.get('password')?.invalid &&
-           (signUpForm.get('password')?.dirty || signUpForm.get('password')?.touched)}">
+            <div class="fg" [ngClass]="{'_error': signUpForm.get('password')?.invalid
+            && signUpForm.get('password')?.touched || (errors && errors.password)}">
               <div class="fg__field">
                 <input [type]="isPasswordShowed ? 'text' : 'password'"
                        placeholder="Пароль" formControlName="password">
@@ -57,7 +69,18 @@
                 </button>
               </div>
               <div class="fg__error-text">
-                <div class="text12">Обязательное поле</div>
+                <div class="text12" *ngIf="signUpForm.get('password')?.invalid
+                && (signUpForm.get('password')?.dirty || signUpForm.get('password')?.touched)
+                && signUpForm.get('password')?.errors?.['required']">
+                  Обязательное поле
+                </div>
+                <div class="text12" *ngIf="signUpForm.get('password')?.invalid
+                && signUpForm.get('password')?.touched
+                && signUpForm.get('password')?.errors?.['pattern']">
+                  Пароль должен содержать хотя бы одну прописную и одну строчную латинскую букву,
+                  а также цифру и спецсимвол (!&#64;#$%^&*()_+-=[]&#123;&#125;;':"\\|,.<>/?). Минимальная длина 8 символов.
+                </div>
+                <div class="text12" *ngIf="errors && errors?.password" [innerHTML]="errors.password!.join('<br>')"></div>
               </div>
             </div>
           </fieldset>

@@ -61,7 +61,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
 
   // ToDO add validation
-  // ToDO change password logic
   // ToDO realize phone adding
   userInfoForm: any = this.fb.group({
     first_name: [{value: '', disabled: true,}, Validators.required],

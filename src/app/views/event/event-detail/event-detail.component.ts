@@ -42,7 +42,6 @@ import {SwiperContainer} from 'swiper/element';
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: EventType | null = null;
   masterEvents: EventType[] = [];
-  // ToDo доделать историю
   historyEvents: EventType[] = [];
   address: string = ''
   eventId: string | null | undefined = null;

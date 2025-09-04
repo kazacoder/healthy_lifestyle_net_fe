@@ -10,6 +10,8 @@ import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {LoginResponseType} from '../../../../../types/login-response.type';
 import {CommonUtils} from '../../../utils/common-utils';
 import {ErrorResponseType} from '../../../../../types/eroor-response.type';
+import {NgxMaskDirective} from 'ngx-mask';
+import {Settings} from '../../../../../settings/settings';
 
 @Component({
   selector: 'sign-up-modal',
@@ -17,25 +19,26 @@ import {ErrorResponseType} from '../../../../../types/eroor-response.type';
     CloseBtnMobComponent,
     NgClass,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    NgxMaskDirective
   ],
   standalone: true,
   templateUrl: './sign-up-modal.component.html',
   styleUrl: './sign-up-modal.component.scss'
 })
 export class SignUpModalComponent implements OnDestroy {
-  @Input()
-  isOpen: boolean = true;
-
+  @Input() isOpen: boolean = true;
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
   @Output() onLoginOpen: EventEmitter<boolean> = new EventEmitter(false);
+  passwordRegex = Settings.passwordRegex;
+  emailRegex = Settings.emailRegex;
 
   signUpForm = this.fb.group(
     {
       username: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.pattern(this.emailRegex)]],
       phone: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.pattern(this.passwordRegex)]],
       confirmPassword: '',
       agree: [false, Validators.requiredTrue],
     },
@@ -103,7 +106,6 @@ export class SignUpModalComponent implements OnDestroy {
           this.closeModal()
         },
         error: (e) => {
-          console.log(e)
           this.errors = e.error as ErrorResponseType;
           this._snackBar.open('Возникла ошибка при создании пользователя')
         }

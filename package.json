@@ -22,6 +22,7 @@
     "@angular/router": "^19.2.0",
     "@ng-select/ng-select": "^14.8.0",
     "air-datepicker": "^3.5.3",
+    "ngx-mask": "^20.0.3",
     "nouislider": "^15.8.1",
     "rxjs": "~7.8.0",
     "swiper": "^11.2.10",
