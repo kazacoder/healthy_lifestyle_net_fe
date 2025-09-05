@@ -24,6 +24,7 @@
             <div class="text12" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.errors?.['pattern']">
               Введите корректный Email: user&#64;domain.name
             </div>
+            <div class="text12" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.errors?.['valueExist']">Этот email уже используется</div>
             <div class="text12" *ngIf="errors && errors?.email">{{ errors.email![0] }}</div>
           </div>
         </div>
@@ -44,12 +45,13 @@
           </div>
         </div>
         <div class="fg"
-             [ngClass]="{'_error': (signUpForm.get('username')?.invalid &&
-             (signUpForm.get('username')?.dirty || signUpForm.get('username')?.touched)) || (errors && errors.username)}">
+             [ngClass]="{'_error': signUpForm.get('username')?.invalid
+             && signUpForm.get('username')?.touched || (errors && errors.username)}">
           <label>Имя пользователя</label>
           <input type="text" placeholder="Например: Иван" formControlName="username" (input)="cleanError('username')">
           <div class="fg__error-text">
-            <div class="text12" *ngIf="signUpForm.get('username')?.invalid">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('username')?.invalid && signUpForm.get('username')?.errors?.['required']">Обязательное поле</div>
+            <div class="text12" *ngIf="signUpForm.get('username')?.invalid && signUpForm.get('username')?.errors?.['valueExist']">Имя пользователя занято, выберите другое</div>
             <div class="text12" *ngIf="errors && errors?.username">{{ errors.username![0] }}</div>
           </div>
         </div>

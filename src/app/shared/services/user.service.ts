@@ -112,4 +112,7 @@ export class UserService {
     this.setIsMaster(false);
   }
 
+  checkIfExist(fieldName: 'username' | 'email', value: string): Observable<boolean> {
+    return this.http.get<boolean>(environment.api + `user/check-if-exist/${fieldName}/${value}/`);
+  }
 }

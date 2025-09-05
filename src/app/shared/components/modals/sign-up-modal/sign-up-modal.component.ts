@@ -12,6 +12,7 @@ import {CommonUtils} from '../../../utils/common-utils';
 import {ErrorResponseType} from '../../../../../types/eroor-response.type';
 import {NgxMaskDirective} from 'ngx-mask';
 import {Settings} from '../../../../../settings/settings';
+import {CustomValidator} from '../../../validators/custom-validators';
 
 @Component({
   selector: 'sign-up-modal',
@@ -35,8 +36,16 @@ export class SignUpModalComponent implements OnDestroy {
 
   signUpForm = this.fb.group(
     {
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.pattern(this.emailRegex)]],
+      username: ['', {
+        validators: [Validators.required],
+        asyncValidators: [CustomValidator.existingValueValidator(this.userService, 'username')],
+        updateOn: 'change',
+      }],
+      email: ['', {
+        validators: [Validators.required, Validators.pattern(this.emailRegex)],
+        asyncValidators: [CustomValidator.existingValueValidator(this.userService, 'email')],
+        updateOn: 'change',
+      }],
       phone: ['', Validators.required],
       password: ['', [Validators.required, Validators.pattern(this.passwordRegex)]],
       confirmPassword: '',
