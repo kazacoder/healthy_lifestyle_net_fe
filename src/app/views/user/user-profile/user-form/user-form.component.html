@@ -110,13 +110,25 @@
     <div class="text18 semi-bold-text font2">
       Ссылки на каналы
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('youtube') || (errors && errors.youtube)}">
       <label>Youtube</label>
-      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="youtube">
+      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="youtube" (input)="cleanError('youtube')">
+      <div class="fg__error-text">
+        <div class="fg__error-text" *ngIf="getControlValidity('youtube')?.pattern">
+          <div class="text12">Введите корректную ссылку</div>
+        </div>
+        <div class="text12" *ngIf="errors && errors?.youtube">{{ errors.youtube![0] }}</div>
+      </div>
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('telegram') || (errors && errors.telegram)}">
       <label>Telegram</label>
-      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="telegram">
+      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="telegram" (input)="cleanError('telegram')">
+      <div class="fg__error-text">
+        <div class="fg__error-text" *ngIf="getControlValidity('telegram')?.pattern">
+          <div class="text12">Введите корректную ссылку</div>
+        </div>
+        <div class="text12" *ngIf="errors && errors?.telegram">{{ errors.telegram![0] }}</div>
+      </div>
     </div>
     <div class="fg">
       <label>VK</label>
@@ -128,11 +140,20 @@
     </div>
   </ng-container>
   <div class="phone-fields">
-    <div class="fg" [ngClass]="{'_error': getControlValidity('phone')}">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('phone') || (errors && errors.phone)}">
       <label><span>*</span>Номер телефона</label>
-      <input type="tel" placeholder="+7" formControlName="phone">
+      <input type="tel"
+             mask="(000) 000-00-00"
+             [prefix]="'+7 '"
+             [instantPrefix]="true"
+             placeholder="+7 (___) ___-__-__"
+             formControlName="phone" (input)="cleanError('phone')">
       <div class="fg__error-text">
-        <div class="text12">Обязательное поле</div>
+        <div class="text12"  *ngIf="getControlValidity('phone')?.required">Обязательное поле</div>
+        <div class="text12" *ngIf="errors && errors?.phone">{{ errors.phone![0] }}</div>
+        <div class="text12" *ngIf="getControlValidity('phone')?.mask">
+          Формат ввода: {{ getControlValidity('phone')?.mask['requiredMask']}}
+        </div>
       </div>
     </div>
     <div class="phone-fields__nav">
@@ -161,15 +182,14 @@
     <div class="fg__error-text" *ngIf="getControlValidity('email')?.required">
       <div class="text12">Обязательное поле</div>
     </div>
-    <div class="fg__error-text" *ngIf="getControlValidity('email')?.email">
+    <div class="fg__error-text" *ngIf="getControlValidity('email')?.pattern">
       <div class="text12">Введите корректный адрес электронной почты</div>
+    </div>
+    <div class="text12" *ngIf="getControlValidity('email')?.valueExist">
+      Этот email уже используется
     </div>
   </div>
   <div class="modal-form__pass">
-    <!--    @@include('../ui/_pass-field.html',{-->
-    <!--    "label":"Пароль",-->
-    <!--    "placeholder":"",-->
-    <!--    })-->
     <div class="modal-form__pass-nav">
       <button (click)="togglePasswordModal(true)"
               [disabled]="userFormDisabled"

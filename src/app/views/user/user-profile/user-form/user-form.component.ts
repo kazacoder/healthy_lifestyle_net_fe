@@ -7,7 +7,7 @@ import {SpecialityType, UserSpecialityType, UserSpecialityUpdateType} from '../.
 import {UserFullInfoType} from '../../../../../types/user-full-info.type';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
-import {Subscription} from 'rxjs';
+import {catchError, Observable, Subscription, tap, throwError} from 'rxjs';
 import {SpecialityService} from '../../../../shared/services/speciality.service';
 import {ChangePasswordComponent} from './change-password/change-password.component';
 import {WindowsUtils} from '../../../../shared/utils/windows-utils';
@@ -16,6 +16,10 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerModule} from '@angular/m
 import {MatNativeDateModule} from '@angular/material/core';
 import {CommonUtils, highlightWeekend} from '../../../../shared/utils/common-utils';
 import {UserGenderType} from '../../../../../types/user-gender.type';
+import {CustomValidator} from '../../../../shared/validators/custom-validators';
+import {Settings} from '../../../../../settings/settings';
+import {ErrorResponseType} from '../../../../../types/eroor-response.type';
+import {NgxMaskDirective} from 'ngx-mask';
 
 @Component({
   selector: 'user-form',
@@ -30,6 +34,7 @@ import {UserGenderType} from '../../../../../types/user-gender.type';
     MatDatepickerInput,
     MatDatepickerModule,
     MatNativeDateModule,
+    NgxMaskDirective,
   ],
   providers: [
     MatDatepickerModule,
@@ -58,6 +63,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   specialityObj: { [key: number]: string } = {};
   genderObj: { [key: string]: string } = {};
   isOpenPasswordModal: boolean = false;
+  errors: ErrorResponseType | null = null;
 
 
   // ToDO add validation
@@ -65,7 +71,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   userInfoForm: any = this.fb.group({
     first_name: [{value: '', disabled: true,}, Validators.required],
     last_name: [{value: '', disabled: true,}],
-    email: [{value: '', disabled: true,}, [Validators.required, Validators.email]],
+    email: [{value: '', disabled: true,}, {
+      validators: [Validators.required, Validators.pattern(Settings.emailRegex)],
+      updateOn: 'change',
+    }],
     city: [{value: '', disabled: true,}],
     youtube: [{value: '', disabled: true,}],
     telegram: [{value: '', disabled: true,}],
@@ -153,6 +162,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       }
       this.fillSpecialitySelect();
     }
+    this.userInfoForm.get('email').setAsyncValidators( [CustomValidator.existingValueValidator(this.userService, 'email', this.userInfo.email)])
   }
 
   fillSpecialitySelect(disableControls: boolean = true) {
@@ -178,8 +188,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   saveChanges() {
 
     if (this.userInfoForm.valid) {
-      this.userFormDisabled = true;
-      this.userInfoForm.disable();
+
       let changes: { [key: string]: string | {} | number | boolean } = {}
       let userSpecialities: { [key: string]: string | number } = {}
       let hasChanged: boolean = false
@@ -201,7 +210,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
         }
       }
       if (hasChanged && Object.keys(changes).length > 0) {
-        this.updateUserInfo(changes)
+        this.updateUserInfo(changes).subscribe({
+          next: () => {
+            this.userFormDisabled = true;
+            this.userInfoForm.disable();
+          },
+          error: (e) => console.log(e.error)
+        })
       }
       const userSpecialitiesArray = this.userInfoForm.get('specialities').controls
 
@@ -250,10 +265,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   }
 
-  updateUserInfo(changes: { [key: string]: string | {} | number | boolean }) {
-    if (this.userId) {
-      this.userService.updateProfileInfo(this.userId, changes).subscribe({
-        next: (data: UserFullInfoType | DefaultResponseType) => {
+  updateUserInfo(changes: { [key: string]: string | {} | number | boolean }): Observable<UserFullInfoType | DefaultResponseType> {
+    if (!this.userId) {
+      return throwError(() => new Error('No userId'));
+    }
+
+      return this.userService.updateProfileInfo(this.userId, changes).pipe(
+        tap((data: UserFullInfoType | DefaultResponseType) => {
           if ((data as DefaultResponseType).detail !== undefined) {
             const error = (data as DefaultResponseType).detail;
             this._snackBar.open(error);
@@ -263,16 +281,17 @@ export class UserFormComponent implements OnInit, OnDestroy {
           const receivedProfileData = data as UserFullInfoType;
           this.userInfo = receivedProfileData;
           this.isMaster = receivedProfileData.status === 3;
-        },
-        error: (errorResponse: HttpErrorResponse) => {
+        }),
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errors = errorResponse.error as ErrorResponseType;
           if (errorResponse.error && errorResponse.error.detail) {
             this._snackBar.open(errorResponse.error.detail)
           } else {
             this._snackBar.open('Ошибка обновления данных')
           }
-        }
-      })
-    }
+          return throwError(() => errorResponse)
+        })
+      );
   }
 
   discardChanges() {
@@ -343,6 +362,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   preventInput(event: KeyboardEvent): void {
     event.preventDefault();
+  }
+
+  cleanError(key: keyof ErrorResponseType): void {
+    if (this.errors?.hasOwnProperty(key)) {
+      this.errors[key] = null;
+    }
   }
 
   ngOnDestroy() {

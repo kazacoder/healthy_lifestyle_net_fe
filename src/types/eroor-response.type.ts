@@ -5,4 +5,8 @@ export type ErrorResponseType = {
   new_password?: string[] | null;
   phone?: string[] | null;
   detail?: string[] | null;
+  youtube?: string[] | null;
+  telegram?: string[] | null;
+  vk?: string[] | null;
+  instagram?: string[] | null;
 }
