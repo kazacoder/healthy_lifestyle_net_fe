@@ -130,13 +130,25 @@
         <div class="text12" *ngIf="errors && errors?.telegram">{{ errors.telegram![0] }}</div>
       </div>
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('vk') || (errors && errors.vk)}">
       <label>VK</label>
-      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="vk">
+      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="vk" (input)="cleanError('vk')">
+      <div class="fg__error-text">
+        <div class="fg__error-text" *ngIf="getControlValidity('vk')?.pattern">
+          <div class="text12">Введите корректную ссылку</div>
+        </div>
+        <div class="text12" *ngIf="errors && errors?.vk">{{ errors.vk![0] }}</div>
+      </div>
     </div>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('instagram') || (errors && errors.instagram)}">
       <label>Instagram</label>
-      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="instagram">
+      <input type="text" placeholder="Вставьте вашу ссылку" formControlName="instagram" (input)="cleanError('instagram')">
+      <div class="fg__error-text">
+        <div class="fg__error-text" *ngIf="getControlValidity('instagram')?.pattern">
+          <div class="text12">Введите корректную ссылку</div>
+        </div>
+        <div class="text12" *ngIf="errors && errors?.instagram">{{ errors.instagram![0] }}</div>
+      </div>
     </div>
   </ng-container>
   <div class="phone-fields">
