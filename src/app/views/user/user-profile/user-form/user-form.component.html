@@ -1,14 +1,26 @@
 <section class="user-form" [formGroup]="userInfoForm">
-  <div class="fg" [ngClass]="{'_error': getControlValidity('first_name')}">
+  <div class="fg" [ngClass]="{'_error': getControlValidity('first_name') || (errors && errors.first_name)}">
     <label><span>*</span>Имя</label>
-    <input type="text" placeholder="Например: Иван" formControlName="first_name">
+    <input type="text" placeholder="Например: Иван" formControlName="first_name" (input)="cleanError('first_name')">
     <div class="fg__error-text">
-      <div class="text12">Обязательное поле</div>
+      <div class="text12"  *ngIf="getControlValidity('first_name')?.required">Обязательное поле</div>
+      <div class="text12" *ngIf="getControlValidity('first_name')?.maxlength">
+        Максимальная длина текста {{ getControlValidity('first_name')?.maxlength.requiredLength }}
+        символов. Введено {{ getControlValidity('first_name')?.maxlength.actualLength }}.
+      </div>
+      <div class="text12" *ngIf="errors && errors?.first_name">{{ errors.first_name![0] }}</div>
     </div>
   </div>
-  <div class="fg">
+  <div class="fg" [ngClass]="{'_error': getControlValidity('last_name') || (errors && errors.last_name)}">
     <label>Фамилия</label>
-    <input type="text" placeholder="Например: Иванов" formControlName="last_name">
+    <input type="text" placeholder="Например: Иванов" formControlName="last_name" (input)="cleanError('last_name')">
+    <div class="fg__error-text">
+      <div class="text12" *ngIf="getControlValidity('last_name')?.maxlength">
+        Максимальная длина текста {{ getControlValidity('last_name')?.maxlength.requiredLength }}
+        символов. Введено {{ getControlValidity('last_name')?.maxlength.actualLength }}.
+      </div>
+      <div class="text12" *ngIf="errors && errors?.last_name">{{ errors.last_name![0] }}</div>
+    </div>
   </div>
   <div class="fg">
     <div class="label-flex">
@@ -65,7 +77,6 @@
           <label>
             Стаж с
           </label>
-<!--          <input type="date" placeholder="ДД.ММ.ГГГГ" [formControlName]="'experienceSince'">-->
           <input type="text"
                  (click)="picker.open()"
                  [readOnly]="true"
@@ -114,9 +125,7 @@
       <label>Youtube</label>
       <input type="text" placeholder="Вставьте вашу ссылку" formControlName="youtube" (input)="cleanError('youtube')">
       <div class="fg__error-text">
-        <div class="fg__error-text" *ngIf="getControlValidity('youtube')?.pattern">
-          <div class="text12">Введите корректную ссылку</div>
-        </div>
+        <div class="text12" *ngIf="getControlValidity('youtube')?.pattern">Введите корректную ссылку</div>
         <div class="text12" *ngIf="errors && errors?.youtube">{{ errors.youtube![0] }}</div>
       </div>
     </div>
@@ -124,9 +133,7 @@
       <label>Telegram</label>
       <input type="text" placeholder="Вставьте вашу ссылку" formControlName="telegram" (input)="cleanError('telegram')">
       <div class="fg__error-text">
-        <div class="fg__error-text" *ngIf="getControlValidity('telegram')?.pattern">
-          <div class="text12">Введите корректную ссылку</div>
-        </div>
+        <div class="text12" *ngIf="getControlValidity('telegram')?.pattern">Введите корректную ссылку</div>
         <div class="text12" *ngIf="errors && errors?.telegram">{{ errors.telegram![0] }}</div>
       </div>
     </div>
@@ -134,9 +141,7 @@
       <label>VK</label>
       <input type="text" placeholder="Вставьте вашу ссылку" formControlName="vk" (input)="cleanError('vk')">
       <div class="fg__error-text">
-        <div class="fg__error-text" *ngIf="getControlValidity('vk')?.pattern">
-          <div class="text12">Введите корректную ссылку</div>
-        </div>
+        <div class="text12" *ngIf="getControlValidity('vk')?.pattern">Введите корректную ссылку</div>
         <div class="text12" *ngIf="errors && errors?.vk">{{ errors.vk![0] }}</div>
       </div>
     </div>
@@ -144,9 +149,7 @@
       <label>Instagram</label>
       <input type="text" placeholder="Вставьте вашу ссылку" formControlName="instagram" (input)="cleanError('instagram')">
       <div class="fg__error-text">
-        <div class="fg__error-text" *ngIf="getControlValidity('instagram')?.pattern">
-          <div class="text12">Введите корректную ссылку</div>
-        </div>
+        <div class="text12" *ngIf="getControlValidity('instagram')?.pattern">Введите корректную ссылку</div>
         <div class="text12" *ngIf="errors && errors?.instagram">{{ errors.instagram![0] }}</div>
       </div>
     </div>
@@ -191,14 +194,14 @@
   <div class="fg" [ngClass]="{'_error': getControlValidity('email')}">
     <label><span>*</span>E-mail</label>
     <input type="email" placeholder="pochta@mail.ru" formControlName="email">
-    <div class="fg__error-text" *ngIf="getControlValidity('email')?.required">
-      <div class="text12">Обязательное поле</div>
-    </div>
-    <div class="fg__error-text" *ngIf="getControlValidity('email')?.pattern">
-      <div class="text12">Введите корректный адрес электронной почты</div>
-    </div>
-    <div class="text12" *ngIf="getControlValidity('email')?.valueExist">
-      Этот email уже используется
+    <div class="fg__error-text">
+      <div class="text12" *ngIf="getControlValidity('email')?.required">Обязательное поле</div>
+      <div class="text12" *ngIf="getControlValidity('email')?.pattern">
+        Введите корректный адрес электронной почты
+      </div>
+      <div class="text12" *ngIf="getControlValidity('email')?.valueExist">
+        Этот email уже используется
+      </div>
     </div>
   </div>
   <div class="modal-form__pass">
@@ -214,19 +217,32 @@
     <div class="text18 semi-bold-text font2">
       Информация о вас
     </div>
-    <div class="fg" [ngClass]="{'_error': getControlValidity('about_me')}">
-      <textarea placeholder="Например опишите ваш опыт и специализацию" formControlName="about_me"></textarea>
+    <div class="fg" [ngClass]="{'_error': getControlValidity('about_me') || (errors && errors.about_me)}">
+      <textarea placeholder="Например опишите ваш опыт и специализацию"
+                (input)="cleanError('about_me')"
+                formControlName="about_me"></textarea>
       <div class="fg__error-text">
-        <div class="text12">Максимальная длина текста 500 символов</div>
+        <div class="text12" *ngIf="getControlValidity('about_me')?.maxlength">
+          Максимальная длина текста {{ getControlValidity('about_me')?.maxlength.requiredLength }}
+          символов. Введено {{ getControlValidity('about_me')?.maxlength.actualLength }}.
+        </div>
+        <div class="text12" *ngIf="errors && errors?.about_me">{{ errors.about_me![0] }}</div>
       </div>
     </div>
     <div class="text18 semi-bold-text font2">
       Краткое описание
     </div>
-    <div class="fg short-text" [ngClass]="{'_error': getControlValidity('short_description')}">
-      <textarea  rows="2" placeholder="Описание основной сферы деятельности в 2х предложениях" formControlName="short_description"></textarea>
+    <div class="fg short-text" [ngClass]="{'_error': getControlValidity('short_description') || (errors && errors.short_description)}">
+      <textarea  rows="2"
+                 (input)="cleanError('short_description')"
+                 placeholder="Описание основной сферы деятельности в 2х предложениях"
+                 formControlName="short_description"></textarea>
       <div class="fg__error-text">
-        <div class="text12">Максимальная длина текста 75 символов</div>
+        <div class="text12" *ngIf="getControlValidity('short_description')?.maxlength">
+          Максимальная длина текста {{ getControlValidity('short_description')?.maxlength.requiredLength }}
+          символов. Введено {{ getControlValidity('short_description')?.maxlength.actualLength }}.
+        </div>
+        <div class="text12" *ngIf="errors && errors?.short_description">{{ errors.short_description![0] }}</div>
       </div>
     </div>
   </ng-container>

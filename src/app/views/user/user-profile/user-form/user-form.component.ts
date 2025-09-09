@@ -44,12 +44,9 @@ import {NgxMaskDirective} from 'ngx-mask';
   styleUrl: './user-form.component.scss'
 })
 export class UserFormComponent implements OnInit, OnDestroy {
-  @Input()
-  userInfo: UserFullInfoType | null | any = null;
-  @Input()
-  userId: string | null = null;
-  @Input()
-  isMaster: boolean = false;
+  @Input() userInfo: UserFullInfoType | null | any = null;
+  @Input() userId: string | null = null;
+  @Input() isMaster: boolean = false;
 
   maxSpecialityCount: number = 3;
   userFormDisabled: boolean = true
@@ -65,21 +62,19 @@ export class UserFormComponent implements OnInit, OnDestroy {
   isOpenPasswordModal: boolean = false;
   errors: ErrorResponseType | null = null;
 
-
-  // ToDO add validation
   // ToDO realize phone adding
   userInfoForm: any = this.fb.group({
-    first_name: [{value: '', disabled: true,}, Validators.required],
-    last_name: [{value: '', disabled: true,}],
+    first_name: [{value: '', disabled: true,}, [Validators.required, Validators.maxLength(150)]],
+    last_name: [{value: '', disabled: true,}, Validators.maxLength(150)],
     email: [{value: '', disabled: true,}, {
       validators: [Validators.required, Validators.pattern(Settings.emailRegex)],
       updateOn: 'change',
     }],
     city: [{value: '', disabled: true,}],
-    youtube: [{value: '', disabled: true,}],
-    telegram: [{value: '', disabled: true,}],
-    vk: [{value: '', disabled: true,}],
-    instagram: [{value: '', disabled: true,}],
+    youtube: [{value: '', disabled: true,}, Validators.pattern(Settings.youtube_regex)],
+    telegram: [{value: '', disabled: true,}, Validators.pattern(Settings.telegram_regex)],
+    vk: [{value: '', disabled: true,}, Validators.pattern(Settings.vk_regex)],
+    instagram: [{value: '', disabled: true,}, Validators.pattern(Settings.instagram_regex)],
     phone: [{value: '', disabled: true,}, Validators.required],
     about_me: [{value: '', disabled: true,}, Validators.maxLength(500)],
     short_description: [{value: '', disabled: true,}, Validators.maxLength(75)],
@@ -319,6 +314,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     }
     this.userFormDisabled = true;
     this.userInfoForm.disable();
+    this.errors = null;
   }
 
   addPhone() {
