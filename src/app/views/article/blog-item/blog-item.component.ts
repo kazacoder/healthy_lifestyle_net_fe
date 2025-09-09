@@ -83,6 +83,7 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
   toggleFavoriteArticleSubscription: Subscription | null = null;
   recentArticleSubscription: Subscription | null = null;
   activatedRouterSubscription: Subscription | null = null;
+  showHistoryArticlesSlider: boolean = true;
 
   constructor(private activatedRoute: ActivatedRoute,
               private articleService: ArticleService,
@@ -153,6 +154,7 @@ export class BlogItemComponent implements AfterViewInit, OnInit, OnDestroy {
             throw new Error(error);
           }
           this.historyArticles = (data as ArticleType[]).filter(item => item.id.toString() !== this!.articleId)
+          this.showHistoryArticlesSlider = this.historyArticles.length > 0;
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {

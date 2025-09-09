@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'chat-area',
@@ -8,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './chat-area.component.scss'
 })
 export class ChatAreaComponent {
+  @Output() onCloseChat: EventEmitter<boolean> = new EventEmitter(false);
+
+
+  closeChat() {
+    this.onCloseChat.emit(false);
+  }
 
 }
