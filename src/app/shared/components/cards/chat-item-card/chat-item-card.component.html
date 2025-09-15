@@ -1,22 +1,22 @@
 <div class="chat-item" [ngClass]="{_active: active}">
   <div class="avatar">
-    <img src="assets/img/avatar.svg" alt="">
+    <img src="{{ dialog?.companion?.photo }}" alt="">
   </div>
   <div class="chat-item__content">
     <div class="chat-item__top">
       <div class="chat-item__name">
-        Дарья Солодаева
+        {{ dialog?.companion?.full_name }}
       </div>
-      <img src="assets/img/crone.svg" alt="" class="chat-item__crone">
+      <img *ngIf="dialog?.companion?.is_master" src="assets/img/crone.svg" alt="" class="chat-item__crone">
     </div>
     <div class="chat-item__bottom">
       <div class="chat-item__text-wrap">
         <div class="chat-item__text">
-          Ответ в 2 строки. Под  Ответ в 2 строки. Под
+          {{ dialog?.last_message?.text }}
         </div>
       </div>
       <div class="chat-item__date">
-        12:43
+        {{ dialog?.last_message?.created_at | date:'HH:mm' }}
       </div>
     </div>
   </div>

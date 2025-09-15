@@ -1,4 +1,4 @@
-<div class="chat-area">
+<div class="chat-area" *ngIf="companion">
   <div class="chat-area__top">
     <button class="chat-area__back m-btn m-btn-primary-outline" (click)="closeChat()">
       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,99 +11,75 @@
     </div>
     <a href="" class="event-card2__master _flex">
       <div class="avatar">
-        <img src="assets/img/avatar.webp" alt="">
+        <img src="{{ companion?.photo }}" alt="">
       </div>
-      <span class="text16 text14-tablet">
-                Дарья Солодаева
-            </span>
-      <img src="assets/img/crone.svg" alt="" class="chat-area__crone">
+      <span class="text16 text14-tablet">{{ companion?.full_name }}</span>
+      <img *ngIf="companion?.is_master" src="assets/img/crone.svg" alt="" class="chat-area__crone">
     </a>
   </div>
   <div class="chat-area__content">
-    <div class="chat-area__scroll">
-      <div class="messages">
+    <div class="chat-area__scroll" #scrollContainer>
+      <div class="messages" *ngFor="let chatSection of chat">
         <div class="messages__date">
-          <span>5 февраля</span>
+          <span>{{ getRussianMonthName(chatSection.date, false, true) }}</span>
         </div>
-        <div class="message-item _self">
-          <div class="message-item__content">
-            <div class="message-item__text">
-              <div class="text16">
-                Как дела?
-              </div>
-            </div>
-            <div class="message-item__time">
-              <div class="text14">
-                08:15
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="message-item">
-          <a href="" class="avatar m-btn-bounce">
-            <img src="assets/img/avatar.webp" alt="">
+        <div class="message-item" [ngClass]="{_self: message.sender_is_user}" *ngFor="let message of chatSection.messages">
+          <a href="" class="avatar m-btn-bounce" *ngIf="!message.sender_is_user">
+            <img src="{{ message.sender_photo }}" alt="">
           </a>
           <div class="message-item__content">
-            <a href="" class="message-item__name">
+            <a href="" class="message-item__name" *ngIf="!message.sender_is_user">
                             <span class="text16 semi-bold-text">
-                                Дарья Солодаева
+                                {{ message.sender_full_name }}
                             </span>
               <img src="assets/img/crone.svg" alt="" class="chat-area__crone">
             </a>
             <div class="message-item__text">
               <div class="text16">
-                Привет, все хорошо) Придешь на мероприятие 9 апреля?
+                {{ message.text }}
               </div>
             </div>
             <div class="message-item__time">
               <div class="text14">
-                08:16
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="message-item _self">
-          <div class="message-item__content">
-            <div class="message-item__text">
-              <div class="text16">
-                Привет, все хорошо) Придешь на мероприятие 9 апреля?
-              </div>
-            </div>
-            <div class="message-item__time">
-              <div class="text14">
-                Сейчас
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="message-item">
-          <a href="" class="avatar m-btn-bounce">
-            <img src="assets/img/avatar.webp" alt="">
-          </a>
-          <div class="message-item__content">
-            <a href="" class="message-item__name">
-                            <span class="text16 semi-bold-text">
-                                Дарья Солодаева
-                            </span>
-              <img src="assets/img/crone.svg" alt="" class="chat-area__crone">
-            </a>
-            <div class="message-item__animate _flex">
-              <div class="loader">
-                <div class="loader__circle"></div>
-                <div class="loader__circle"></div>
-                <div class="loader__circle"></div>
+                {{ message.created_at | date:'HH:mm' }}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="message-item" *ngIf="isTyping">
+        <a href="" class="avatar m-btn-bounce">
+          <img src="{{ companion?.photo }}" alt="">
+        </a>
+        <div class="message-item__content">
+          <a href="" class="message-item__name">
+                            <span class="text16 semi-bold-text">
+                                {{ companion?.full_name }}
+                            </span>
+            <img *ngIf="companion?.is_master" src="assets/img/crone.svg" alt="" class="chat-area__crone">
+          </a>
+          <div class="message-item__animate _flex">
+            <div class="loader">
+              <div class="loader__circle"></div>
+              <div class="loader__circle"></div>
+              <div class="loader__circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-  <div class="chat-area__bottom">
+  <div class="chat-area__bottom" [formGroup]="chatForm">
     <div class="fg">
-      <input type="text" placeholder="Напишите...">
+      <input type="text"
+             formControlName="message"
+             placeholder="Напишите...">
     </div>
-    <button class="chat-area__btn m-btn m-btn-primary m-btn-bounce">
+    <button class="chat-area__btn m-btn m-btn-primary m-btn-bounce"
+            (click)="sendMessage()"
+            [disabled]="chatForm.invalid">
       <img src="assets/img/send.svg" alt="">
     </button>
   </div>

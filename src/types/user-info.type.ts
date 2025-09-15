@@ -3,3 +3,10 @@ export type UserInfoType = {
   username: string,
   firstName?: string,
 }
+
+export type UserShortType = {
+  id: string,
+  full_name: string,
+  photo: string,
+  is_master: boolean,
+}

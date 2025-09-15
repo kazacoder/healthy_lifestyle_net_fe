@@ -58,4 +58,5 @@ export class ProfileNavComponent implements AfterContentChecked {
     this.isOpened = !this.isOpened;
   }
 
+  protected readonly localStorage = localStorage;
 }

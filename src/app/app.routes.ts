@@ -46,6 +46,7 @@ export const routes: Routes = [
           {path: '', component: UserProfileComponent, title: 'Профиль'},
           {path: 'notifications', component: NotificationsComponent, title: 'Уведомления'},
           {path: 'messages', component: ChatComponent, title: 'Сообщения'},
+          {path: 'messages/:url', component: ChatComponent, title: 'Сообщения'},
           {path: 'publication', component: PublicationsComponent, title: 'Публикации'},
           {path: 'publication/add', component: PublicationComponent, title: 'Публикация'},
           {path: 'publication/:url', component: PublicationComponent, title: 'Редактирование публикации'},

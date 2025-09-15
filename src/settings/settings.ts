@@ -3,6 +3,7 @@ export const Settings = {
   maxAdditionEventPhotoCount: 3,
   maxAdditionUserPhotoCount: 3,
   maxAnswerLength: 1000,
+  maxChatMessageLength: 500,
   minAnswerLength: 10,
   maxQuestionLength: 1000,
   minQuestionLength: 10,

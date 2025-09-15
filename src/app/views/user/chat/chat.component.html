@@ -14,13 +14,14 @@
           <img src="assets/img/search.svg" alt="" class="search-field__icon">
         </div>
         <div class="chat__list">
-          <chat-item-card *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]; let idx = index"
-                          [active]="selectedChatIndex === idx"
-                          (click)="openChat(idx)"></chat-item-card>
+          <chat-item-card *ngFor="let dialog of dialogList"
+                          [dialog]="dialog"
+                          [active]="selectedChatIndex === dialog.id"
+                          (click)="openChat(dialog.id, dialog.companion)"></chat-item-card>
         </div>
       </div>
       <div class="chat__col2">
-        <chat-area (onCloseChat)="closeChat()"></chat-area>
+        <chat-area [companion]="currentCompanion" (onCloseChat)="closeChat()"></chat-area>
       </div>
     </div>
   </div>

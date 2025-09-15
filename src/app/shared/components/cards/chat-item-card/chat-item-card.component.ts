@@ -1,10 +1,13 @@
 import {Component, Input} from '@angular/core';
-import {NgClass} from '@angular/common';
+import {DatePipe, NgClass, NgIf} from '@angular/common';
+import {DialogType} from '../../../../../types/dialog.type';
 
 @Component({
   selector: 'chat-item-card',
   imports: [
-    NgClass
+    NgClass,
+    NgIf,
+    DatePipe
   ],
   standalone: true,
   templateUrl: './chat-item-card.component.html',
@@ -12,5 +15,6 @@ import {NgClass} from '@angular/common';
 })
 export class ChatItemCardComponent {
   @Input() active: boolean = false;
+  @Input() dialog: DialogType | null = null;
 
 }
