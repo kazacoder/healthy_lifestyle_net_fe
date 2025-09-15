@@ -7,7 +7,7 @@ import {
   OnInit,
   Output, ViewChild
 } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {ChatService} from '../../../../shared/services/chat.service';
 import {ChatMessagesDatedList, ChatMessageType} from '../../../../../types/chat-message.type';
@@ -27,7 +27,8 @@ import {Settings} from '../../../../../settings/settings';
     NgForOf,
     NgClass,
     DatePipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   standalone: true,
   templateUrl: './chat-area.component.html',

@@ -9,7 +9,7 @@
     <div class="chat-area__title text30 semi-bold-text">
       Чат с
     </div>
-    <a href="" class="event-card2__master _flex">
+    <a routerLink="/master/{{ companion.id }}" class="event-card2__master _flex">
       <div class="avatar">
         <img src="{{ companion?.photo }}" alt="">
       </div>
@@ -24,11 +24,11 @@
           <span>{{ getRussianMonthName(chatSection.date, false, true) }}</span>
         </div>
         <div class="message-item" [ngClass]="{_self: message.sender_is_user}" *ngFor="let message of chatSection.messages">
-          <a href="" class="avatar m-btn-bounce" *ngIf="!message.sender_is_user">
+          <a routerLink="/master/{{ companion.id }}" class="avatar m-btn-bounce" *ngIf="!message.sender_is_user">
             <img src="{{ message.sender_photo }}" alt="">
           </a>
           <div class="message-item__content">
-            <a href="" class="message-item__name" *ngIf="!message.sender_is_user">
+            <a routerLink="/master/{{ companion.id }}" class="message-item__name" *ngIf="!message.sender_is_user">
                             <span class="text16 semi-bold-text">
                                 {{ message.sender_full_name }}
                             </span>
@@ -49,11 +49,11 @@
       </div>
 
       <div class="message-item" *ngIf="isTyping">
-        <a href="" class="avatar m-btn-bounce">
+        <a routerLink="/master/{{ companion.id }}" class="avatar m-btn-bounce">
           <img src="{{ companion?.photo }}" alt="">
         </a>
         <div class="message-item__content">
-          <a href="" class="message-item__name">
+          <a routerLink="/master/{{ companion.id }}" class="message-item__name">
                             <span class="text16 semi-bold-text">
                                 {{ companion?.full_name }}
                             </span>
