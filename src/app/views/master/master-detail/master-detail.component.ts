@@ -22,6 +22,9 @@ import {EventService} from '../../../shared/services/event.service';
 import {EventResponseType} from '../../../../types/event-response.type';
 import {EventType} from '../../../../types/event.type';
 import {EventCard3Component} from '../../../shared/components/cards/event-card3/event-card3.component';
+import {ChatModalComponent} from '../../../shared/components/modals/chat-modal/chat-modal.component';
+import {UserShortType} from '../../../../types/user-info.type';
+import {UserService} from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-master-detail',
@@ -34,7 +37,8 @@ import {EventCard3Component} from '../../../shared/components/cards/event-card3/
     ParagraphTextPipe,
     NgClass,
     ClaimModalComponent,
-    EventCard3Component
+    EventCard3Component,
+    ChatModalComponent
   ],
   standalone: true,
   templateUrl: './master-detail.component.html',
@@ -47,9 +51,12 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   toggleFavoriteMasterSubscription: Subscription | null = null;
   isLogged: boolean = false;
   isClaimModalOpen: boolean = false;
+  isChatModalOpen: boolean = false;
+  masterIsSelfUser: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   masterId: string | null | undefined = null;
   master: MasterInfoType | null = null;
+  companion: UserShortType | null = null;
   hideNavigation: boolean = false;
   socialObject: SocialObjectType | null = null
   masterSlider: SwiperContainer | null = null;
@@ -110,7 +117,8 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               private _snackBar: MatSnackBar,
               private favoriteService: FavoriteService,
               private authService: AuthService,
-              private eventService: EventService) {
+              private eventService: EventService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
@@ -120,6 +128,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       this.getMasterDetail();
       this.getMastersEvents();
     });
+    this.masterIsSelfUser = this.masterId === this.userService.getUserId()
   }
 
   getMasterDetail() {
@@ -133,6 +142,12 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
               throw new Error(error);
             }
             this.master = data as MasterInfoType
+            this.companion = {
+              id: this.master.id.toString(),
+              full_name: this.master.full_name,
+              photo: this.master.photo,
+              is_master: this.master.is_master,
+            }
             this.master.specialities.forEach(item => {
               let experience;
               const experienceYears = new Date().getFullYear() - new Date(item.experience_since).getFullYear()
@@ -259,6 +274,15 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   toggleClaimModal(val: boolean) {
     this.isClaimModalOpen = val;
     WindowsUtils.fixBody(val);
+  }
+
+  toggleCHatModal(val: boolean) {
+    if (!this.isLogged && val) {
+      this._snackBar.open('Чтобы отправить сообщение необходимо войти')
+    } else {
+      this.isChatModalOpen = val;
+      WindowsUtils.fixBody(val);
+    }
   }
 
   ngOnDestroy() {

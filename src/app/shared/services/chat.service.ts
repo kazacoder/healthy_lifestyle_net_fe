@@ -21,6 +21,10 @@ export class ChatService {
     return this.http.get<DialogType[] | DefaultResponseType>(environment.api + 'dialogs/')
   }
 
+  getOrCreateDialog(userId: string): Observable<DialogType | DefaultResponseType> {
+    return this.http.post<DialogType | DefaultResponseType>(environment.api + 'dialogs/', {user_id: userId});
+  }
+
   sendMessage(dialogId: string, text: string): Observable<ChatMessageType | DefaultResponseType> {
     return this.http.post<ChatMessageType | DefaultResponseType>(environment.api + 'dialogs/' + dialogId + '/messages/',
       {text: text})

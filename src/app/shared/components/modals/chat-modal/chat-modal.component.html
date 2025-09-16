@@ -1,0 +1,10 @@
+<div class="modal chat-modal _active" id="chatModal">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <chat-area [companion]="companion"></chat-area>
+  </div>
+</div>

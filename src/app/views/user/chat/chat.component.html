@@ -21,7 +21,9 @@
         </div>
       </div>
       <div class="chat__col2">
-        <chat-area [companion]="currentCompanion" (onCloseChat)="closeChat()"></chat-area>
+        <chat-area [companion]="currentCompanion"
+                   [isChatPage]="true"
+                   (onCloseChat)="closeChat()"></chat-area>
       </div>
     </div>
   </div>

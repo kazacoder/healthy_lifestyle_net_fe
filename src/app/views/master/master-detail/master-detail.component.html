@@ -20,7 +20,9 @@
             <swiper-nav></swiper-nav>
             <div class="swiper-pagination"></div>
           </div>
-          <button class="master-item__btn m-btn m-btn-primary m-btn-bounce">
+          <button class="master-item__btn m-btn m-btn-primary m-btn-bounce"
+                  *ngIf="!masterIsSelfUser"
+                  (click)="toggleCHatModal(true)">
             <img src="assets/img/email.svg" alt="">
             <span>Связаться с мастером</span>
           </button>
@@ -180,3 +182,6 @@
   (onCloseModal)="toggleClaimModal($event)"
   [isOpen]="isClaimModalOpen">
 </claim-modal>
+<chat-modal [companion]="companion"
+            (onCloseModal)="toggleCHatModal($event)"
+            *ngIf="isChatModalOpen"></chat-modal>
