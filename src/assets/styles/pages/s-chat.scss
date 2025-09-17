@@ -286,6 +286,9 @@
     padding-top: .25em;
     &__top{
       justify-content: space-between;
+      &._end {
+        justify-content: flex-end;
+      }
     }
     &__back{
       display: flex;

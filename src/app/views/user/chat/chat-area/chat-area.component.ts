@@ -139,6 +139,7 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   closeChat() {
     this.onCloseChat.emit(false);
+    this.chat = [];
   }
 
   sendMessage() {
