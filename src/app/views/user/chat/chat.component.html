@@ -10,7 +10,7 @@
           Все чаты
         </div>
         <div class="fg search-field">
-          <input type="text" placeholder="Поиск по диалогам">
+          <input type="text" placeholder="Поиск по диалогам" [(ngModel)]="searchText" (input)="search()">
           <img src="assets/img/search.svg" alt="" class="search-field__icon">
         </div>
         <div class="chat__list">

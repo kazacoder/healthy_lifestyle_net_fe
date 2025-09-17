@@ -10,6 +10,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {UserShortType} from '../../../../types/user-info.type';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
@@ -17,7 +18,8 @@ import {UserShortType} from '../../../../types/user-info.type';
     ChatItemCardComponent,
     ChatAreaComponent,
     NgClass,
-    NgForOf
+    NgForOf,
+    FormsModule
   ],
   standalone: true,
   templateUrl: './chat.component.html',
@@ -27,8 +29,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   isOpenedChat: boolean = false;
   selectedChatIndex: number | null = null;
   dialogList: DialogType[] = [];
+  allDialogs: DialogType[] = []; // исходный список без фильтра
   currentCompanion: UserShortType | null = null;
   getDialogListSubscription: Subscription | null = null;
+  searchText: string = '';
 
   constructor(private chatService: ChatService,
               private _snackBar: MatSnackBar,
@@ -44,7 +48,8 @@ export class ChatComponent implements OnInit, OnDestroy {
             this._snackBar.open(error);
             throw new Error(error);
           }
-          this.dialogList = data as DialogType[];
+          this.allDialogs = data as DialogType[];
+          this.dialogList = [...this.allDialogs]; // копия для отображения
           this.router.navigate(['/profile/messages/' + this.dialogList[0].id]).then();
           this.selectedChatIndex = this.dialogList[0].id;
           this.currentCompanion = this.dialogList[0].companion;
@@ -64,6 +69,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.selectedChatIndex = index;
     this.currentCompanion = companion
     this.router.navigate(['/profile/messages/' + index]).then()
+  }
+
+  search() {
+    const query = this.searchText.trim().toLowerCase();
+
+    if (!query) {
+      this.dialogList = [...this.allDialogs]; // если строка пустая → вернуть всё
+      return;
+    }
+
+    this.dialogList = this.allDialogs.filter(dialog =>
+      dialog.companion.full_name.toLowerCase().includes(query)
+    );
   }
 
   closeChat() {
