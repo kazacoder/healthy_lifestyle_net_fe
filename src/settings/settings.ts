@@ -17,5 +17,6 @@ export const Settings = {
   youtube_regex: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(channel\/[A-Za-z0-9_-]{24}|c\/[A-Za-z0-9_-]+|user\/[A-Za-z0-9_-]+|@[\w.-]+)$/,
   telegram_regex: /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[a-zA-Z][a-zA-Z0-9_]{4,31}$|^@[a-zA-Z][a-zA-Z0-9_]{4,31}$/,
   vk_regex: /^(?:https?:\/\/)?(?:www\.)?vk\.com\/[a-zA-Z0-9_.]{5,32}$/,
-  instagram_regex: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?!.*\.\.)(?!\.)([a-zA-Z0-9._]{1,30})(?<!\.)\/?$/
+  instagram_regex: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?!.*\.\.)(?!\.)([a-zA-Z0-9._]{1,30})(?<!\.)\/?$/,
+  offlineFormatsIDs: [2, 3], // Офлайн, Комбинированный
 }

@@ -9,7 +9,7 @@ import {CommonUtils} from '../../../../../shared/utils/common-utils';
 import {DefaultResponseType} from '../../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {UserChangePassType} from '../../../../../../types/user-change-pass.type';
-import {ErrorResponseType} from '../../../../../../types/eroor-response.type';
+import {ErrorResponseType} from '../../../../../../types/error-response.type';
 import {Settings} from '../../../../../../settings/settings';
 
 @Component({

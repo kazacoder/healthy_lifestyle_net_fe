@@ -18,7 +18,7 @@ import {CommonUtils, highlightWeekend} from '../../../../shared/utils/common-uti
 import {UserGenderType} from '../../../../../types/user-gender.type';
 import {CustomValidator} from '../../../../shared/validators/custom-validators';
 import {Settings} from '../../../../../settings/settings';
-import {ErrorResponseType} from '../../../../../types/eroor-response.type';
+import {ErrorResponseType} from '../../../../../types/error-response.type';
 import {NgxMaskDirective} from 'ngx-mask';
 
 @Component({

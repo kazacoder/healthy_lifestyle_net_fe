@@ -9,8 +9,17 @@ export type ErrorResponseType = {
   detail?: string[] | null;
   youtube?: string[] | null;
   telegram?: string[] | null;
+  whatsapp?: string[] | null;
   vk?: string[] | null;
   instagram?: string[] | null;
   short_description?: string[] | null;
   about_me?: string[] | null;
+  ticket_amount?: string[] | null;
+  price?: string[] | null;
+  prepayment?: string[] | null;
+  amount?: string[] | null;
+  duration?: string[] | null;
+  house?: string[] | null;
+  street?: string[] | null;
+  city?: string[] | null;
 }

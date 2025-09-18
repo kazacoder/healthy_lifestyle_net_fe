@@ -1,3 +1,23 @@
+.pg {
+  &._error {
+    input {
+      border-radius: 0.5em;
+      border: 1px solid $text-weekend;
+      color: $text-weekend;
+    }
+
+    .pg__error-text {
+      display: block;
+    }
+  }
+
+  &__error-text {
+    margin-top: .375em;
+    color: $text-weekend;
+    display: none;
+  }
+}
+
 .fg {
   position: relative;
   margin: 0;

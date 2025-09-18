@@ -24,6 +24,8 @@ import {
 } from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {CommonUtils, highlightWeekend} from '../../../../../shared/utils/common-utils';
+import {ErrorResponseType} from '../../../../../../types/error-response.type';
+import {NgxMaskDirective} from 'ngx-mask';
 
 @Component({
   selector: 'publication-form',
@@ -41,7 +43,8 @@ import {CommonUtils, highlightWeekend} from '../../../../../shared/utils/common-
     MatHint,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatFormField
+    MatFormField,
+    NgxMaskDirective
   ],
   providers: [
     MatDatepickerModule,
@@ -67,6 +70,9 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   edit: boolean = false;
   dp: any = null;
   areFormsValid: boolean = false
+  offline: boolean = true;
+  errors: ErrorResponseType | null = null;
+  protected readonly highlightWeekend = highlightWeekend;
 
   @Input() existingFilesIds: number[] = [];
   @Input() imageForm: FormGroup | null = null;
@@ -75,17 +81,17 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
 
   publicationForm: any = this.fb.group({
     title: ['', Validators.required],
-    phone: ['', Validators.required],
+    phone: ['',],
     ticketAmount: [0, Validators.required],
     pricing: ['_free', Validators.required],
-    price: [0],
+    price: [0, Validators.required],
     prepayment: [0],
     address: this.fb.group({
       city: ['', Validators.required],
       street: ['', Validators.required],
       house: ['', Validators.required],
-      floor: ['', Validators.required],
-      office: ['', Validators.required],
+      floor: ['',],
+      office: ['',],
     }),
     duration: this.fb.group({
       amount: [null, Validators.required],
@@ -95,8 +101,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     suit: [null, Validators.required],
     format: [null, Validators.required],
     date: ['', Validators.required],
-    whatsapp: [null, Validators.required],
-    telegram: [null, Validators.required],
+    whatsapp: ['', ],
+    telegram: ['', Validators.pattern(Settings.telegram_regex)],
     description: [null, Validators.required],
     categories: [[]]
   })
@@ -224,6 +230,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       })
     }
     this.subscribeToForms();
+    this.checkFormat();
   }
 
   buildPublicationFormData(): FormData {
@@ -323,11 +330,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       formData.append('is_free', isFree);
       formData.append('price', this.publicationForm.value.price);
       formData.append('prepayment', this.publicationForm.value.prepayment);
-      formData.append('city', this.publicationForm.value.address.city);
-      formData.append('street', this.publicationForm.value.address.street);
-      formData.append('house', this.publicationForm.value.address.house);
-      formData.append('floor', this.publicationForm.value.address.floor);
-      formData.append('office', this.publicationForm.value.address.office);
       formData.append('duration', this.publicationForm.value.duration.amount);
       formData.append('time_period', this.publicationForm.value.duration.timePeriod);
       formData.append('suit', this.publicationForm.value.suit);
@@ -336,6 +338,14 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       formData.append('whatsapp', this.publicationForm.value.whatsapp);
       formData.append('telegram', this.publicationForm.value.telegram);
       formData.append('description', this.publicationForm.value.description);
+
+      if (this.offline) {
+        formData.append('city', this.publicationForm.value.address.city);
+        formData.append('street', this.publicationForm.value.address.street);
+        formData.append('house', this.publicationForm.value.address.house);
+        formData.append('floor', this.publicationForm.value.address.floor);
+        formData.append('office', this.publicationForm.value.address.office);
+      }
 
       if (this.publicationForm.value.categories.length > 0) {
         this.publicationForm.value.categories.forEach((category: CategoryType) => {
@@ -367,6 +377,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
           if (errorResponse.error && errorResponse.error.detail) {
             this._snackBar.open(errorResponse.error.detail)
           } else {
+            this.errors = errorResponse.error as ErrorResponseType;
             this._snackBar.open('Ошибка создания события')
           }
         }
@@ -394,6 +405,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             this._snackBar.open('Событие успешно обновлено');
           },
           error: (errorResponse: HttpErrorResponse) => {
+            this.errors = errorResponse.error as ErrorResponseType;
             if (errorResponse.error && errorResponse.error.detail) {
               this._snackBar.open(errorResponse.error.detail)
             } else {
@@ -428,6 +440,53 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     this.areFormsValid = this.publicationForm.valid && (this.imageForm?.valid ?? true);
   }
 
+  getControlValidity(ctrlName: string, groupName: string | null = null, beFieldName: string | null = null): any {
+    let ctrl = this.publicationForm.get([ctrlName])
+    if (groupName) {
+      ctrl = this.publicationForm.get(groupName).get([ctrlName])
+    }
+    if (!ctrl) {
+      return null
+    }
+    return (ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ||
+      (this.errors && this.errors[beFieldName as keyof ErrorResponseType || ctrlName as keyof ErrorResponseType]))
+      ? ctrl.errors || true : null
+  }
+
+  cleanError(key: keyof ErrorResponseType): void {
+    if (this.errors?.hasOwnProperty(key)) {
+      this.errors[key] = null;
+    }
+  }
+
+  checkFormat() {
+    const formatId = parseInt(this.publicationForm.get('format').value);
+    const address = this.publicationForm.get('address');
+    const addressItems = [address.get('street'), address.get('house'), address.get('city')];
+    if (!formatId) {
+      address.disable();
+      return;
+    }
+
+    if (Settings.offlineFormatsIDs.includes(formatId)) {
+      address.enable();
+      this.offline = true;
+      addressItems.forEach(item => {
+        // item.setValidators(Validators.required);
+        item.clearValidators();
+        item.updateValueAndValidity();
+        item.markAsPristine();
+        item.markAsUntouched();
+      })
+    } else {
+      addressItems.forEach(item => {
+        item.clearValidators();
+        item.updateValueAndValidity();
+      });
+      this.offline = false;
+    }
+  }
+
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe();
     this.getFormatsSubscription?.unsubscribe();
@@ -436,15 +495,4 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     this.createPublication?.unsubscribe();
     this.updatePublicationSubscription?.unsubscribe();
   }
-
-  getControlValidity(ctrlName: string, groupName: string | null = null) {
-    if (groupName) {
-      const ctrl = this.publicationForm.get(groupName).get([ctrlName])
-      return ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ? ctrl.errors : null
-    }
-    const ctrl = this.publicationForm.get([ctrlName])
-    return ctrl.invalid && (ctrl?.dirty || ctrl?.touched) ? ctrl.errors : null
-  }
-
-  protected readonly highlightWeekend = highlightWeekend;
 }

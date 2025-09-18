@@ -9,7 +9,7 @@ import {NgClass, NgIf} from '@angular/common';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {LoginResponseType} from '../../../../../types/login-response.type';
 import {CommonUtils} from '../../../utils/common-utils';
-import {ErrorResponseType} from '../../../../../types/eroor-response.type';
+import {ErrorResponseType} from '../../../../../types/error-response.type';
 import {NgxMaskDirective} from 'ngx-mask';
 import {Settings} from '../../../../../settings/settings';
 import {CustomValidator} from '../../../validators/custom-validators';
