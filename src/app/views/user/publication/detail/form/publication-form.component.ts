@@ -472,8 +472,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       address.enable();
       this.offline = true;
       addressItems.forEach(item => {
-        // item.setValidators(Validators.required);
-        item.clearValidators();
+        item.setValidators(Validators.required);
         item.updateValueAndValidity();
         item.markAsPristine();
         item.markAsUntouched();
