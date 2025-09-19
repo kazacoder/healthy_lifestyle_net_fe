@@ -188,7 +188,18 @@
     <ng-container formGroupName="address" *ngIf="offline">
       <div class="fg" [ngClass]="{'_error': getControlValidity('city', 'address')}">
         <label>Город</label>
-        <input type="text" (input)="cleanError('city')" [formControlName]="'city'" placeholder="Например: Москва">
+        <input type="text"
+               (input)="cleanError('city')"
+               [formControlName]="'city'"
+               aria-label="Address"
+               matInput
+               [matAutocomplete]="auto"
+               placeholder="Например: Москва">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of suggestions$ | async" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
         <div class="fg__error-text">
           <div class="text12" *ngIf="getControlValidity('city')?.required">Обязательное поле</div>
           <div class="text12" *ngIf="errors && errors?.city">{{ errors.city![0] }}</div>

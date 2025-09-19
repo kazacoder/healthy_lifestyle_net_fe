@@ -1,10 +1,19 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {HttpErrorResponse} from '@angular/common/http';
-import {combineLatest, Subscription} from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  Subscription,
+  switchMap
+} from 'rxjs';
 import {CategoryType} from '../../../../../../types/category.type';
 import {UserService} from '../../../../../shared/services/user.service';
 import {PublicationService} from '../../../../../shared/services/publication.service';
@@ -22,10 +31,12 @@ import {
   MatDatepickerModule,
   MatDatepickerToggle
 } from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MatNativeDateModule, MatOption} from '@angular/material/core';
 import {CommonUtils, highlightWeekend} from '../../../../../shared/utils/common-utils';
 import {ErrorResponseType} from '../../../../../../types/error-response.type';
 import {NgxMaskDirective} from 'ngx-mask';
+import {AddressService} from '../../../../../shared/services/address.service';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @Component({
   selector: 'publication-form',
@@ -44,7 +55,10 @@ import {NgxMaskDirective} from 'ngx-mask';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormField,
-    NgxMaskDirective
+    NgxMaskDirective,
+    MatAutocompleteModule,
+    MatOption,
+    AsyncPipe
   ],
   providers: [
     MatDatepickerModule,
@@ -72,6 +86,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   areFormsValid: boolean = false
   offline: boolean = true;
   errors: ErrorResponseType | null = null;
+  suggestions$!: Observable<any[]>;
   protected readonly highlightWeekend = highlightWeekend;
 
   @Input() existingFilesIds: number[] = [];
@@ -111,8 +126,26 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
               private fb: FormBuilder,
               private _snackBar: MatSnackBar,
               private publicationService: PublicationService,
+              private addressService: AddressService,
               private router: Router) {
     this.isMaster = this.userService.isMaster;
+    const ctrl = this.publicationForm.get('address').get('city');
+    console.log(ctrl)
+    this.suggestions$ = this.publicationForm.get('address').get('city').valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      filter((value): value is string => typeof value === 'string' && value.length >= Settings.minAddressQueryLength),
+      switchMap((value: string) =>
+        this.addressService.getAddressSuggest(value, 10).pipe(
+          // мапим результат в массив строк
+          map((res: any) => res.suggestions.map((s: any) => {
+            console.log(s.value)
+            return  s.value
+          })
+          )
+        )
+      )
+    );
   }
 
   ngOnInit() {
