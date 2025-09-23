@@ -8,6 +8,7 @@ export const Settings = {
   maxQuestionLength: 1000,
   minQuestionLength: 10,
   minAddressQueryLength: 3,
+  minCityQueryLength: 2,
   questionDefaultLimit: 4,
   eventDefaultLimit: 9,
   articlesDefaultLimit: 8,

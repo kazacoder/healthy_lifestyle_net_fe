@@ -191,17 +191,19 @@
         <input type="text"
                (input)="cleanError('city')"
                [formControlName]="'city'"
-               aria-label="Address"
+               aria-label="City"
                matInput
-               [matAutocomplete]="auto"
+               [matAutocomplete]="cityAuto"
+               (blur)="validateCitySelection('address.city')"
                placeholder="Например: Москва">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let option of suggestions$ | async" [value]="option">
-            {{ option }}
+        <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayCity">
+          <mat-option *ngFor="let option of cities$ | async" [value]="option">
+            {{ option.value }}
           </mat-option>
         </mat-autocomplete>
         <div class="fg__error-text">
-          <div class="text12" *ngIf="getControlValidity('city')?.required">Обязательное поле</div>
+          <div class="text12" *ngIf="getControlValidity('city', 'address')?.required">Обязательное поле</div>
+          <div class="text12" *ngIf="getControlValidity('city', 'address')?.invalidCity">Начните вводить и выберите город из списка</div>
           <div class="text12" *ngIf="errors && errors?.city">{{ errors.city![0] }}</div>
         </div>
         <button type="button" class="add-btn m-btn-bounce">
@@ -221,7 +223,18 @@
       </div>
       <div class="fg" [ngClass]="{'_error': getControlValidity('street', 'address')}">
         <label>Улица</label>
-        <input type="text" (input)="cleanError('street')" [formControlName]="'street'" placeholder="Например: Волочаевская">
+        <input type="text"
+               (input)="cleanError('street')"
+               [formControlName]="'street'"
+               aria-label="Street"
+               matInput
+               [matAutocomplete]="streetAuto"
+               placeholder="Например: Волочаевская">
+        <mat-autocomplete #streetAuto="matAutocomplete">
+          <mat-option *ngFor="let option of suggestions$ | async" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
         <div class="fg__error-text">
           <div class="text12" *ngIf="getControlValidity('street')?.required">Обязательное поле</div>
           <div class="text12" *ngIf="errors && errors?.street">{{ errors.street![0] }}</div>

@@ -8,9 +8,8 @@ import {
   combineLatest,
   debounceTime,
   distinctUntilChanged,
-  filter,
   map,
-  Observable,
+  Observable, of,
   Subscription,
   switchMap
 } from 'rxjs';
@@ -87,6 +86,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   offline: boolean = true;
   errors: ErrorResponseType | null = null;
   suggestions$!: Observable<any[]>;
+  cities$!: Observable<any[]>;
   protected readonly highlightWeekend = highlightWeekend;
 
   @Input() existingFilesIds: number[] = [];
@@ -129,22 +129,44 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
               private addressService: AddressService,
               private router: Router) {
     this.isMaster = this.userService.isMaster;
-    const ctrl = this.publicationForm.get('address').get('city');
-    console.log(ctrl)
-    this.suggestions$ = this.publicationForm.get('address').get('city').valueChanges.pipe(
+    const ctrlAddress = this.publicationForm.get('address').get('street');
+    this.suggestions$ = ctrlAddress.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      filter((value): value is string => typeof value === 'string' && value.length >= Settings.minAddressQueryLength),
-      switchMap((value: string) =>
-        this.addressService.getAddressSuggest(value, 10).pipe(
-          // мапим результат в массив строк
-          map((res: any) => res.suggestions.map((s: any) => {
-            console.log(s.value)
-            return  s.value
-          })
+      switchMap((value: string) => {
+        console.log(ctrlCity.value.value)
+        if (value.length >= Settings.minAddressQueryLength) {
+          return this.addressService.getAddressSuggest(ctrlCity.value.value + ' ' + value, 10).pipe(
+            // мапим результат в массив строк
+            map((res: any) => res.suggestions.map((s: any) => {
+                return s.value
+              })
+            )
           )
-        )
-      )
+        } else {
+          return of([])
+        }
+      })
+    );
+
+    const ctrlCity = this.publicationForm.get('address').get('city');
+    this.cities$ = ctrlCity.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((value: string) => {
+        if (typeof value === 'string' && value.length >= Settings.minCityQueryLength) {
+          return this.addressService.getCitySuggest(value, 20).pipe(
+            // мапим результат в массив строк
+            map((res: any) => res.cities.map((s: any) => {
+                console.log(s)
+                return s
+              })
+            )
+          )
+        } else {
+          return of([])
+        }
+      })
     );
   }
 
@@ -264,6 +286,22 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     }
     this.subscribeToForms();
     this.checkFormat();
+  }
+
+  displayCity(city: any): string {
+    return city ? city.value : '';
+  }
+
+  validateCitySelection(ctrlName: string) {
+    const ctrl = this.publicationForm.get(ctrlName);
+    const value = ctrl?.value;
+
+    if (!value) {
+      return
+    } else if (typeof value === 'string') {
+      // если значение — строка, значит пользователь не выбрал из списка
+      ctrl?.setErrors({ invalidCity: true });
+    }
   }
 
   buildPublicationFormData(): FormData {
