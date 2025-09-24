@@ -1,5 +1,8 @@
 import {CategoryType} from './category.type';
 import {AdditionalImageType} from './additional-image.type';
+import {CityResponseType} from './city-response.type';
+import {StreetResponseType} from './street-response.type';
+import {HouseResponseType} from './house-response.type';
 
 export type PublicationType = {
   id: number,
@@ -13,9 +16,9 @@ export type PublicationType = {
   is_free: boolean,
   price: string,
   prepayment: string,
-  city: string | null,
-  street: string | null,
-  house: string | null,
+  city: CityResponseType | null,
+  street: StreetResponseType | null,
+  house: HouseResponseType | null,
   floor: string | null,
   office: string | null,
   duration: number,

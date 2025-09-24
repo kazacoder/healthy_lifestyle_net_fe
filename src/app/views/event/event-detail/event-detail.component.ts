@@ -125,9 +125,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           }
           this.event = data as EventType;
           this.getMastersEvents(this.event.author.toString());
-          this.address = this.event.city ? `г. ${this.event.city}` : '';
-          this.address += this.event.street ? `, ул. ${this.event.street}` : '';
-          this.address += this.event.house ? `, д. ${this.event.house}` : '';
+          this.address = this.event.city ? `${this.event.city.value}` : '';
+          this.address += this.event.street ? `, ${this.event.street.value}` : '';
+          this.address += this.event.house ? `, ${this.event.house.value}` : '';
           this.address += this.event.floor ? `, эт. ${this.event.floor}` : '';
           this.address += this.event.office ? `, к. ${this.event.office}` : '';
         },

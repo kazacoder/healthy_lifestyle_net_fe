@@ -9,6 +9,8 @@ export const Settings = {
   minQuestionLength: 10,
   minAddressQueryLength: 3,
   minCityQueryLength: 2,
+  minStreetQueryLength: 2,
+  minHouseQueryLength: 1,
   questionDefaultLimit: 4,
   eventDefaultLimit: 9,
   articlesDefaultLimit: 8,

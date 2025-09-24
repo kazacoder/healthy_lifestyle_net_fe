@@ -194,16 +194,17 @@
                aria-label="City"
                matInput
                [matAutocomplete]="cityAuto"
-               (blur)="validateCitySelection('address.city')"
+               (blur)="validateOrAutocompleteAddressItemSelection('address.city', cities)"
+               (change)="cleanControls(['address.street', 'address.house'])"
                placeholder="Например: Москва">
-        <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayCity">
+        <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayValue">
           <mat-option *ngFor="let option of cities$ | async" [value]="option">
             {{ option.value }}
           </mat-option>
         </mat-autocomplete>
         <div class="fg__error-text">
           <div class="text12" *ngIf="getControlValidity('city', 'address')?.required">Обязательное поле</div>
-          <div class="text12" *ngIf="getControlValidity('city', 'address')?.invalidCity">Начните вводить и выберите город из списка</div>
+          <div class="text12" *ngIf="getControlValidity('city', 'address')?.invalidChoice">Начните вводить и выберите город из списка</div>
           <div class="text12" *ngIf="errors && errors?.city">{{ errors.city![0] }}</div>
         </div>
         <button type="button" class="add-btn m-btn-bounce">
@@ -229,36 +230,52 @@
                aria-label="Street"
                matInput
                [matAutocomplete]="streetAuto"
+               (change)="cleanControls(['address.house'])"
+               (blur)="validateOrAutocompleteAddressItemSelection('address.street', streets)"
                placeholder="Например: Волочаевская">
-        <mat-autocomplete #streetAuto="matAutocomplete">
-          <mat-option *ngFor="let option of suggestions$ | async" [value]="option">
-            {{ option }}
+        <mat-autocomplete #streetAuto="matAutocomplete" [displayWith]="displayValue">
+          <mat-option *ngFor="let option of streets$ | async" [value]="option">
+            {{ option.value }}
           </mat-option>
         </mat-autocomplete>
         <div class="fg__error-text">
-          <div class="text12" *ngIf="getControlValidity('street')?.required">Обязательное поле</div>
+          <div class="text12" *ngIf="getControlValidity('street', 'address')?.required">Обязательное поле</div>
+          <div class="text12" *ngIf="getControlValidity('street', 'address')?.invalidChoice">Начните вводить и выберите город из списка</div>
           <div class="text12" *ngIf="errors && errors?.street">{{ errors.street![0] }}</div>
         </div>
       </div>
       <div class="publication-form__group publication-form__group--col3">
         <div class="fg" (input)="cleanError('house')" [ngClass]="{'_error': getControlValidity('house', 'address')}">
           <label>Дом/строение</label>
-          <input type="text" [formControlName]="'house'" placeholder="34">
+          <input type="text"
+                 [formControlName]="'house'"
+                 (input)="cleanError('house')"
+                 aria-label="House"
+                 matInput
+                 [matAutocomplete]="houseAuto"
+                 (blur)="validateOrAutocompleteAddressItemSelection('address.house', houses)"
+                 placeholder="Номер дома">
+          <mat-autocomplete #houseAuto="matAutocomplete" [displayWith]="displayValue">
+            <mat-option *ngFor="let option of house$ | async" [value]="option">
+              {{ option.value }}
+            </mat-option>
+          </mat-autocomplete>
           <div class="fg__error-text">
-            <div class="text12" *ngIf="getControlValidity('house')?.required">Обязательное поле</div>
+            <div class="text12" *ngIf="getControlValidity('house', 'address')?.required">Обязательное поле</div>
+            <div class="text12" *ngIf="getControlValidity('house', 'address')?.invalidChoice">Начните вводить и выберите город из списка</div>
             <div class="text12" *ngIf="errors && errors?.house">{{ errors.house![0] }}</div>
           </div>
         </div>
         <div class="fg" [ngClass]="{'_error': getControlValidity('floor', 'address')}">
           <label>Этаж</label>
-          <input type="text" [formControlName]="'floor'" placeholder="5">
+          <input type="text" [formControlName]="'floor'" placeholder="этаж">
           <div class="fg__error-text">
             <div class="text12">Обязательное поле</div>
           </div>
         </div>
         <div class="fg" [ngClass]="{'_error': getControlValidity('office', 'address')}">
           <label>Кабинет</label>
-          <input type="text" [formControlName]="'office'" placeholder="15">
+          <input type="text" [formControlName]="'office'" placeholder="номер">
           <div class="fg__error-text">
             <div class="text12">Обязательное поле</div>
           </div>

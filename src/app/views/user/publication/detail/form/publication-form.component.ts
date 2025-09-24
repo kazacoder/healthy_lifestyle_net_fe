@@ -11,7 +11,7 @@ import {
   map,
   Observable, of,
   Subscription,
-  switchMap
+  switchMap, tap
 } from 'rxjs';
 import {CategoryType} from '../../../../../../types/category.type';
 import {UserService} from '../../../../../shared/services/user.service';
@@ -36,6 +36,10 @@ import {ErrorResponseType} from '../../../../../../types/error-response.type';
 import {NgxMaskDirective} from 'ngx-mask';
 import {AddressService} from '../../../../../shared/services/address.service';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {LocationRequestType} from '../../../../../../types/location-request.type';
+import {StreetResponseType, StreetsResponseType} from '../../../../../../types/street-response.type';
+import {HouseResponseType, HousesResponseType} from '../../../../../../types/house-response.type';
+import {CitiesResponseType, CityResponseType} from '../../../../../../types/city-response.type';
 
 @Component({
   selector: 'publication-form',
@@ -85,8 +89,12 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   areFormsValid: boolean = false
   offline: boolean = true;
   errors: ErrorResponseType | null = null;
-  suggestions$!: Observable<any[]>;
+  streets$!: Observable<any[]>;
   cities$!: Observable<any[]>;
+  house$!: Observable<any[]>;
+  streets: StreetResponseType[] = [];
+  cities: CityResponseType[] = [];
+  houses: HouseResponseType[] = [];
   protected readonly highlightWeekend = highlightWeekend;
 
   @Input() existingFilesIds: number[] = [];
@@ -129,17 +137,20 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
               private addressService: AddressService,
               private router: Router) {
     this.isMaster = this.userService.isMaster;
-    const ctrlAddress = this.publicationForm.get('address').get('street');
-    this.suggestions$ = ctrlAddress.valueChanges.pipe(
+
+    const ctrlCity = this.publicationForm.get('address').get('city');
+    this.cities$ = ctrlCity.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
+      tap(() => this.cities = []),
       switchMap((value: string) => {
-        console.log(ctrlCity.value.value)
-        if (value.length >= Settings.minAddressQueryLength) {
-          return this.addressService.getAddressSuggest(ctrlCity.value.value + ' ' + value, 10).pipe(
-            // мапим результат в массив строк
-            map((res: any) => res.suggestions.map((s: any) => {
-                return s.value
+        if (value.length >= Settings.minCityQueryLength) {
+          return this.addressService.getCitySuggest(value, 20).pipe(
+            // мапим результат в массив объектов
+            map((result: CitiesResponseType | DefaultResponseType) => (result as CitiesResponseType)
+              .cities.map((city: CityResponseType) => {
+                this.cities.push(city)
+                return city
               })
             )
           )
@@ -149,17 +160,48 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       })
     );
 
-    const ctrlCity = this.publicationForm.get('address').get('city');
-    this.cities$ = ctrlCity.valueChanges.pipe(
+    const ctrlStreet = this.publicationForm.get('address').get('street');
+    this.streets$ = ctrlStreet.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
+      tap(() => this.streets = []),
       switchMap((value: string) => {
-        if (typeof value === 'string' && value.length >= Settings.minCityQueryLength) {
-          return this.addressService.getCitySuggest(value, 20).pipe(
-            // мапим результат в массив строк
-            map((res: any) => res.cities.map((s: any) => {
-                console.log(s)
-                return s
+        let locations: LocationRequestType = null
+        if (ctrlCity.value['settlement_fias_id']) {
+          locations = {settlement_fias_id: ctrlCity.value['settlement_fias_id']}
+        } else if (ctrlCity.value['city_fias_id']) {
+          locations = {city_fias_id: ctrlCity.value['city_fias_id']}
+        }
+        if (locations && value.length >= Settings.minStreetQueryLength) {
+          return this.addressService.getStreetSuggest(value, locations, 10).pipe(
+            // мапим результат в массив объектов
+            map((result: StreetsResponseType | DefaultResponseType) => (result as StreetsResponseType)
+              .streets.map((street: StreetResponseType) => {
+                this.streets.push(street)
+                return street
+              })
+            )
+          )
+        } else {
+          return of([])
+        }
+      })
+    );
+
+    const ctrlHouse = this.publicationForm.get('address').get('house');
+    this.house$ = ctrlHouse.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => this.houses = []),
+      switchMap((value: string) => {
+        const streetFiasId = ctrlStreet.value['street_fias_id']
+        if (value.length >= Settings.minHouseQueryLength && streetFiasId) {
+          return this.addressService.getHouseSuggest(value, streetFiasId, 10).pipe().pipe(
+            // мапим результат в массив объектов
+            map((result: HousesResponseType | DefaultResponseType) => (result as HousesResponseType)
+              .houses.map((house: HouseResponseType) => {
+                this.houses.push(house)
+                return house
               })
             )
           )
@@ -274,7 +316,13 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             this.publicationForm.get(key).setValue(value?.toString());
           } else if (beKey.group) {
             const group = this.publicationForm.get(beKey.group)
-            group.get(key).setValue(value?.toString())
+            if (['city', 'street', 'house'].includes(key)) {
+              if (value) {
+                group.get(key).setValue(value); // объект с value, fias_id и т.д.
+              }
+            } else {
+              group.get(key).setValue(value?.toString());
+            }
           } else if (key === 'categories') {
             this.publicationForm.get(key).setValue(value);
             this.categories = [...this.categoriesUnfiltered.filter(
@@ -288,19 +336,26 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     this.checkFormat();
   }
 
-  displayCity(city: any): string {
-    return city ? city.value : '';
+  displayValue(value: any): string {
+    return value ? value.value : '';
   }
 
-  validateCitySelection(ctrlName: string) {
+  validateOrAutocompleteAddressItemSelection(
+    ctrlName: string,
+    option: Array<HouseResponseType | StreetResponseType | CityResponseType> | null = null
+  ) {
     const ctrl = this.publicationForm.get(ctrlName);
     const value = ctrl?.value;
 
     if (!value) {
       return
     } else if (typeof value === 'string') {
-      // если значение — строка, значит пользователь не выбрал из списка
-      ctrl?.setErrors({ invalidCity: true });
+      if (option && option.length > 0) {
+        ctrl.setValue(option[0])
+      } else {
+        // если значение — строка, значит пользователь не выбрал из списка
+        ctrl?.setErrors({ invalidChoice: true });
+      }
     }
   }
 
@@ -318,7 +373,11 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
           Object.keys(group.controls).forEach(subKey => {
             const subControl = group.get(subKey)!;
             if (subControl.dirty) {
-              formData.append(publicationFormFieldsMatch[subKey as PubFormKey].field, subControl.value);
+              if (['city', 'street', 'house'].includes(subKey)) {
+                formData.append(publicationFormFieldsMatch[subKey as PubFormKey].field, JSON.stringify(subControl.value));
+              } else {
+                formData.append(publicationFormFieldsMatch[subKey as PubFormKey].field, subControl.value);
+              }
             }
           });
         }
@@ -411,9 +470,9 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
       formData.append('description', this.publicationForm.value.description);
 
       if (this.offline) {
-        formData.append('city', this.publicationForm.value.address.city);
-        formData.append('street', this.publicationForm.value.address.street);
-        formData.append('house', this.publicationForm.value.address.house);
+        formData.append('city', JSON.stringify(this.publicationForm.value.address.city));
+        formData.append('street', JSON.stringify(this.publicationForm.value.address.street));
+        formData.append('house', JSON.stringify(this.publicationForm.value.address.house));
         formData.append('floor', this.publicationForm.value.address.floor);
         formData.append('office', this.publicationForm.value.address.office);
       }
@@ -528,6 +587,12 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     if (this.errors?.hasOwnProperty(key)) {
       this.errors[key] = null;
     }
+  }
+
+  cleanControls(ctrlNameList: Array<string>) {
+    ctrlNameList.forEach(ctrlName => {
+      this.publicationForm.get(ctrlName).setValue('');
+    })
   }
 
   checkFormat() {

@@ -1,5 +1,8 @@
 import {CategoryType} from './category.type';
 import {AdditionalImageType} from './additional-image.type';
+import {HouseResponseType} from './house-response.type';
+import {StreetResponseType} from './street-response.type';
+import {CityResponseType} from './city-response.type';
 
 export type EventType = {
   id: number,
@@ -21,9 +24,9 @@ export type EventType = {
   is_free: boolean,
   price: string,
   prepayment: string,
-  city: string | null,
-  street: string | null,
-  house: string | null,
+  city: CityResponseType | null,
+  street: StreetResponseType | null,
+  house: HouseResponseType | null,
   floor: string | null,
   office: string | null,
   duration: number,
