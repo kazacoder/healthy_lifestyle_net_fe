@@ -20,6 +20,7 @@ import {EventCard3Component} from '../../../shared/components/cards/event-card3/
 import {NgForOf, NgIf} from '@angular/common';
 import {SwiperNavComponent} from '../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element';
+import {CoordinatesType} from '../../../../types/coordinates.type';
 
 @Component({
   selector: 'app-event-detail',
@@ -55,6 +56,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   recentEventSubscription: Subscription | null = null;
   masterHistorySwiper: HTMLElement | null = null;
   recentEventsSwiper: HTMLElement | null = null;
+  coordinates: CoordinatesType | null = null
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
@@ -130,6 +132,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.address += this.event.house ? `, ${this.event.house.value}` : '';
           this.address += this.event.floor ? `, эт. ${this.event.floor}` : '';
           this.address += this.event.office ? `, к. ${this.event.office}` : '';
+          if (this.event.house) {
+            this.coordinates = {
+              latitude: this.event.house.geo_lat!,
+              longitude: this.event.house.geo_lon!,
+            }
+          }
         },
         error: (errorResponse: HttpErrorResponse) => {
           if (errorResponse.error && errorResponse.error.detail) {
