@@ -16,11 +16,15 @@ export const Settings = {
   articlesDefaultLimit: 8,
   masterDefaultLimit: 4,
   maxCategoryTagCount: 10,
+  mapZoom: 16,
   passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
   emailRegex: /^([-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*|^"([\x01-\x08\x0b\x0c\x0e-\x1f!#-\[\]-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,63}\.?$/i,
   youtube_regex: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(channel\/[A-Za-z0-9_-]{24}|c\/[A-Za-z0-9_-]+|user\/[A-Za-z0-9_-]+|@[\w.-]+)$/,
-  telegram_regex: /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[a-zA-Z][a-zA-Z0-9_]{4,31}$|^@[a-zA-Z][a-zA-Z0-9_]{4,31}$/,
+  telegram_regex: /^(?!_)(?!.*_$)(?!.*__)[A-Za-z0-9_]{5,32}$/,
   vk_regex: /^(?:https?:\/\/)?(?:www\.)?vk\.com\/[a-zA-Z0-9_.]{5,32}$/,
   instagram_regex: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?!.*\.\.)(?!\.)([a-zA-Z0-9._]{1,30})(?<!\.)\/?$/,
   offlineFormatsIDs: [2, 3], // Офлайн, Комбинированный
 }
+
+
+// telegram_regex: /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[a-zA-Z][a-zA-Z0-9_]{4,31}$|^@[a-zA-Z][a-zA-Z0-9_]{4,31}$/,

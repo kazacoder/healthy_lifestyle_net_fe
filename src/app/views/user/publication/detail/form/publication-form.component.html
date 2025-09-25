@@ -339,7 +339,7 @@
           <label>Telegram</label>
           <input type="text"
                  (input)="cleanError('telegram')"
-                 [formControlName]="'telegram'" placeholder="Ваш TG аккаунт">
+                 [formControlName]="'telegram'" placeholder="Ваш Username в Telegram">
           <div class="fg__error-text">
             <div class="text12" *ngIf="getControlValidity('telegram')?.required">Обязательное поле</div>
             <div class="text12" *ngIf="getControlValidity('telegram')?.pattern">Введите корректную ссылку</div>

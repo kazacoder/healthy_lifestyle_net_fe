@@ -48,9 +48,9 @@
           {{ event?.author_full_name }}
       </span>
     </a>
-    <div class="event-city _flex">
+    <div class="event-city _flex" *ngIf="event?.city?.value">
       <img src="assets/img/marker.svg" alt="">
-      <span class="text16 text12-tablet" [innerHTML]="event?.city">
+      <span class="text16 text12-tablet" [innerHTML]="event?.city?.value">
       </span>
     </div>
   </div>

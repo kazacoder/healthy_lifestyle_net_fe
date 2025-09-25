@@ -53,7 +53,7 @@
           </div>
           <span class="text20 text16-tablet">{{ event?.author_full_name }}</span>
         </a>
-        <div class="event-item__street _flex">
+        <div class="event-item__street _flex" *ngIf="address">
           <img src="assets/img/marker.svg" alt="">
           <span class="text18 text16-tablet">{{ address }}</span>
         </div>

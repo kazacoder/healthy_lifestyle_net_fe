@@ -20,8 +20,8 @@
       [eventAuthor]="event?.author"></event-questions>
   </div>
 
-  <div class="address">
-    <event-address [coordinates]="coordinates"></event-address>
+  <div class="address" *ngIf="coordinates">
+    <event-address [coordinates]="coordinates" [address]="address"></event-address>
   </div>
 
   <div class="container" id="masterEvents">

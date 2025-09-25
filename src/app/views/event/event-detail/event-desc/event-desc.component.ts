@@ -10,6 +10,8 @@ import {Subscription} from 'rxjs';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {BookingResponseType} from '../../../../../types/booking-response.type';
+import {PhoneFormatPipe} from '../../../../shared/pipes/phone-format.pipe';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'event-desc',
@@ -18,7 +20,8 @@ import {BookingResponseType} from '../../../../../types/booking-response.type';
     SwiperNavComponent,
     EventCard2Component,
     NgForOf,
-    NgClass
+    NgClass,
+    PhoneFormatPipe
   ],
   standalone: true,
   templateUrl: './event-desc.component.html',
@@ -36,6 +39,8 @@ export class EventDescComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() photos: AdditionalImageType[] | null | undefined = undefined;
   photoSwiper: SwiperContainer | null = null;
   hideNavigation: boolean = false;
+  waUrl: SafeResourceUrl | null = null;
+  tgUrl: SafeResourceUrl | null = null;
   photoSwiperParams = {
     slidesPerView: "auto",
     spaceBetween: 0,
@@ -54,11 +59,14 @@ export class EventDescComponent implements AfterViewInit, OnChanges, OnDestroy {
   bookingSubscription: Subscription | null = null;
 
   constructor(private _snackBar: MatSnackBar,
-              private eventService: EventService,) {
+              private eventService: EventService,
+              private sanitizer: DomSanitizer) {
   }
 
   ngOnChanges() {
     this.hideNavigation = !this.photos || this.photos.length === 0;
+    this.waUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://wa.me/7${ this.whatsapp }`)
+    this.tgUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://t.me/${ this.tg }`)
   }
 
   ngAfterViewInit(): void {

@@ -49,13 +49,13 @@
         Контакты
       </div>
       <div class="event-contacts__items">
-        <a href="" class="event-contacts__item" *ngIf="tg">
+        <a [href]="tgUrl" class="event-contacts__item" *ngIf="tg">
           <img src="assets/img/tg.svg" alt="">
           <span>{{ tg }}</span>
         </a>
-        <a href="" class="event-contacts__item" *ngIf="whatsapp">
+        <a [href]="waUrl" class="event-contacts__item" *ngIf="whatsapp">
           <img src="assets/img/whatsapp.svg" alt="">
-          <span>{{ whatsapp }}</span>
+          <span>{{ whatsapp | phoneFormat }}</span>
         </a>
       </div>
     </div>
