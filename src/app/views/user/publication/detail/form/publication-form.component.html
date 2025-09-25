@@ -70,7 +70,11 @@
           <div [ngClass]="{_active: publicationForm.get('pricing').value === '_free'}"
                class="pricing__free pricing__item">
             <div class="m-check">
-              <input checked type="radio" name="pricing" value="_free" formControlName="pricing">
+              <input checked type="radio"
+                     (click)="makeEventFree()"
+                     name="pricing"
+                     value="_free"
+                     formControlName="pricing">
               <label>
                 <span>Бесплатно</span>
               </label>
@@ -194,7 +198,7 @@
                aria-label="City"
                matInput
                [matAutocomplete]="cityAuto"
-               (blur)="validateOrAutocompleteAddressItemSelection('address.city', cities)"
+               (blur)="proceedBlur('address.city', cities, ['address.street', 'address.house'])"
                (change)="cleanControls(['address.street', 'address.house'])"
                placeholder="Например: Москва">
         <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayValue">
@@ -231,7 +235,7 @@
                matInput
                [matAutocomplete]="streetAuto"
                (change)="cleanControls(['address.house'])"
-               (blur)="validateOrAutocompleteAddressItemSelection('address.street', streets)"
+               (blur)="proceedBlur('address.street', streets, ['address.house'])"
                placeholder="Например: Волочаевская">
         <mat-autocomplete #streetAuto="matAutocomplete" [displayWith]="displayValue">
           <mat-option *ngFor="let option of streets$ | async" [value]="option">

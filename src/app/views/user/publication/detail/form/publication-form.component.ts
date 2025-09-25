@@ -111,8 +111,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     prepayment: [0],
     address: this.fb.group({
       city: ['', Validators.required],
-      street: ['', Validators.required],
-      house: ['', Validators.required],
+      street: [{value: '', disabled: true,}, Validators.required],
+      house: [{value: '', disabled: true,}, Validators.required],
       floor: ['',],
       office: ['',],
     }),
@@ -124,7 +124,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     suit: [null, Validators.required],
     format: [null, Validators.required],
     date: ['', Validators.required],
-    whatsapp: ['', ],
+    whatsapp: ['',],
     telegram: ['', Validators.pattern(Settings.telegram_regex)],
     description: [null, Validators.required],
     categories: [[]]
@@ -354,8 +354,33 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
         ctrl.setValue(option[0])
       } else {
         // если значение — строка, значит пользователь не выбрал из списка
-        ctrl?.setErrors({ invalidChoice: true });
+        ctrl?.setErrors({invalidChoice: true});
       }
+    }
+  }
+
+  makeEventFree() {
+    this.publicationForm.get('price').setValue(0)
+    this.publicationForm.get('prepayment').setValue(0)
+  }
+
+  proceedBlur(
+    ctrlName: string,
+    option: Array<HouseResponseType | StreetResponseType | CityResponseType> | null = null,
+    ctrlNameArray: string[]
+  ) {
+    this.validateOrAutocompleteAddressItemSelection(ctrlName, option)
+    this.toggleCtrl(ctrlName, ctrlNameArray)
+  }
+
+  toggleCtrl(ctrlMasterName: string, ctrlSlaveNameArray: string[]) {
+    const ctrl = this.publicationForm.get(ctrlMasterName)
+    if (ctrl.invalid || !ctrl.value) {
+      ctrlSlaveNameArray.forEach(ctrlName => {
+        this.publicationForm.get(ctrlName).disable()
+      })
+    } else {
+      this.publicationForm.get(ctrlSlaveNameArray[0]).enable()
     }
   }
 
@@ -508,6 +533,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             this._snackBar.open(errorResponse.error.detail)
           } else {
             this.errors = errorResponse.error as ErrorResponseType;
+            console.log(errorResponse)
             this._snackBar.open('Ошибка создания события')
           }
         }
@@ -539,6 +565,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             if (errorResponse.error && errorResponse.error.detail) {
               this._snackBar.open(errorResponse.error.detail)
             } else {
+              console.log(errorResponse)
+              this.errors = errorResponse.error as ErrorResponseType;
               this._snackBar.open('Ошибка обновления события')
             }
           }
@@ -571,9 +599,9 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getControlValidity(ctrlName: string, groupName: string | null = null, beFieldName: string | null = null): any {
-    let ctrl = this.publicationForm.get([ctrlName])
+    let ctrl = this.publicationForm.get(ctrlName)
     if (groupName) {
-      ctrl = this.publicationForm.get(groupName).get([ctrlName])
+      ctrl = this.publicationForm.get(groupName).get(ctrlName)
     }
     if (!ctrl) {
       return null
@@ -606,6 +634,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
 
     if (Settings.offlineFormatsIDs.includes(formatId)) {
       address.enable();
+      this.toggleCtrl('address.city', ['address.street', 'address.house'])
+      this.toggleCtrl('address.street', ['address.house'])
       this.offline = true;
       addressItems.forEach(item => {
         item.setValidators(Validators.required);
