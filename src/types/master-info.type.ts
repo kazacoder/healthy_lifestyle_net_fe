@@ -1,11 +1,12 @@
 import {UserSpecialityType} from './speciality.type';
 import {AdditionalImageType} from './additional-image.type';
+import {CityResponseType} from './city-response.type';
 
 export type MasterInfoType = {
   id: number,
   full_name: string,
   specialities: UserSpecialityType[],
-  city: string,
+  city: CityResponseType,
   about_me: string,
   short_description: string,
   photo: string,

@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -7,19 +7,32 @@ import {SpecialityType, UserSpecialityType, UserSpecialityUpdateType} from '../.
 import {UserFullInfoType} from '../../../../../types/user-full-info.type';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
-import {catchError, Observable, Subscription, tap, throwError} from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged, map,
+  Observable, of,
+  Subscription,
+  switchMap,
+  tap,
+  throwError
+} from 'rxjs';
 import {SpecialityService} from '../../../../shared/services/speciality.service';
 import {ChangePasswordComponent} from './change-password/change-password.component';
 import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MatNativeDateModule, MatOption} from '@angular/material/core';
 import {CommonUtils, highlightWeekend} from '../../../../shared/utils/common-utils';
 import {UserGenderType} from '../../../../../types/user-gender.type';
 import {CustomValidator} from '../../../../shared/validators/custom-validators';
 import {Settings} from '../../../../../settings/settings';
 import {ErrorResponseType} from '../../../../../types/error-response.type';
 import {NgxMaskDirective} from 'ngx-mask';
+import {CitiesResponseType, CityResponseType} from '../../../../../types/city-response.type';
+import {AddressService} from '../../../../shared/services/address.service';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {MatInput} from '@angular/material/input';
 
 @Component({
   selector: 'user-form',
@@ -35,6 +48,11 @@ import {NgxMaskDirective} from 'ngx-mask';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskDirective,
+    AsyncPipe,
+    MatAutocomplete,
+    MatOption,
+    MatAutocompleteTrigger,
+    MatInput,
   ],
   providers: [
     MatDatepickerModule,
@@ -61,6 +79,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   genderObj: { [key: string]: string } = {};
   isOpenPasswordModal: boolean = false;
   errors: ErrorResponseType | null = null;
+  cities$!: Observable<any[]>;
+  cities: CityResponseType[] = [];
 
   // ToDO realize phone adding
   userInfoForm: any = this.fb.group({
@@ -91,8 +111,30 @@ export class UserFormComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
               private userService: UserService,
               private specialityService: SpecialityService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private addressService: AddressService,) {
 
+    const ctrlCity = this.userInfoForm.get('city');
+    this.cities$ = ctrlCity.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => this.cities = []),
+      switchMap((value: string) => {
+        if (typeof value === 'string' && value.length >= Settings.minCityQueryLength) {
+          return this.addressService.getCitySuggest(value, 20).pipe(
+            // мапим результат в массив объектов
+            map((result: CitiesResponseType | DefaultResponseType) => (result as CitiesResponseType)
+              .cities.map((city: CityResponseType) => {
+                this.cities.push(city)
+                return city
+              })
+            )
+          )
+        } else {
+          return of([])
+        }
+      })
+    );
   }
 
   ngOnInit() {
@@ -358,6 +400,29 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   preventInput(event: KeyboardEvent): void {
     event.preventDefault();
+  }
+
+  validateOrAutocompleteAddressItemSelection(
+    ctrlName: string,
+    option: CityResponseType[] | null = null
+  ) {
+    const ctrl = this.userInfoForm.get(ctrlName);
+    const value = ctrl?.value;
+
+    if (!value) {
+      return
+    } else if (typeof value === 'string') {
+      if (option && option.length > 0) {
+        ctrl.setValue(option[0])
+      } else {
+        // если значение — строка, значит пользователь не выбрал из списка
+        ctrl?.setErrors({invalidChoice: true});
+      }
+    }
+  }
+
+  displayValue(value: any): string {
+    return value ? value.value : '';
   }
 
   cleanError(key: keyof ErrorResponseType): void {

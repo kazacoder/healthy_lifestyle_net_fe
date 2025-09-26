@@ -114,9 +114,24 @@
         </div>
       </ng-container>
     </ng-container>
-    <div class="fg">
+    <div class="fg" [ngClass]="{'_error': getControlValidity('city')}">
       <label>Город</label>
-      <input type="text" placeholder="Например: Москва" formControlName="city">
+      <input type="text"
+             placeholder="Например: Москва"
+             matInput
+             [matAutocomplete]="cityAuto"
+             (blur)="validateOrAutocompleteAddressItemSelection('city', cities)"
+             formControlName="city">
+      <mat-autocomplete #cityAuto="matAutocomplete" [displayWith]="displayValue">
+        <mat-option *ngFor="let option of cities$ | async" [value]="option">
+          {{ option.value }}
+        </mat-option>
+      </mat-autocomplete>
+      <div class="fg__error-text">
+        <div class="text12" *ngIf="getControlValidity('city')?.required">Обязательное поле</div>
+        <div class="text12" *ngIf="getControlValidity('city')?.invalidChoice">Начните вводить и выберите город из списка</div>
+        <div class="text12" *ngIf="errors && errors?.city">{{ errors.city![0] }}</div>
+      </div>
     </div>
     <div class="text18 semi-bold-text font2">
       Ссылки на каналы
