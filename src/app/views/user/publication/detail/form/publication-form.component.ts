@@ -685,13 +685,24 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
             value: address.city_with_type
           }
           const street: StreetResponseType = {
-            value: '',
-            street: '',
-            street_with_type: '',
-            street_type: '',
-            street_fias_id: ''
+            value: address.street_with_type,
+            street: address.street,
+            street_with_type: address.street_with_type,
+            street_type: address.street_type,
+            street_fias_id: address.street_fias_id
+          }
+          const house: HouseResponseType = {
+            value: address.house,
+            house: address.house,
+            house_type: address.house_type,
+            house_fias_id: address.house_fias_id,
+            geo_lat: coords.lat.toString(),
+            geo_lon: coords.lon.toString(),
+            qc_geo: parseInt(address.qc_geo)
           }
           this.publicationForm.get('address.city').setValue(city);
+          this.publicationForm.get('address.street').setValue(street);
+          this.publicationForm.get('address.house').setValue(house);
 
           this.toggleMapModal(false);
 
