@@ -1,0 +1,22 @@
+<div class="modal map-modal" [ngClass]="{'_active _active2': isOpen}" *ngIf="isOpen">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="">
+      <div class="modal__top text-center map__title">
+        <div class="text20 text16-tablet semi-bold-text text-center">Выберите точку на карте</div>
+      </div>
+      <div class="map__body">
+        <div class="map__content" id="map"></div>
+      </div>
+      <div class="map-modal__nav">
+        <div class="map-modal__btn m-btn m-btn-primary m-btn-bounce">
+          <button (click)="confirm()">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

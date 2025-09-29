@@ -6,6 +6,7 @@ import {StreetsResponseType} from '../../../types/street-response.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {HousesResponseType} from '../../../types/house-response.type';
 import {CitiesResponseType} from '../../../types/city-response.type';
+import {GeolocationResponseType} from '../../../types/geolocation-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,9 @@ export class AddressService {
 
   getHouseSuggest(query: string, street_fias_id: string, count: number = 20): Observable<DefaultResponseType | HousesResponseType> {
     return this.http.post<HousesResponseType | DefaultResponseType>(environment.api + 'address/house/', {query, street_fias_id, count});
+  }
+
+  getGeoLocation(lat: number, lon: number, count: number = 1): Observable<DefaultResponseType | GeolocationResponseType> {
+    return this.http.post<GeolocationResponseType | DefaultResponseType>(environment.api + 'address/geolocation/', {lat, lon, count});
   }
 }

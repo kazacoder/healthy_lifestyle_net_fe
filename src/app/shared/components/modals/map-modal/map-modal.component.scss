@@ -1,0 +1,38 @@
+.map-modal{
+  .modal__dialog{
+    padding: 1.25em 3.125em;
+    width: 81.5em;
+  }
+
+  .map__content {
+    width: 100%;
+    height: calc(70vh - 30px);
+  }
+
+  .map__title {
+    margin-bottom: 1em;
+  }
+
+  .modal__top{
+    display: block;
+  }
+
+  &__nav{
+    display: flex;
+    margin-top: 1em;
+    justify-content: center;
+  }
+  &__btn{
+    padding: 0 1.25em;
+    font-weight: 600;
+    height: 2.625em;
+    &--confirm{
+      width: 33.125em;
+    }
+    span{
+      font-size: 1.375em;
+    }
+  }
+}
+
+

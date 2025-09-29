@@ -40,6 +40,9 @@ import {LocationRequestType} from '../../../../../../types/location-request.type
 import {StreetResponseType, StreetsResponseType} from '../../../../../../types/street-response.type';
 import {HouseResponseType, HousesResponseType} from '../../../../../../types/house-response.type';
 import {CitiesResponseType, CityResponseType} from '../../../../../../types/city-response.type';
+import {MapModalComponent} from '../../../../../shared/components/modals/map-modal/map-modal.component';
+import {WindowsUtils} from '../../../../../shared/utils/windows-utils';
+import {GeolocationResponseType} from '../../../../../../types/geolocation-response.type';
 
 @Component({
   selector: 'publication-form',
@@ -61,7 +64,8 @@ import {CitiesResponseType, CityResponseType} from '../../../../../../types/city
     NgxMaskDirective,
     MatAutocompleteModule,
     MatOption,
-    AsyncPipe
+    AsyncPipe,
+    MapModalComponent
   ],
   providers: [
     MatDatepickerModule,
@@ -83,6 +87,7 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   getTimePeriodsSubscription: Subscription | null = null;
   updatePublicationSubscription: Subscription | null = null;
   createPublication: Subscription | null = null;
+  getGeolocationSubscription: Subscription | null = null;
   maxCatCount = Settings.maxCategoryCount;
   edit: boolean = false;
   dp: any = null;
@@ -95,6 +100,8 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
   streets: StreetResponseType[] = [];
   cities: CityResponseType[] = [];
   houses: HouseResponseType[] = [];
+  mapOpen: boolean = false;
+  coords: { lat: number, lon: number } | null = null;
   protected readonly highlightWeekend = highlightWeekend;
 
   @Input() existingFilesIds: number[] = [];
@@ -652,6 +659,60 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  proceedCoords(coords: { lat: number, lon: number }) {
+    this.coords = coords;
+    this.getGeolocationSubscription = this.addressService.getGeoLocation(coords.lat, coords.lon)
+      .subscribe({
+        next: (data: GeolocationResponseType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            const error = (data as DefaultResponseType).detail;
+            this._snackBar.open(error);
+            throw new Error(error);
+          }
+          const address = (data as GeolocationResponseType).data;
+          const city: CityResponseType = {
+            city: address.city,
+            city_fias_id: address.city_fias_id,
+            city_type: address.city_type,
+            city_with_type: address.city_with_type,
+            region_fias_id: address.region_fias_id,
+            region_iso_code: address.region_iso_code,
+            region_with_type: address.region_with_type,
+            settlement: address.settlement,
+            settlement_fias_id: address.settlement_fias_id,
+            settlement_type: address.settlement_type,
+            settlement_with_type: address.settlement_with_type,
+            value: address.city_with_type
+          }
+          const street: StreetResponseType = {
+            value: '',
+            street: '',
+            street_with_type: '',
+            street_type: '',
+            street_fias_id: ''
+          }
+          this.publicationForm.get('address.city').setValue(city);
+
+          this.toggleMapModal(false);
+
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.errors = errorResponse.error as ErrorResponseType;
+          if (errorResponse.error && errorResponse.error.detail) {
+            this._snackBar.open(errorResponse.error.detail)
+          } else {
+            this._snackBar.open('Ошибка геолокации')
+          }
+        }
+      });
+
+  }
+
+  toggleMapModal(val: boolean): void {
+    this.mapOpen = val;
+    WindowsUtils.fixBody(val);
+  }
+
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe();
     this.getFormatsSubscription?.unsubscribe();
@@ -659,5 +720,6 @@ export class PublicationFormComponent implements OnInit, OnDestroy, OnChanges {
     this.getSuitsSubscription?.unsubscribe();
     this.createPublication?.unsubscribe();
     this.updatePublicationSubscription?.unsubscribe();
+    this.getGeolocationSubscription?.unsubscribe();
   }
 }
