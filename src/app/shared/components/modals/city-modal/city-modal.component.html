@@ -11,15 +11,18 @@
       </div>
     </div>
     <div class="fg search-field _mt30">
-      <input type="text" placeholder="Введите название города">
+      <input type="text"
+             [(ngModel)]="searchField"
+             (input)="filterCity()"
+             placeholder="Введите название города">
       <img src="assets/img/search.svg" alt="" class="search-field__icon">
     </div>
     <div class="cities _mt16">
       <div class="cities__items">
-        <div class="cities__item" [ngClass]="city === chosenCity ? '_active' : ''"
-             (click)="cityProceed(city)"
-             *ngFor="let city of cities">
-          <span>{{ city }}</span>
+        <div class="cities__item" [ngClass]="city.city === chosenCity ? '_active' : ''"
+             (click)="cityProceed(city.city)"
+             *ngFor="let city of citiesFiltered">
+          <span>{{ city.city }}</span>
         </div>
       </div>
     </div>

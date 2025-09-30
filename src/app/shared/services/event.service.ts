@@ -12,6 +12,7 @@ import {FiltersDataType} from '../../../types/filters-data.type';
 import {ParamsObjectType} from '../../../types/params-object.type';
 import {BookingResponseType} from '../../../types/booking-response.type';
 import {EventQuestionsAnswersResponseType} from '../../../types/event-questions-answers-response.type';
+import {EventsCitesResponseType} from '../../../types/event-city.type';
 
 @Injectable({
   providedIn: 'root'
@@ -114,5 +115,9 @@ export class EventService {
 
   getRecentEventList(): Observable<EventType[] | DefaultResponseType> {
     return this.http.get<EventType[] | DefaultResponseType>(`${environment.api}recent-events/`)
+  }
+
+  getEventsCitiesList(): Observable<EventsCitesResponseType | DefaultResponseType> {
+    return this.http.get<EventsCitesResponseType | DefaultResponseType>(`${environment.api}events/cities/`)
   }
 }
