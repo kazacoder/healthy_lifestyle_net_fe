@@ -157,7 +157,9 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   chooseCity(value: string) {
-    this.chosenCity = value;
+    setTimeout(() => {
+      this.chosenCity = value;
+    });
   }
 
   ngOnDestroy() {

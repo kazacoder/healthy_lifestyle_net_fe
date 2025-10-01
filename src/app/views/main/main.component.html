@@ -137,9 +137,11 @@
     </div>
   </div>
 </main>
-<city-modal [isOpened]="isCityModalOpened"
+<city-modal *ngIf="isCityModalOpened"
+            [isOpened]="isCityModalOpened"
             [chosenCity]="chosenCity"
             (onChoiceCity)="chooseCity($event)"
+            modalType="events"
             (onCloseModal)="toggleCityModal($event)"></city-modal>
 <param-modal [isOpened]="isParamModalOpened"
              (onCloseModal)="toggleParamModal($event)"></param-modal>

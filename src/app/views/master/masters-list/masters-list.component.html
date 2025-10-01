@@ -28,7 +28,9 @@
     </div>
   </div>
 </main>
-<city-modal [isOpened]="isCityModalOpened"
+<city-modal *ngIf="isCityModalOpened"
+            [isOpened]="isCityModalOpened"
             [chosenCity]="chosenCity"
             (onChoiceCity)="chooseCity($event)"
+            modalType="masters"
             (onCloseModal)="toggleCityModal($event)"></city-modal>

@@ -31,8 +31,10 @@
     </button>
   </div>
 </div>
-<city-modal [isOpened]="isCityModalOpened"
+<city-modal *ngIf="isCityModalOpened"
+            [isOpened]="isCityModalOpened"
             [chosenCity]="chosenCity"
+            modalType="events"
             (onChoiceCity)="chooseCity($event)"
             (onCloseModal)="toggleCityModal($event)"></city-modal>
 <param-modal [isOpened]="isParamModalOpened"

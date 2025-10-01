@@ -4,11 +4,11 @@ import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.compone
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {EventService} from '../../../services/event.service';
-import {EventCityType, EventsCitesResponseType} from '../../../../../types/event-city.type';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FormsModule} from '@angular/forms';
+import {CitesListResponseType} from '../../../../../types/city-response.type';
 
 @Component({
   selector: 'city-modal',
@@ -23,12 +23,13 @@ import {FormsModule} from '@angular/forms';
   styleUrl: './city-modal.component.scss'
 })
 export class CityModalComponent implements OnInit, OnDestroy {
-  cities: EventCityType[] = [];
-  citiesFiltered: EventCityType[] = [];
+  cities: string[] = [];
+  citiesFiltered: string[] = [];
   searchField: string = ''
 
   @Input() isOpened: boolean = false;
   @Input() chosenCity: string | null = null;
+  @Input() modalType: 'masters' | 'events' | null = null;
 
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
   @Output() onChoiceCity: EventEmitter<string> = new EventEmitter();
@@ -54,15 +55,15 @@ export class CityModalComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.getCitiesListSubscription = this.eventService.getEventsCitiesList().subscribe({
-      next: (data: EventsCitesResponseType | DefaultResponseType) => {
+    this.getCitiesListSubscription = this.eventService.getCitiesList(this.modalType!).subscribe({
+      next: (data: CitesListResponseType | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
           const error = (data as DefaultResponseType).detail;
           this._snackBar.open(error);
           throw new Error(error);
         }
-        this.cities = (data as EventsCitesResponseType).cities;
-        this.citiesFiltered = (data as EventsCitesResponseType).cities;
+        this.cities = (data as CitesListResponseType).cities;
+        this.citiesFiltered = (data as CitesListResponseType).cities;
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {
@@ -80,25 +81,17 @@ export class CityModalComponent implements OnInit, OnDestroy {
   }
 
   filterCity() {
-    console.log(this.searchField);
-    console.log(this.cities);
     const query = this.searchField.trim().toLowerCase();
     if (query) {
-      this.citiesFiltered = this.cities.filter(city => {
-        console.log(city.city.includes(query))
-        city.city.includes(query);
-      })
+      this.citiesFiltered = this.cities.filter(city => city.toLowerCase().includes(query))
     } else {
       this.citiesFiltered = [...this.cities];
     }
-    console.log(this.citiesFiltered)
   }
 
   cityProceed(city: string) {
     this.onChoiceCity.emit(city);
-    this.onCloseModal.emit(false);
-    this.isOpened = false;
-
+    this.closeModal();
 
     const queryParams = {
       ...this.activatedRoute.snapshot.queryParams, ['city']: city
@@ -109,7 +102,15 @@ export class CityModalComponent implements OnInit, OnDestroy {
       queryParams,
       queryParamsHandling: 'merge'
     }).then();
+  }
 
+  search() {
+    const query = this.searchField.trim().toLowerCase();
+    if (query) {
+      this.cityProceed(query);
+    } else (
+      this.closeModal()
+    )
   }
 
   ngOnDestroy() {

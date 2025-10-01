@@ -19,12 +19,17 @@
     </div>
     <div class="cities _mt16">
       <div class="cities__items">
-        <div class="cities__item" [ngClass]="city.city === chosenCity ? '_active' : ''"
-             (click)="cityProceed(city.city)"
+        <div class="cities__item" [ngClass]="city === chosenCity ? '_active' : ''"
+             (click)="cityProceed(city)"
              *ngFor="let city of citiesFiltered">
-          <span>{{ city.city }}</span>
+          <span>{{ city }}</span>
         </div>
       </div>
+    </div>
+    <div class="delete-confirm__nav">
+      <button class="delete-confirm__btn m-btn m-btn-primary m-btn-bounce" (click)="search()">
+        <span>Ок</span>
+      </button>
     </div>
   </div>
 </div>

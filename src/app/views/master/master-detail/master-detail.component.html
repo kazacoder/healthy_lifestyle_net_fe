@@ -57,14 +57,14 @@
           </div>
           <div class="master-item__subcol2">
             <div class="master-contacts">
-              <div class="contact-item _last" *ngIf="master?.city">
+              <div class="contact-item _last" *ngIf="master?.city?.value">
                 <div class="h3">
                   Город
                 </div>
                 <div class="contact-item__desc">
                   <div class="contact-item__place medium-text">
                     <img src="assets/img/marker2.svg" alt="">
-                    <span>{{ master?.city }}</span>
+                    <span>{{ master?.city?.value }}</span>
                   </div>
                 </div>
               </div>

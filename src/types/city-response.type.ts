@@ -16,3 +16,7 @@ export type CityResponseType = {
 export type CitiesResponseType = {
   cities: CityResponseType[],
 }
+
+export type CitesListResponseType = {
+  cities: string[];
+}
