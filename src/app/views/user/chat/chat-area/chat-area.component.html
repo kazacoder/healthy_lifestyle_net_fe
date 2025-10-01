@@ -76,6 +76,7 @@
   <div class="chat-area__bottom" [formGroup]="chatForm">
     <div class="fg">
       <input type="text"
+             (keydown)="onKeyPress()"
              formControlName="message"
              placeholder="Напишите...">
     </div>

@@ -52,6 +52,12 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
     message: ['', [Validators.required, Validators.maxLength(Settings.maxChatMessageLength)]],
   })
 
+  messages: any[] = [];
+  typingUsers: string[] = [];
+  newMessage = '';
+
+  private subs: Subscription[] = [];
+
   getRussianMonthName = CommonUtils.getRussianMonthName
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -64,10 +70,14 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this.isChatPage) {
       this.activatedRouterSubscription = this.activatedRoute.params.subscribe(param => {
         this.dialogId = param['url'];
+        this.chatService.connect(parseInt(this.dialogId!));
         this.getMessageList();
       });
     } else {
-      this.getDialogId().then(() => this.getMessageList());
+      this.getDialogId().then(() => {
+        this.getMessageList();
+        this.chatService.connect(parseInt(this.dialogId!));
+      });
       setTimeout(() => this.scrollToBottom(), 300);
     }
   }
@@ -141,35 +151,50 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.onCloseChat.emit(false);
     this.chat = [];
   }
+  //
+  // sendMessage() {
+  //   if (this.chatForm.valid && this.dialogId) {
+  //     this.sendMessageSubscription = this.chatService.sendMessage(this.dialogId, this.chatForm.get('message')!.value!)
+  //       .subscribe({
+  //         next: (data: ChatMessageType | DefaultResponseType) => {
+  //           if ((data as DefaultResponseType).detail !== undefined) {
+  //             const error = (data as DefaultResponseType).detail;
+  //             this._snackBar.open(error);
+  //             throw new Error(error);
+  //           }
+  //           this.chatForm.reset();
+  //           this.getMessageList();
+  //         },
+  //         error: (errorResponse: HttpErrorResponse) => {
+  //           if (errorResponse.error && errorResponse.error.detail) {
+  //             this._snackBar.open(errorResponse.error.detail)
+  //           } else {
+  //             this._snackBar.open('Ошибка отправки сообщения')
+  //           }
+  //         }
+  //       })
+  //   }
+  // }
 
   sendMessage() {
-    if (this.chatForm.valid && this.dialogId) {
-      this.sendMessageSubscription = this.chatService.sendMessage(this.dialogId, this.chatForm.get('message')!.value!)
-        .subscribe({
-          next: (data: ChatMessageType | DefaultResponseType) => {
-            if ((data as DefaultResponseType).detail !== undefined) {
-              const error = (data as DefaultResponseType).detail;
-              this._snackBar.open(error);
-              throw new Error(error);
-            }
-            this.chatForm.reset();
-            this.getMessageList();
-          },
-          error: (errorResponse: HttpErrorResponse) => {
-            if (errorResponse.error && errorResponse.error.detail) {
-              this._snackBar.open(errorResponse.error.detail)
-            } else {
-              this._snackBar.open('Ошибка отправки сообщения')
-            }
-          }
-        })
-    }
+    if (this.chatForm.invalid) return;
+
+    const text = this.chatForm.value.message;
+    this.chatService.sendMessage(text!);
+
+    this.chatForm.reset(); // очищаем поле
+  }
+
+  onKeyPress() {
+    this.chatService.sendTyping();
   }
 
   ngOnDestroy() {
     this.activatedRouterSubscription?.unsubscribe();
     this.sendMessageSubscription?.unsubscribe();
     this.getMessageListSubscription?.unsubscribe();
+    this.chatService.disconnect();
+    this.subs.forEach(s => s.unsubscribe());
   }
 
 }

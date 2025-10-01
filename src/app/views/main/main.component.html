@@ -137,8 +137,7 @@
     </div>
   </div>
 </main>
-<city-modal *ngIf="isCityModalOpened"
-            [isOpened]="isCityModalOpened"
+<city-modal [isOpened]="isCityModalOpened"
             [chosenCity]="chosenCity"
             (onChoiceCity)="chooseCity($event)"
             modalType="events"

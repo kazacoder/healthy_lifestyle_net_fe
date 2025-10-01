@@ -31,8 +31,7 @@
     </button>
   </div>
 </div>
-<city-modal *ngIf="isCityModalOpened"
-            [isOpened]="isCityModalOpened"
+<city-modal [isOpened]="isCityModalOpened"
             [chosenCity]="chosenCity"
             modalType="events"
             (onChoiceCity)="chooseCity($event)"
