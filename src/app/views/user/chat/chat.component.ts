@@ -40,6 +40,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getDialogList();
+  }
+
+  getDialogList() {
     this.getDialogListSubscription = this.chatService.getDialogsList()
       .subscribe({
         next: (data: DialogType[] | DefaultResponseType) => {

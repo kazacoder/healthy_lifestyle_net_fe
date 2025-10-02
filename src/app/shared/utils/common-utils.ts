@@ -173,6 +173,14 @@ export class CommonUtils {
     return shuffled.slice(0, minCount);
   }
 
+  static getShortDate (dateString: string): string {
+    // создаём объект Date из строки
+    const date = new Date(dateString);
+
+    // получаем ISO дату и обрезаем до "YYYY-MM-DD"
+    return date.toISOString().split("T")[0];
+  }
+
 }
 
 export const highlightWeekend: MatCalendarCellClassFunction<Date> = (cellDate, view) => {

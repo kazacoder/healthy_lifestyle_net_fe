@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
-import {ChatMessagesDatedList, ChatMessageType} from '../../../types/chat-message.type';
+import {ChatMessagesDatedList} from '../../../types/chat-message.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {DialogType} from '../../../types/dialog.type';
@@ -36,23 +36,17 @@ export class ChatService {
     return this.http.post<DialogType | DefaultResponseType>(environment.api + 'dialogs/', {user_id: userId});
   }
 
-  // sendMessage(dialogId: string, text: string): Observable<ChatMessageType | DefaultResponseType> {
-  //   return this.http.post<ChatMessageType | DefaultResponseType>(environment.api + 'dialogs/' + dialogId + '/messages/',
-  //     {text: text})
-  // }
-  //
-
   // ws
 
   connect(dialogId: number) {
     this.currentDialogId = dialogId;
-    console.log(dialogId);
 
     if (this.socket) {
       this.socket.close();
     }
     const token = this.authService.getTokens().accessToken
-    this.socket = new WebSocket(`ws://localhost:8000/ws/chat/${dialogId}/`, ['jwt', token ? token : 'null']);
+    const host = environment.host
+    this.socket = new WebSocket(`ws://${host}/ws/chat/${dialogId}/`, ['jwt', token ? token : 'null']);
 
     this.socket.onopen = () => {
       console.log('✅ Connected to WebSocket');
@@ -102,8 +96,6 @@ export class ChatService {
   }
 
   sendMessage(text: string) {
-    console.log('send message')
-    console.log(text)
     this.socket?.send(JSON.stringify({ action: 'message', text }));
   }
 
@@ -113,9 +105,6 @@ export class ChatService {
     this.lastTypingSent = now;
 
     this.socket?.send(JSON.stringify({ action: 'typing' }));
-    if (this.currentDialogId) {
-      this.updateTypingStatus(this.currentDialogId).subscribe();
-    }
   }
 
   getMessages(): Observable<any> {
@@ -124,14 +113,5 @@ export class ChatService {
 
   getTyping(): Observable<any> {
     return this.typingSubject.asObservable();
-  }
-
-  /** REST API для статуса печатающих */
-  updateTypingStatus(dialogId: number): Observable<any> {
-    return this.http.post(environment.api + `dialogs/${dialogId}/typing/`, {});
-  }
-
-  getTypingUsers(dialogId: number): Observable<any[]> {
-    return this.http.get<any[]>(environment.api + `dialogs/${dialogId}/typing/`);
   }
 }

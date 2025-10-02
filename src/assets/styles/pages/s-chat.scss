@@ -197,6 +197,7 @@
     background: rgba($primary, 0.09);
     border-radius: 0 .625em .625em .625em;
     font-family: $font2;
+    overflow-wrap:break-word;
     .text16{
       line-height: 150%;
     }
