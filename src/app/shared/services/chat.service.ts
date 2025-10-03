@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Observable, Subject, take} from 'rxjs';
 import {ChatMessagesDatedList} from '../../../types/chat-message.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {DialogType} from '../../../types/dialog.type';
 import {AuthService} from '../../core/auth/auth.service';
+import {TokensResponseType} from '../../../types/tokens-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class ChatService {
   private socket: WebSocket | null = null;
   private messagesSubject = new Subject<any>();
   private typingSubject = new Subject<any>();
+  private pendingMessage: string | null = null;
 
   private reconnectTimeout: any;
   private reconnectDelay = 3000; // 3 сек
@@ -38,7 +40,7 @@ export class ChatService {
 
   // ws
 
-  connect(dialogId: number) {
+   connect(dialogId: number) {
     this.currentDialogId = dialogId;
 
     if (this.socket) {
@@ -66,15 +68,50 @@ export class ChatService {
       }
     };
 
-    this.socket.onclose = () => {
-      console.log('⚠️ WebSocket closed, will try reconnect');
-      this.tryReconnect();
+    this.socket.onclose =  async (event) => {
+      if (event.code === 1000) {
+        console.log('⚠️ WebSocket closed');
+      } else if (event.code === 4401) {
+        await this.refreshAndReconnect();
+      } else {
+        console.log('⚠️ WebSocket closed, will try reconnect');
+        this.tryReconnect();
+      }
     };
 
     this.socket.onerror = () => {
       console.log('❌ WebSocket error, closing...');
       this.socket?.close();
     };
+  }
+
+  private async refreshAndReconnect() {
+    // HTTP refresh
+    this.authService.refresh().pipe(take(1)).subscribe({
+      next: (data: DefaultResponseType | TokensResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          console.error("❌ Failed to refresh token", (data as DefaultResponseType).detail);
+          this.disconnect();
+        }
+        console.log("🔑 Token refreshed, reconnecting...");
+        const tokens = data as TokensResponseType;
+        this.authService.setTokens(tokens.access, tokens.refresh);
+
+        this.connect(this.currentDialogId!);
+
+        if (this.pendingMessage) {
+          setTimeout(() => {
+            this.sendMessage(this.pendingMessage!);
+            this.pendingMessage = null;
+          }, 500);
+        }
+
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        console.error("❌ Failed to refresh token", errorResponse );
+        this.disconnect();
+      }
+    });
   }
 
   private tryReconnect() {
@@ -86,8 +123,8 @@ export class ChatService {
     }, this.reconnectDelay);
   }
 
-  disconnect() {
-    this.socket?.close();
+  disconnect(closeStatus: number | undefined = undefined) {
+    this.socket?.close(closeStatus);
     this.socket = null;
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout);
@@ -96,7 +133,12 @@ export class ChatService {
   }
 
   sendMessage(text: string) {
-    this.socket?.send(JSON.stringify({ action: 'message', text }));
+    this.pendingMessage = text
+    if (this.socket?.readyState === WebSocket.OPEN) {
+      this.socket?.send(JSON.stringify({ action: 'message', text }));
+    } else {
+      this.tryReconnect();
+    }
   }
 
   sendTyping() {
@@ -104,7 +146,13 @@ export class ChatService {
     if (now - this.lastTypingSent < 1500) return; // debounce 1.5 сек
     this.lastTypingSent = now;
 
-    this.socket?.send(JSON.stringify({ action: 'typing' }));
+
+    if (this.socket?.readyState === WebSocket.OPEN) {
+      this.socket?.send(JSON.stringify({ action: 'typing' }));
+    } else {
+      this.tryReconnect();
+    }
+
   }
 
   getMessages(): Observable<any> {

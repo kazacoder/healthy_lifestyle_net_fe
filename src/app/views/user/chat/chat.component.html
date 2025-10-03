@@ -24,6 +24,7 @@
         <chat-area [companion]="currentCompanion"
                    (onSendMessage)="getDialogList()"
                    [isChatPage]="true"
+                   *ngIf="currentCompanion"
                    (onCloseChat)="closeChat()"></chat-area>
       </div>
     </div>

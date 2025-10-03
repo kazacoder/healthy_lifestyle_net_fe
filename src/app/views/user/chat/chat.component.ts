@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ChatItemCardComponent} from '../../../shared/components/cards/chat-item-card/chat-item-card.component';
 import {ChatAreaComponent} from './chat-area/chat-area.component';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {DialogType} from '../../../../types/dialog.type';
 import {Subscription} from 'rxjs';
 import {ChatService} from '../../../shared/services/chat.service';
@@ -19,7 +19,8 @@ import {FormsModule} from '@angular/forms';
     ChatAreaComponent,
     NgClass,
     NgForOf,
-    FormsModule
+    FormsModule,
+    NgIf
   ],
   standalone: true,
   templateUrl: './chat.component.html',

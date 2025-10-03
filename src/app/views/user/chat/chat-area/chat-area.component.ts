@@ -36,6 +36,9 @@ import {UserService} from '../../../../shared/services/user.service';
   templateUrl: './chat-area.component.html',
   styleUrl: './chat-area.component.scss'
 })
+
+//ToDo сделать логику автопролистывания сообщений вниз!
+
 export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Output() onCloseChat: EventEmitter<boolean> = new EventEmitter(false);
   @Output() onSendMessage: EventEmitter<boolean> = new EventEmitter(false);
@@ -89,12 +92,11 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
   connectOrChangeRoom() {
     this.chat = [];
     this.isTyping = false;
-    setTimeout(() => {
-      this.chatService.connect(parseInt(this.dialogId!));
-      this.getMessageList();
-      this.getMessages();
-      this.getTyping();
-    })
+    this.chatService.disconnect(1000)
+    this.chatService.connect(parseInt(this.dialogId!));
+    this.getMessageList();
+    this.getMessages();
+    this.getTyping();
   }
 
   getMessages() {
@@ -114,6 +116,7 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
         } else {
           this.chat.push({date: msg_date, messages: [msg]});
         }
+        this.scrollToBottom();
       })
     );
   }
@@ -122,11 +125,12 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.getTypingSubscription?.unsubscribe();
     this.subs.push(
       this.getTypingSubscription = this.chatService.getTyping().subscribe(user => {
-        console.log(user)
         if (user === null) {
           this.isTyping = false;
           return;
         }
+
+        this.scrollToBottom();
 
         if (user !== this.userId) {
           this.isTyping = true;
@@ -134,7 +138,6 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
           clearTimeout(this.typingTimeout);
           this.typingTimeout = null;
           this.typingTimeout = setTimeout(() => {
-            console.log('timeOut')
             this.isTyping = false;
             this.isCompanionTyping = false
           }, 3000);
@@ -239,7 +242,7 @@ export class ChatAreaComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.sendMessageSubscription?.unsubscribe();
     this.getMessageSubscription?.unsubscribe();
     this.getMessageListSubscription?.unsubscribe();
-    this.chatService.disconnect();
+    this.chatService.disconnect(1000);
     this.subs.forEach(s => s.unsubscribe());
   }
 
