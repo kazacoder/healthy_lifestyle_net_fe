@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, Subject, take} from 'rxjs';
 import {ChatMessagesDatedList} from '../../../types/chat-message.type';
@@ -7,6 +7,7 @@ import {environment} from '../../../environments/environment';
 import {DialogType} from '../../../types/dialog.type';
 import {AuthService} from '../../core/auth/auth.service';
 import {TokensResponseType} from '../../../types/tokens-response.type';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class ChatService {
   private messagesSubject = new Subject<any>();
   private typingSubject = new Subject<any>();
   private pendingMessage: string | null = null;
+  userId: number | null = null;
 
   private reconnectTimeout: any;
   private reconnectDelay = 3000; // 3 сек
@@ -24,7 +26,9 @@ export class ChatService {
   private lastTypingSent = 0; // для debounce
 
   constructor(private http: HttpClient,
-              private authService: AuthService,) { }
+              private authService: AuthService,
+              private userService: UserService,) {
+  }
 
   getMessagesList(dialogId: string): Observable<ChatMessagesDatedList[] | DefaultResponseType> {
     return this.http.get<ChatMessagesDatedList[] | DefaultResponseType>(environment.api + 'dialogs/' + dialogId + '/messages/')
@@ -40,7 +44,7 @@ export class ChatService {
 
   // ws
 
-   connect(dialogId: number) {
+  connect(dialogId: number) {
     this.currentDialogId = dialogId;
 
     if (this.socket) {
@@ -48,6 +52,12 @@ export class ChatService {
     }
     const token = this.authService.getTokens().accessToken
     const host = environment.host
+
+    const userIdString = this.userService.getUserId()
+    if (userIdString) {
+      this.userId = parseInt(userIdString);
+    }
+
     this.socket = new WebSocket(`ws://${host}/ws/chat/${dialogId}/`, ['jwt', token ? token : 'null']);
 
     this.socket.onopen = () => {
@@ -63,12 +73,15 @@ export class ChatService {
 
       if (data.type === 'message') {
         this.messagesSubject.next(data.message);
+        if (data.message.sender === this.userId) {
+          this.pendingMessage = null;
+        }
       } else if (data.type === 'typing') {
         this.typingSubject.next(data.user);
       }
     };
 
-    this.socket.onclose =  async (event) => {
+    this.socket.onclose = async (event) => {
       if (event.code === 1000) {
         console.log('⚠️ WebSocket closed');
       } else if (event.code === 4401) {
@@ -108,7 +121,7 @@ export class ChatService {
 
       },
       error: (errorResponse: HttpErrorResponse) => {
-        console.error("❌ Failed to refresh token", errorResponse );
+        console.error("❌ Failed to refresh token", errorResponse);
         this.disconnect();
       }
     });
@@ -135,7 +148,7 @@ export class ChatService {
   sendMessage(text: string) {
     this.pendingMessage = text
     if (this.socket?.readyState === WebSocket.OPEN) {
-      this.socket?.send(JSON.stringify({ action: 'message', text }));
+      this.socket?.send(JSON.stringify({action: 'message', text}));
     } else {
       this.tryReconnect();
     }
@@ -148,7 +161,7 @@ export class ChatService {
 
 
     if (this.socket?.readyState === WebSocket.OPEN) {
-      this.socket?.send(JSON.stringify({ action: 'typing' }));
+      this.socket?.send(JSON.stringify({action: 'typing'}));
     } else {
       this.tryReconnect();
     }
