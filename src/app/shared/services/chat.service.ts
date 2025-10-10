@@ -22,8 +22,13 @@ export class ChatService {
   private reconnectTimeout: any;
   private reconnectDelay = 3000; // 3 сек
   private currentDialogId: number | null = null;
+  private isReconnecting = false;
 
   private lastTypingSent = 0; // для debounce
+  private lastMessageTimestamp: string | null = null;
+
+  /** 👇 Храним ID всех полученных сообщений, чтобы не дублировать */
+  private receivedMessageIds = new Set<number>();
 
   constructor(private http: HttpClient,
               private authService: AuthService,
@@ -66,14 +71,26 @@ export class ChatService {
         clearTimeout(this.reconnectTimeout);
         this.reconnectTimeout = null;
       }
+      if (this.isReconnecting) {
+        this.syncMessages();
+        this.isReconnecting = false;
+      }
     };
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === 'message') {
-        this.messagesSubject.next(data.message);
-        if (data.message.sender === this.userId) {
+        const msg = data.message;
+
+        // ✅ Фильтруем дубликаты по ID
+        if (!this.receivedMessageIds.has(msg.id)) {
+          this.receivedMessageIds.add(msg.id);
+          this.messagesSubject.next(msg);
+          this.lastMessageTimestamp = msg.created_at;
+        }
+
+        if (msg.sender === this.userId) {
           this.pendingMessage = null;
         }
       } else if (data.type === 'typing') {
@@ -87,18 +104,21 @@ export class ChatService {
       } else if (event.code === 4401) {
         await this.refreshAndReconnect();
       } else {
-        console.log('⚠️ WebSocket closed, will try reconnect');
+        console.warn('⚠️ WebSocket closed, will try reconnect');
         this.tryReconnect();
       }
     };
 
     this.socket.onerror = () => {
-      console.log('❌ WebSocket error, closing...');
+      console.error('❌ WebSocket error, closing...');
       this.socket?.close();
     };
   }
 
   private async refreshAndReconnect() {
+    if (this.isReconnecting) return;
+    this.isReconnecting = true;
+
     // HTTP refresh
     this.authService.refresh().pipe(take(1)).subscribe({
       next: (data: DefaultResponseType | TokensResponseType) => {
@@ -106,7 +126,7 @@ export class ChatService {
           console.error("❌ Failed to refresh token", (data as DefaultResponseType).detail);
           this.disconnect();
         }
-        console.log("🔑 Token refreshed, reconnecting...");
+        console.warn("🔑 Token refreshed, reconnecting...");
         const tokens = data as TokensResponseType;
         this.authService.setTokens(tokens.access, tokens.refresh);
 
@@ -129,7 +149,7 @@ export class ChatService {
 
   private tryReconnect() {
     if (this.reconnectTimeout || !this.currentDialogId) return;
-
+    this.isReconnecting = true;
     this.reconnectTimeout = setTimeout(() => {
       console.log('🔄 Reconnecting WebSocket...');
       this.connect(this.currentDialogId!);
@@ -174,5 +194,34 @@ export class ChatService {
 
   getTyping(): Observable<any> {
     return this.typingSubject.asObservable();
+  }
+
+  /** 🔄 Подтягивает только новые сообщения после reconnect */
+  private syncMessages() {
+    //ToDo sort messages after sync
+
+    if (!this.currentDialogId) return;
+    const after = this.lastMessageTimestamp ? `?after=${this.lastMessageTimestamp}` : '';
+    console.log(`🔄 Syncing new messages since ${this.lastMessageTimestamp || 'start'}...`);
+
+    this.http.get<ChatMessagesDatedList[] | DefaultResponseType>(`${environment.api}dialogs/${this.currentDialogId}/messages/${after}`)
+      .subscribe({
+        next: (data: ChatMessagesDatedList[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).detail !== undefined) {
+            console.error((data as DefaultResponseType).detail)
+          }
+          (data as ChatMessagesDatedList[]).forEach((group) => {
+            group.messages.forEach((msg) => {
+              // ✅ проверяем, не было ли уже такого ID
+              if (!this.receivedMessageIds.has(msg.id)) {
+                this.receivedMessageIds.add(msg.id);
+                this.messagesSubject.next(msg);
+                this.lastMessageTimestamp = msg.created_at;
+              }
+            });
+          });
+        },
+        error: (err) => console.error('❌ Sync error', err),
+      });
   }
 }
