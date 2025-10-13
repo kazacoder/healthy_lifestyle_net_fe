@@ -1,16 +1,12 @@
 <div class="notification-card">
-  <div class="faq-card__badge">
+  <div class="faq-card__badge" *ngIf="!notification?.is_read">
     <span>Новое уведомление</span>
   </div>
   <div class="notification-card__info _flex-between">
-    <div class="notification-card__title text18">
-      Жалоба принята
-    </div>
+    <div class="notification-card__title text18">{{ notification?.title }}</div>
     <div class="notification-card__date text14">
-      14.03.23
+      {{ notification?.created_at | date: "dd.MM.yy" }}
     </div>
   </div>
-  <div class="notification-card__desc text16">
-    Forem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-  </div>
+  <div class="notification-card__desc text16" [innerHTML]="notification?.text"></div>
 </div>
