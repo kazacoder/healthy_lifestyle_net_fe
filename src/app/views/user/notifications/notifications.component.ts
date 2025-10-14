@@ -54,6 +54,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     })
   }
 
+  proceedMarkAsRead() {
+    this.feedbackService.setCount();
+  }
 
   ngOnDestroy() {
     this.getNotificationsListSubscription?.unsubscribe();

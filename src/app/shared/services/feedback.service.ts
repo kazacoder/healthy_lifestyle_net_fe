@@ -19,6 +19,11 @@ export class FeedbackService {
     return this.http.get<NotificationType[] | DefaultResponseType>(environment.api + 'feedback/notifications/');
   }
 
+
+  markNotificationAsRead(id: number): Observable<NotificationType[] | DefaultResponseType> {
+    return this.http.patch<NotificationType[] | DefaultResponseType>(environment.api + `feedback/notifications/${id}/`, {is_read: true});
+  }
+
   getNotificationsCount(): Observable<NotificationsCountType | DefaultResponseType> {
     return this.http.get<NotificationsCountType | DefaultResponseType>(environment.api + 'feedback/notifications_count/')
       .pipe(

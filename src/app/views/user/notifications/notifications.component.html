@@ -5,7 +5,10 @@
     </h1>
 
     <div class="notification__items">
-      <notification-card [notification]="notification"  *ngFor="let notification of notifications"></notification-card>
+      <notification-card
+        (onMarkAsRead)="proceedMarkAsRead()"
+        [notification]="notification"
+        *ngFor="let notification of notifications"></notification-card>
     </div>
   </div>
 </div>

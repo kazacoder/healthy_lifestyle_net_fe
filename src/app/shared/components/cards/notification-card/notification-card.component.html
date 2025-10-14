@@ -1,7 +1,8 @@
 <div class="notification-card">
-  <div class="faq-card__badge" *ngIf="!notification?.is_read">
+  <button (click)="markAsRead()" class="faq-card__badge" *ngIf="!notification?.is_read">
     <span>Новое уведомление</span>
-  </div>
+    <img src="assets/img/mail.svg" alt="">
+  </button>
   <div class="notification-card__info _flex-between">
     <div class="notification-card__title text18">{{ notification?.title }}</div>
     <div class="notification-card__date text14">
