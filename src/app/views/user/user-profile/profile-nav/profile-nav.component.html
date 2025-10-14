@@ -16,8 +16,8 @@
          routerLinkActive="_active"
          class="profile-nav__link m-btn-bounce">
         <span class="profile-nav__link-title">Уведомления</span>
-        <span class="profile-nav__link-count">
-            2
+        <span class="profile-nav__link-count" *ngIf="notificationsCount">
+            {{ notificationsCount }}
         </span>
       </a>
       <a routerLink="/profile/messages"

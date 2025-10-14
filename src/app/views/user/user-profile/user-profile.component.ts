@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProfileNavComponent} from './profile-nav/profile-nav.component';
 import {ImgFieldComponent} from './img-field/img-field.component';
 import {UserTypeComponent} from './user-type/user-type.component';
 import {UserSettingsComponent} from './user-settings/user-settings.component';
@@ -21,7 +20,6 @@ import {AdditionalImageType} from '../../../../types/additional-image.type';
 @Component({
   selector: 'app-user-profile',
   imports: [
-    ProfileNavComponent,
     ImgFieldComponent,
     UserTypeComponent,
     UserSettingsComponent,

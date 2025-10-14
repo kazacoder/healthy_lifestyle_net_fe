@@ -43,7 +43,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           throw new Error(error);
         }
         this.notifications = data as NotificationType[];
-        console.log(this.notifications)
       },
       error: (errorResponse: HttpErrorResponse) => {
         if (errorResponse.error && errorResponse.error.detail) {

@@ -9,6 +9,7 @@ import {UserService} from '../../services/user.service';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SignUpModalComponent} from '../../components/modals/sign-up-modal/sign-up-modal.component';
+import {FeedbackService} from '../../services/feedback.service';
 
 @Component({
   selector: 'app-header',
@@ -33,10 +34,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedSubscription: Subscription | null = null;
   userNameSubscription: Subscription | null = null;
   userName: string | null = null;
+  notificationsCountSubscription: Subscription | null = null;
+  notificationsCount: number | null = null;
+
 
   constructor(private authService: AuthService,
               private userService: UserService,
-              private _snackBar: MatSnackBar,) {
+              private _snackBar: MatSnackBar,
+              private feedbackService: FeedbackService,) {
   }
 
   toggleLoginModal(value: boolean) {
@@ -52,6 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoggedSubscription = this.authService.isLogged$.subscribe((isLogged: boolean) => {
       this.isLogged = isLogged;
+      if (isLogged) {
+        this.feedbackService.setCount();
+      }
     })
 
     this.userNameSubscription = this.userService.userName$.subscribe((userName: string | null) => {
@@ -63,10 +71,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userName = userNameFromLocalStorage;
       this.isLogged = true;
     }
+    this.notificationsCountSubscription = this.feedbackService.notificationsCount$.subscribe((count: number) => {
+      this.notificationsCount = count;
+    })
   }
 
   ngOnDestroy() {
     this.isLoggedSubscription?.unsubscribe();
+    this.notificationsCountSubscription?.unsubscribe();
   }
 
   logout(): void {
