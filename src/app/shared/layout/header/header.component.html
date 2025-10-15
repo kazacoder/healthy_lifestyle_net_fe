@@ -46,14 +46,14 @@
       <div class="header-action _flex">
         <div class="header-search">
           <button class="header-search__show m-btn m-btn-primary-outline">
-            <img class="_view1" src="/assets/img/search.svg" alt="">
-            <img class="_view2" src="/assets/img/close.svg" alt="">
+            <img class="_view1" ngSrc="/assets/img/search.svg" alt="" height="20" width="20">
+            <img class="_view2" ngSrc="/assets/img/close.svg" alt="" height="18" width="18">
           </button>
           <div class="header-search__hidden">
             <div class="search-block">
               <div class="fg search-field">
                 <input class="_search-field" type="text" placeholder="Поиск по сайту">
-                <img src="/assets/img/search.svg" alt="" class="search-field__icon">
+                <img ngSrc="/assets/img/search.svg" alt="" class="search-field__icon" height="20" width="20">
               </div>
               <div class="search-block__results">
                 <div class="search-block__items">
@@ -75,7 +75,7 @@
           </div>
         </div>
         <a *ngIf="!isLogged" (click)="toggleLoginModal(true)" class="header-action__login m-btn m-btn-primary m-btn-bounce">
-          <img src="/assets/img/user.svg" alt="">
+          <img ngSrc="/assets/img/user.svg" alt="" height="26" width="27">
           <span>Войти</span>
         </a>
         <div *ngIf="isLogged" class="header-user _flex">
