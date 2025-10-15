@@ -1,5 +1,5 @@
 import {
-  AfterContentChecked,
+  AfterContentChecked, ChangeDetectorRef,
   Component, ElementRef,
   HostListener,
   OnDestroy,
@@ -42,13 +42,15 @@ export class ProfileNavComponent implements OnInit, AfterContentChecked, OnDestr
               private _snackBar: MatSnackBar,
               private router: Router,
               private feedbackService: FeedbackService,
-              private elRef: ElementRef,) {
+              private elRef: ElementRef,
+              private cdr: ChangeDetectorRef,) {
     this.isMaster = this.userService.isMaster;
   }
 
   ngOnInit() {
     this.notificationsCountSubscription = this.feedbackService.notificationsCount$.subscribe((count: number) => {
       this.notificationsCount = count;
+      this.cdr.detectChanges();
     })
   }
 
