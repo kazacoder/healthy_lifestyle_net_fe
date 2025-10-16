@@ -10,6 +10,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SignUpModalComponent} from '../../components/modals/sign-up-modal/sign-up-modal.component';
 import {FeedbackService} from '../../services/feedback.service';
+import {NotificationsWsResponseType} from '../../../../types/notificationsWsResponse.type';
 
 @Component({
   selector: 'app-header',
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLogged: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   userNameSubscription: Subscription | null = null;
+  getNotificationsCount: Subscription | null = null;
   userName: string | null = null;
   notificationsCountSubscription: Subscription | null = null;
   notificationsCount: number | null = null;
@@ -74,11 +76,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.notificationsCountSubscription = this.feedbackService.notificationsCount$.subscribe((count: number) => {
       this.notificationsCount = count;
     })
+    this.feedbackService.connectWS()
+    this.getNotificationsCount = this.feedbackService.getNotificationsCountWS().subscribe((data: NotificationsWsResponseType) => {
+      this.notificationsCount = data.data.unread_count;
+      this._snackBar.open('Вам пришло новое уведомление')
+    })
   }
 
   ngOnDestroy() {
     this.isLoggedSubscription?.unsubscribe();
     this.notificationsCountSubscription?.unsubscribe();
+    this.getNotificationsCount?.unsubscribe();
   }
 
   logout(): void {

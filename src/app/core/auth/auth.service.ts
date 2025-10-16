@@ -1,20 +1,22 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {Injectable, OnInit} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable, take, throwError} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {LoginResponseType} from '../../../types/login-response.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../../shared/services/user.service';
 import {TokensResponseType} from '../../../types/tokens-response.type';
+import {Settings} from '../../../settings/settings';
+import {FeedbackService} from '../../shared/services/feedback.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit {
 
-  public accessTokenKey: string = 'access';
-  public refreshTokenKey: string = 'refresh';
+  public accessTokenKey = Settings.accessTokenKey;
+  public refreshTokenKey = Settings.refreshTokenKey;
   public userIdKey: string = 'userId';
 
   public isLogged$: BehaviorSubject<boolean>;
@@ -22,9 +24,33 @@ export class AuthService {
 
   constructor(private http: HttpClient,
               private _snackBar: MatSnackBar,
-              private userService: UserService,) {
+              private userService: UserService,
+              private feedbackService: FeedbackService,) {
     this.isLogged = !!localStorage.getItem(this.accessTokenKey);
     this.isLogged$ = new BehaviorSubject<boolean>(this.isLogged);
+  }
+
+  ngOnInit() {
+    this.feedbackService.needToRefresh().subscribe((needToRefresh: boolean) => {
+      if (needToRefresh) {
+        this.refresh().pipe(take(1)).subscribe({
+          next: (data: DefaultResponseType | TokensResponseType) => {
+            if ((data as DefaultResponseType).detail !== undefined) {
+              console.error("❌ Failed to refresh token", (data as DefaultResponseType).detail);
+              this.feedbackService.disconnectWS();
+            }
+            console.warn("🔑 Token refreshed, reconnecting...");
+            const tokens = data as TokensResponseType;
+            this.setTokens(tokens.access, tokens.refresh);
+            this.feedbackService.connectWS();
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            console.error("❌ Failed to refresh token", errorResponse);
+            this.feedbackService.disconnectWS();
+          }
+        });
+      }
+    })
   }
 
   get_tokens(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
@@ -52,6 +78,7 @@ export class AuthService {
     this.removeTokens();
     this.userService.removeUserInfo();
     this.userService.setIsLogged(false)
+    this.feedbackService.disconnectWS(1000)
   }
 
 

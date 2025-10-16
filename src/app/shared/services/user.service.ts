@@ -10,6 +10,7 @@ import {UserPhotoDeleteType, UserPhotoType} from '../../../types/user-photo.type
 import {UserChangePassType} from '../../../types/user-change-pass.type';
 import {AdditionalImageType} from '../../../types/additional-image.type';
 import {UserGenderType} from '../../../types/user-gender.type';
+import {FeedbackService} from './feedback.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class UserService {
   isMasterObservable = this.isMaster$.asObservable();
   isLoggedObservable = this.isLogged$.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private feedbackService: FeedbackService,) {
     this.isMaster = localStorage.getItem(this.userStatusKey) === '3'
     this.setIsMaster(this.isMaster);
     if (this.getUserId()) {
@@ -90,6 +92,7 @@ export class UserService {
     localStorage.setItem(this.userIdKey, user_id);
     localStorage.setItem(this.userNameKey, username);
     localStorage.setItem(this.userStatusKey, userStatus.toString());
+    this.feedbackService.connectWS()
   }
 
   getUserName(): string | null {

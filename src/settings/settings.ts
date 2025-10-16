@@ -1,4 +1,6 @@
 export const Settings = {
+  accessTokenKey: 'access',
+  refreshTokenKey: 'refresh',
   maxCategoryCount: 5,
   maxAdditionEventPhotoCount: 3,
   maxAdditionUserPhotoCount: 3,

@@ -14,6 +14,7 @@ import {ConfirmModalComponent} from '../../../../shared/components/modals/confir
 import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 import {Subscription} from 'rxjs';
 import {FeedbackService} from '../../../../shared/services/feedback.service';
+import {NotificationsWsResponseType} from '../../../../../types/notificationsWsResponse.type';
 
 @Component({
   selector: 'profile-nav',
@@ -35,6 +36,7 @@ export class ProfileNavComponent implements OnInit, AfterContentChecked, OnDestr
   isOpenConfirmModal: boolean = false;
   activeMenuItem: string | undefined = '';
   notificationsCountSubscription: Subscription | null = null;
+  getNotificationsCount: Subscription | null = null;
   notificationsCount: number | null = null;
 
   constructor(private authService: AuthService,
@@ -51,6 +53,10 @@ export class ProfileNavComponent implements OnInit, AfterContentChecked, OnDestr
     this.notificationsCountSubscription = this.feedbackService.notificationsCount$.subscribe((count: number) => {
       this.notificationsCount = count;
       this.cdr.detectChanges();
+    })
+
+    this.getNotificationsCount = this.feedbackService.getNotificationsCountWS().subscribe((data: NotificationsWsResponseType) => {
+      this.notificationsCount = data.data.unread_count;
     })
   }
 
@@ -86,5 +92,6 @@ export class ProfileNavComponent implements OnInit, AfterContentChecked, OnDestr
 
   ngOnDestroy(): void {
     this.notificationsCountSubscription?.unsubscribe();
+    this.getNotificationsCount?.unsubscribe();
   }
 }
