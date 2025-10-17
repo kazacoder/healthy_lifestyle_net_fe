@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {NgClass} from '@angular/common';
-import {PassFieldComponent} from '../../ui/pass-field/pass-field.component';
 import {AuthService} from '../../../../core/auth/auth.service';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -16,7 +15,6 @@ import {UserService} from '../../../services/user.service';
   imports: [
     CloseBtnMobComponent,
     NgClass,
-    PassFieldComponent,
     ReactiveFormsModule
   ],
   standalone: true,

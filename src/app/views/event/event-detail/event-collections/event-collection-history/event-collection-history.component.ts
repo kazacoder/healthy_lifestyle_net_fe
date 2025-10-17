@@ -2,7 +2,7 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit} from '@angular/core';
 import {SwiperNavComponent} from '../../../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {EventCard3Component} from '../../../../../shared/components/cards/event-card3/event-card3.component';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf} from '@angular/common';
 import {EventType} from '../../../../../../types/event.type';
 
 @Component({
@@ -12,7 +12,6 @@ import {EventType} from '../../../../../../types/event.type';
     EventCard3Component,
     NgForOf,
     NgClass,
-    NgIf
   ],
   standalone: true,
   templateUrl: './event-collection-history.component.html',

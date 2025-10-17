@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit} from '@angular/core';
 import {SwiperNavComponent} from '../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SocialsComponent} from '../../../shared/components/ui/socials/socials.component';
-import {EventCardComponent} from '../../../shared/components/cards/event-card/event-card.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -31,7 +30,6 @@ import {UserService} from '../../../shared/services/user.service';
   imports: [
     SwiperNavComponent,
     SocialsComponent,
-    EventCardComponent,
     NgForOf,
     NgIf,
     ParagraphTextPipe,

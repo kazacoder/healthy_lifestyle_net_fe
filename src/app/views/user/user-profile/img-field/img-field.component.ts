@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {NgOptimizedImage, NgStyle} from '@angular/common';
+import {NgStyle} from '@angular/common';
 import {UserService} from '../../../../shared/services/user.service';
 import {Subscription} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -12,7 +12,6 @@ import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 @Component({
   selector: 'img-field',
   imports: [
-    NgOptimizedImage,
     NgStyle,
     ConfirmModalComponent
   ],

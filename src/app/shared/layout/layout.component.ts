@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {HeaderComponent} from './header/header.component';
 import {FooterComponent} from './footer/footer.component';
-import {LoginModalComponent} from '../components/modals/login-modal/login-modal.component';
 
 @Component({
   selector: 'app-layout',
@@ -11,7 +10,6 @@ import {LoginModalComponent} from '../components/modals/login-modal/login-modal.
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    LoginModalComponent
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'

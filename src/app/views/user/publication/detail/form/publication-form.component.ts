@@ -23,12 +23,11 @@ import {Router} from '@angular/router';
 import {SuitType} from '../../../../../../types/suit.type';
 import {FormatType} from '../../../../../../types/format.type';
 import {TimePeriodType} from '../../../../../../types/time-period.type';
-import {MatFormField, MatHint, MatInput, MatSuffix} from '@angular/material/input';
+import {MatInput} from '@angular/material/input';
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerModule,
-  MatDatepickerToggle
 } from '@angular/material/datepicker';
 import {MatNativeDateModule, MatOption} from '@angular/material/core';
 import {CommonUtils, highlightWeekend} from '../../../../../shared/utils/common-utils';
@@ -55,12 +54,8 @@ import {GeolocationResponseType} from '../../../../../../types/geolocation-respo
     MatInput,
     MatDatepickerInput,
     MatDatepicker,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatHint,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatFormField,
     NgxMaskDirective,
     MatAutocompleteModule,
     MatOption,

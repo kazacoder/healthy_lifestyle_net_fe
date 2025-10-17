@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit} from '@angular/core';
-import {EventCard3Component} from '../../../shared/components/cards/event-card3/event-card3.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SwiperNavComponent} from '../../../shared/components/ui/swiper-nav/swiper-nav.component';
 import {SwiperContainer} from 'swiper/element';
@@ -18,7 +17,6 @@ import {AuthService} from '../../../core/auth/auth.service';
 @Component({
   selector: 'blog-item',
   imports: [
-    EventCard3Component,
     NgForOf,
     SwiperNavComponent,
     NgClass,

@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} fr
 import {EventType} from '../../../../../types/event.type';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {MonthToStringPipe} from '../../../../shared/pipes/month-to-string.pipe';
 import {CommonUtils} from '../../../../shared/utils/common-utils';
 import {ToIntPipe} from '../../../../shared/pipes/to-int.pipe';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
@@ -18,7 +17,6 @@ import {AuthService} from '../../../../core/auth/auth.service';
     NgIf,
     NgForOf,
     RouterLink,
-    MonthToStringPipe,
     NgStyle,
     ToIntPipe,
     NgClass

@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SortComponent} from '../../../shared/components/ui/sort/sort.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
 import {BlogCardComponent} from '../../../shared/components/cards/blog-card/blog-card.component';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FilterObjectType} from '../../../../types/filter-object.type';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
@@ -24,7 +24,6 @@ import {FiltersDataTypeArticles} from '../../../../types/filters-data.type';
     ParamFilterComponent,
     BlogCardComponent,
     NgForOf,
-    NgStyle,
     NgClass,
     NgIf
   ],

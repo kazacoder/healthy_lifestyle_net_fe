@@ -2,7 +2,6 @@ import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output}
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {EventType} from '../../../../../types/event.type';
-import {MonthToStringPipe} from '../../../pipes/month-to-string.pipe';
 import {ToIntPipe} from '../../../pipes/to-int.pipe';
 import {CommonUtils} from '../../../utils/common-utils';
 import {Subscription} from 'rxjs';
@@ -18,7 +17,6 @@ import {HttpErrorResponse} from '@angular/common/http';
     NgClass,
     RouterLink,
     NgForOf,
-    MonthToStringPipe,
     ToIntPipe
   ],
   standalone: true,

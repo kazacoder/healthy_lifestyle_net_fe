@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {ChatAreaComponent} from '../../../../views/user/chat/chat-area/chat-area.component';
-import {NgClass} from '@angular/common';
 import {UserShortType} from '../../../../../types/user-info.type';
 
 @Component({
@@ -14,7 +13,6 @@ import {UserShortType} from '../../../../../types/user-info.type';
   imports: [
     CloseBtnMobComponent,
     ChatAreaComponent,
-    NgClass
   ],
   standalone: true,
   templateUrl: './chat-modal.component.html',

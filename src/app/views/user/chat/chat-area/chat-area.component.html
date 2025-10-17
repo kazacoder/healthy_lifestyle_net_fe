@@ -13,9 +13,9 @@
     </div>
     <a routerLink="/master/{{ companion.id }}" class="event-card2__master _flex">
       <div class="avatar">
-        <img src="{{ companion?.photo }}" alt="">
+        <img src="{{ companion.photo }}" alt="">
       </div>
-      <span class="text16 text14-tablet">{{ companion?.full_name }}</span>
+      <span class="text16 text14-tablet">{{ companion.full_name }}</span>
       <img *ngIf="companion?.is_master" src="assets/img/crone.svg" alt="" class="chat-area__crone">
     </a>
   </div>
@@ -52,12 +52,12 @@
 
       <div class="message-item" *ngIf="isTyping">
         <a routerLink="/master/{{ companion.id }}" class="avatar m-btn-bounce">
-          <img src="{{ companion?.photo }}" alt="">
+          <img src="{{ companion.photo }}" alt="">
         </a>
         <div class="message-item__content">
           <a routerLink="/master/{{ companion.id }}" class="message-item__name">
                             <span class="text16 semi-bold-text">
-                                {{ companion?.full_name }}
+                                {{ companion.full_name }}
                             </span>
             <img *ngIf="companion?.is_master" src="assets/img/crone.svg" alt="" class="chat-area__crone">
           </a>

@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnChanges, OnDestroy} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SwiperNavComponent} from '../../../../shared/components/ui/swiper-nav/swiper-nav.component';
-import {EventCard2Component} from '../../../../shared/components/cards/event-card2/event-card2.component';
 import {SwiperContainer} from 'swiper/element/bundle';
 import {AdditionalImageType} from '../../../../../types/additional-image.type';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -18,7 +17,6 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
   imports: [
     NgIf,
     SwiperNavComponent,
-    EventCard2Component,
     NgForOf,
     NgClass,
     PhoneFormatPipe

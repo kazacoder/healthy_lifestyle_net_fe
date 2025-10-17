@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {QuestionCardComponent} from '../../cards/question-card/question-card.component';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf} from '@angular/common';
 import {QuestionExtendedType} from '../../../../../types/question-extended.type';
 import {AnswerCardComponent} from '../../cards/answer-card/answer-card.component';
 
@@ -12,8 +12,6 @@ import {AnswerCardComponent} from '../../cards/answer-card/answer-card.component
     QuestionCardComponent,
     NgClass,
     NgForOf,
-    NgIf,
-    DatePipe,
     AnswerCardComponent
   ],
   standalone: true,

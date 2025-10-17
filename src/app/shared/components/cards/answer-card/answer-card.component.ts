@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {DatePipe, NgClass, NgIf, SlicePipe} from '@angular/common';
+import {DatePipe, NgClass, NgIf} from '@angular/common';
 import {QuestionExtendedType} from '../../../../../types/question-extended.type';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {WindowsUtils} from '../../../utils/windows-utils';
@@ -18,7 +18,6 @@ import {Subscription} from 'rxjs';
     DatePipe,
     NgIf,
     ConfirmModalComponent,
-    SlicePipe,
     NgClass,
     ReactiveFormsModule,
   ],

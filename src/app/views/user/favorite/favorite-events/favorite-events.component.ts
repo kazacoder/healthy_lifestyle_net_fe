@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NoteCard2Component} from '../../../../shared/components/cards/note-card2/note-card2.component';
-import {RouterOutlet} from '@angular/router';
 import {EventType} from '../../../../../types/event.type';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FavoriteService} from '../../../../shared/services/favorite.service';
@@ -13,7 +12,6 @@ import {NgForOf} from '@angular/common';
   selector: 'favorite-events',
   imports: [
     NoteCard2Component,
-    RouterOutlet,
     NgForOf
   ],
   standalone: true,
