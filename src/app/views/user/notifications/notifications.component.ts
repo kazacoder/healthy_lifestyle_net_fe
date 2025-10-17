@@ -6,7 +6,7 @@ import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FeedbackService} from '../../../shared/services/feedback.service';
-import {Subscription} from 'rxjs';
+import {Subscription, take} from 'rxjs';
 import {NotificationType} from '../../../../types/notification.type';
 import {NgForOf} from '@angular/common';
 
@@ -23,6 +23,7 @@ import {NgForOf} from '@angular/common';
 export class NotificationsComponent implements OnInit, OnDestroy {
 
   getNotificationsListSubscription: Subscription | null = null;
+  getNotificationsCount: Subscription | null = null;
   notifications: NotificationType[] = [];
 
   constructor(private _snackBar: MatSnackBar,
@@ -32,10 +33,16 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getNotificationsList();
+    this.getNotificationsCount = this.feedbackService.getNotificationsCountWS().subscribe(() => {
+      //ToDo доделать - обновлять уведомления а не загружать все заново
+      // ToDo доделать - пагинацию уведомлений
+
+      this.getNotificationsList();
+    })
   }
 
   getNotificationsList() {
-    this.getNotificationsListSubscription = this.feedbackService.getNotificationList().subscribe({
+    this.getNotificationsListSubscription = this.feedbackService.getNotificationList().pipe(take(1)).subscribe({
       next: (data: NotificationType[] | DefaultResponseType) => {
         if ((data as DefaultResponseType).detail !== undefined) {
           const error = (data as DefaultResponseType).detail;
@@ -60,5 +67,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getNotificationsListSubscription?.unsubscribe();
+    this.getNotificationsCount?.unsubscribe();
   }
 }

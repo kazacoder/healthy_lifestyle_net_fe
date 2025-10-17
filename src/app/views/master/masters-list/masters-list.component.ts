@@ -167,5 +167,6 @@ export class MastersListComponent implements OnInit, OnDestroy {
     this.mastersListSubscription?.unsubscribe();
     this.activatedRouterSubscription?.unsubscribe();
     this.getSpecialityListSubscription?.unsubscribe();
+    this.isLoggedSubscription?.unsubscribe();
   }
 }

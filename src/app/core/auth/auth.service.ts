@@ -1,6 +1,6 @@
-import {Injectable, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {BehaviorSubject, Observable, take, throwError} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {LoginResponseType} from '../../../types/login-response.type';
 import {DefaultResponseType} from '../../../types/default-response.type';
@@ -13,7 +13,7 @@ import {FeedbackService} from '../../shared/services/feedback.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements OnInit {
+export class AuthService {
 
   public accessTokenKey = Settings.accessTokenKey;
   public refreshTokenKey = Settings.refreshTokenKey;
@@ -30,28 +30,6 @@ export class AuthService implements OnInit {
     this.isLogged$ = new BehaviorSubject<boolean>(this.isLogged);
   }
 
-  ngOnInit() {
-    this.feedbackService.needToRefresh().subscribe((needToRefresh: boolean) => {
-      if (needToRefresh) {
-        this.refresh().pipe(take(1)).subscribe({
-          next: (data: DefaultResponseType | TokensResponseType) => {
-            if ((data as DefaultResponseType).detail !== undefined) {
-              console.error("❌ Failed to refresh token", (data as DefaultResponseType).detail);
-              this.feedbackService.disconnectWS();
-            }
-            console.warn("🔑 Token refreshed, reconnecting...");
-            const tokens = data as TokensResponseType;
-            this.setTokens(tokens.access, tokens.refresh);
-            this.feedbackService.connectWS();
-          },
-          error: (errorResponse: HttpErrorResponse) => {
-            console.error("❌ Failed to refresh token", errorResponse);
-            this.feedbackService.disconnectWS();
-          }
-        });
-      }
-    })
-  }
 
   get_tokens(username: string, password: string): Observable<LoginResponseType | DefaultResponseType> {
     return this.http.post<LoginResponseType | DefaultResponseType>(environment.api + 'token/', {username, password})
@@ -106,6 +84,7 @@ export class AuthService implements OnInit {
     }
     this.isLogged$.next(true);
     this.isLogged = true;
+    this.feedbackService.connectWS(true)
   }
 
 

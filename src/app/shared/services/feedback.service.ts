@@ -15,7 +15,7 @@ export class FeedbackService {
 
   private socket: WebSocket | null = null;
   private notificationsCountSubject = new Subject<NotificationsWsResponseType>();
-  private needToRefreshSubject = new Subject<boolean>();
+  private needReconnect: boolean = false;
 
   notificationsCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private accessTokenKey = Settings.accessTokenKey;
@@ -49,30 +49,26 @@ export class FeedbackService {
 
   //ws
 
-  connectWS() {
-    if (this.socket) {
+  connectWS(reconnect: boolean = false) {
+    if (this.socket && !reconnect || this.socket && reconnect && this.needReconnect) {
       this.socket.close()
     }
 
     const token = localStorage.getItem(this.accessTokenKey);
     const host = environment.host;
 
-    if (token) {
+    if (token && !reconnect || reconnect && this.needReconnect) {
       this.socket = new WebSocket(`ws://${host}/ws/feedback/notifications/`, ['jwt', token ? token : 'null']);
+      this.needReconnect = false;
     }
 
     if (this.socket) {
       this.socket.onopen = () => {
-        console.log('✅ Connected to WebSocket');
-        // ToDo reconnect
-        // if (this.reconnectTimeout) {
-        //   clearTimeout(this.reconnectTimeout);
-        //   this.reconnectTimeout = null;
-        // }
-        // if (this.isReconnecting) {
-        //   this.syncMessages();
-        //   this.isReconnecting = false;
-        // }
+        if (reconnect) {
+          console.log('🔄 Reconnected to WebSocket');
+        } else {
+          console.log('✅ Connected to WebSocket');
+        }
       };
 
       this.socket.onmessage = (event) => {
@@ -84,19 +80,17 @@ export class FeedbackService {
       };
 
       this.socket.onclose = async (event) => {
+        console.log(event)
         if (event.code === 1000) {
           console.log('⚠️ WebSocket closed');
         } else if (event.code === 4401) {
-          this.needToRefreshSubject.next(true);
-          // await this.refreshAndReconnect();
+          this.needReconnect = true;
           console.warn("🔑 Token is invalid.");
           console.warn('⚠️ WebSocket closed');
         } else if (event.code === 4402) {
           console.warn('⚠️ Token not provided. WebSocket closed');
         } else {
           console.warn('⚠️ WebSocket closed');
-          // console.warn('⚠️ WebSocket closed, will try reconnect');
-          // this.tryReconnect();
         }
       };
 
@@ -104,7 +98,6 @@ export class FeedbackService {
         console.error('❌ WebSocket error, closing...');
         this.socket?.close();
       };
-
     }
   }
 
@@ -115,9 +108,5 @@ export class FeedbackService {
 
   getNotificationsCountWS(): Observable<NotificationsWsResponseType> {
     return this.notificationsCountSubject.asObservable()
-  }
-
-  needToRefresh(): Observable<boolean> {
-    return this.needToRefreshSubject.asObservable()
   }
 }
