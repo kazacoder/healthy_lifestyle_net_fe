@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {DefaultResponseType} from '../../../types/default-response.type';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
@@ -15,10 +15,30 @@ import {PublicationParticipantType} from '../../../types/publication-participant
 })
 export class PublicationService {
 
+  categoryListSubject = new BehaviorSubject<CategoryType[]>([]);
+  categoryList$ = this.categoryListSubject.asObservable();
+
   constructor(private http: HttpClient) { }
 
   getCategoriesList (): Observable<CategoryType[] | DefaultResponseType> {
-    return this.http.get<CategoryType[] | DefaultResponseType>(environment.api + 'category/');
+    // Если данные уже есть, возвращаем их как Observable
+    if (this.categoryListSubject.value.length > 0) {
+      return this.categoryList$;
+    }
+
+    return this.http.get<CategoryType[] | DefaultResponseType>(environment.api + 'category/').pipe(
+      map(data => {
+        // Если пришёл массив категорий — сохраняем и возвращаем
+        if (Array.isArray(data)) {
+          this.categoryListSubject.next(data);
+          // return data;
+        }
+        // Если пришёл объект с detail (ошибка) — возвращаем
+        return data;
+      })
+    );
+
+    // return this.http.get<CategoryType[] | DefaultResponseType>(environment.api + 'category/');
   }
 
   getSuitsList (): Observable<SuitType[] | DefaultResponseType> {

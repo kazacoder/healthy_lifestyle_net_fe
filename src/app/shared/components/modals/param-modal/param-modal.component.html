@@ -188,20 +188,10 @@
           </div>
           <div class="param-category__view1">
             <div class="publication-category__items _flex">
-              <div class="m-badge">
-                <img src="assets/img/type-icon.svg" alt="">
-                <span>Йога</span>
-                <button class="m-badge__remove">
-                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.5 1L13.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
-                    <path d="M13.5 1L1.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                </button>
-              </div>
-              <div class="m-badge">
-                <img src="assets/img/type-icon2.svg" alt="">
-                <span>Баня</span>
-                <button class="m-badge__remove">
+              <div class="m-badge" *ngFor="let cat of chosenCategories">
+                <img src="{{ cat.image }}" alt="">
+                <span>{{ cat.title }}</span>
+                <button class="m-badge__remove" (click)="removeCategory(cat)">
                   <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1.5 1L13.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
                     <path d="M13.5 1L1.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
@@ -210,133 +200,20 @@
               </div>
             </div>
             <div class="publication-category__items2 _flex">
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Дыхание</span>
+              <div class="publication-category__item" *ngFor="let category of categories"
+                   (click)="choseCategory(category)">
+                <img src="{{ category.image }}" alt="">
+                <span>{{ category.title }}</span>
               </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Цигун</span>
               </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тантра</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Фестиваль</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Семинар</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Танцы</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Спортивное мероприятие</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Мастер-класс</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Шоу</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Общение</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Выставка</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Нейрографика</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Нетворгкинг</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Игры</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Общение</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Курсы</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Праздничное</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Обучение</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Лекция</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Ретрит</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Ярмарка</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Гвоздестояние</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Медитация</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Звуковая медитация</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Шибари</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Чайные церемонии</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Гипноз</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Кино</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Треннинг</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Растяжка</span>
-              </div>
-            </div>
           </div>
           <div class="param-category__view2">
-            <div class="param-select _mob-top">
-              <div class="param-select__show">
+            <div class="param-select _mob-top" [ngClass]="{_open: categoryOpen}">
+              <div class="param-select__show" (click)="toggleCategoryDropdown(true)">
                 <div class="param-select__current">
-                  Цигун
+                  {{ chosenCategories.length > 0
+                  ? chosenCategories.length > 1 ? chosenCategories[0].title + ", +" + (chosenCategories.length - 1) : chosenCategories[0].title
+                  : "Выбрать" }}
                 </div>
                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.00134 14.5C8.90968 14.5001 8.8189 14.4821 8.73422 14.447C8.64954 14.4119 8.57263 14.3604 8.50791 14.2955L1.52875 7.31639C1.25604 7.04368 1.25604 6.60207 1.52875 6.32953C1.80146 6.057 2.24307 6.05682 2.5156 6.32953L9.00134 12.8153L15.4871 6.32953C15.7598 6.05682 16.2014 6.05682 16.4739 6.32953C16.7465 6.60224 16.7466 7.04385 16.4739 7.31639L9.49476 14.2955C9.43004 14.3604 9.35313 14.4119 9.26845 14.447C9.18377 14.4821 9.093 14.5001 9.00134 14.5Z" fill="black"/>
@@ -348,53 +225,13 @@
                   <img src="assets/img/search.svg" alt="" class="search-field__icon">
                 </div>
                 <div class="param-select__items">
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Цигун">
-                    <label><span>Цигун</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тантра">
-                    <label><span>Цигун</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Фестиваль">
-                    <label><span>Фестиваль</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Семинар">
-                    <label><span>Семинар</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Танцы">
-                    <label><span>Танцы</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Спортивное мероприятие">
-                    <label><span>Танцы</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Мастер-класс">
-                    <label><span>Мастер-класс</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Шоу">
-                    <label><span>Шоу</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Танцы">
-                    <label><span>Танцы</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Спортивное мероприятие">
-                    <label><span>Танцы</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Мастер-класс">
-                    <label><span>Мастер-класс</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Шоу">
-                    <label><span>Шоу</span></label>
+                  <div class="param-select__option m-check"
+                       *ngFor="let category of categoriesInitial">
+                    <input type="checkbox"
+                           [(ngModel)]="category.selected"
+                           (ngModelChange)="choseCategory(category)"
+                           [value]="category">
+                    <label><span>{{ category.title }}</span></label>
                   </div>
                 </div>
               </div>
@@ -402,7 +239,7 @@
           </div>
         </div>
         <div class="param-modal__nav">
-          <button class="param-modal__btn m-btn m-btn-gray m-btn-bounce">
+          <button class="param-modal__btn m-btn m-btn-gray m-btn-bounce" (click)="clear()">
             <span>Сбросить</span>
           </button>
           <button class="param-modal__btn param-modal__btn--confirm m-btn m-btn-primary m-btn-bounce">
@@ -693,7 +530,7 @@
           </div>
         </div>
         <div class="param-modal__nav">
-          <button class="param-modal__btn m-btn m-btn-gray m-btn-bounce">
+          <button class="param-modal__btn m-btn m-btn-gray m-btn-bounce" (click)="clear()">
             <span>Сбросить</span>
           </button>
           <button class="param-modal__btn param-modal__btn--confirm m-btn m-btn-primary m-btn-bounce">
