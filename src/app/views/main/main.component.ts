@@ -61,6 +61,12 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
       nextEl: `.events-slider .swiper-button-next`,
       prevEl: `.events-slider .swiper-button-prev`,
     },
+    observer: true,
+    observeParents: true,
+    resistanceRatio: 0, // предотвращает "отскок" в конце
+    touchReleaseOnEdges: true,
+    simulateTouch: true,
+    passiveListeners: false,
   }
 
   event2Swiper: SwiperContainer | null = null;
@@ -73,6 +79,12 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
       nextEl: `.events-slider2 .swiper-button-next`,
       prevEl: `.events-slider2 .swiper-button-prev`,
     },
+    observer: true,
+    observeParents: true,
+    resistanceRatio: 0, // предотвращает "отскок" в конце
+    touchReleaseOnEdges: true,
+    simulateTouch: true,
+    passiveListeners: false,
   }
 
   masterSwiper: SwiperContainer | null = null;
@@ -104,12 +116,6 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
       this.getEventsResponse();
       this.getMastersResponse();
     });
-
-    this.eventSwiper = document.querySelector('.event-swiper');
-    if (this.eventSwiper) {
-      Object.assign(this.eventSwiper, this.eventSwiperParams);
-      this.eventSwiper.initialize();
-    }
   }
 
   getEventsResponse() {
@@ -155,7 +161,11 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   }
 
   ngAfterViewInit() {
-
+    this.eventSwiper = document.querySelector('.event-swiper');
+    if (this.eventSwiper) {
+      Object.assign(this.eventSwiper, this.eventSwiperParams);
+      this.eventSwiper.initialize();
+    }
 
     this.event2Swiper = document.querySelector('.nearest-events');
     if (this.event2Swiper) {
