@@ -104,6 +104,12 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
       this.getEventsResponse();
       this.getMastersResponse();
     });
+
+    this.eventSwiper = document.querySelector('.event-swiper');
+    if (this.eventSwiper) {
+      Object.assign(this.eventSwiper, this.eventSwiperParams);
+      this.eventSwiper.initialize();
+    }
   }
 
   getEventsResponse() {
@@ -149,11 +155,7 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   }
 
   ngAfterViewInit() {
-    this.eventSwiper = document.querySelector('.event-swiper');
-    if (this.eventSwiper) {
-      Object.assign(this.eventSwiper, this.eventSwiperParams);
-      this.eventSwiper.initialize();
-    }
+
 
     this.event2Swiper = document.querySelector('.nearest-events');
     if (this.event2Swiper) {
