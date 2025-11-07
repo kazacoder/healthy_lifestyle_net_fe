@@ -18,4 +18,5 @@ export type UserSpecialityUpdateType = {
 export type SpecialityType = {
   title: string,
   id: number,
+  selected?: boolean,
 }

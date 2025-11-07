@@ -6,8 +6,12 @@ import {RegionSelectComponent} from '../../ui/region-select/region-select.compon
 import {PublicationService} from '../../../services/publication.service';
 import {CategoryType} from '../../../../../types/category.type';
 import {Subscription} from 'rxjs';
-import {EventType} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import {SpecialityType} from '../../../../../types/speciality.type';
+import {SpecialityService} from '../../../services/speciality.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {DefaultResponseType} from '../../../../../types/default-response.type';
 
 @Component({
   selector: 'param-modal',
@@ -31,11 +35,21 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   categories: CategoryType[] = [];
   categoriesInitial: CategoryType[] = [];
   chosenCategories: CategoryType[] = [];
-  categoryOpen: boolean = false
+  categoryOpen: boolean = false;
+  specialities: SpecialityType[] = [];
+  specialitiesInitial: SpecialityType[] = [];
+  chosenSpecialities: SpecialityType[] = [];
+  specialitiesOpen: boolean = false;
+  duration: number = 0;
+  rangeSliders: any[] = [];
 
   getCategoriesSubscription: Subscription | null = null;
+  getSpecialitiesSubscription: Subscription | null = null;
 
-  constructor(private publicationService: PublicationService,) {
+  constructor(private publicationService: PublicationService,
+              private specialityService: SpecialityService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,) {
   }
 
   closeModal() {
@@ -55,10 +69,31 @@ export class ParamModalComponent implements OnInit, OnDestroy {
       this.categories = this.categoriesInitial;
     })
 
+    this.getSpecialitiesSubscription = this.specialityService.getSpecialityList().subscribe({
+      next: (data: SpecialityType[] | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          console.log(error);
+          throw new Error(error);
+        }
+        this.specialitiesInitial = data as SpecialityType[];
+        this.categoriesInitial.forEach(cat => cat.selected = false);
+        this.specialities = this.specialitiesInitial;
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          console.log(errorResponse.error.detail)
+        } else {
+          console.log('Ошибка получения данных')
+        }
+      }
+    })
+
     let filterSliders = document.querySelectorAll(".filter-slider")
     filterSliders.forEach((slider, i) => {
       const rangeSlider: any = slider.querySelector(`.range-slider`);
-      const sliderItemsCount =  (slider as any).dataset.max - 1;
+      this.rangeSliders.push(rangeSlider)
+      const sliderItemsCount = (slider as any).dataset.max - 1;
       const rangeInput = slider.querySelector(`.range-slider__input`);
 
       if (rangeSlider) {
@@ -77,8 +112,8 @@ export class ParamModalComponent implements OnInit, OnDestroy {
               return value % (100 / sliderItemsCount) ? -1 : 1;
             },
             format: {
-              to: function(value) {
-                let targetIndex = value > 0 ? sliderItemsCount - Math.ceil(100 / value) + 1 : 0;
+              to: function (value) {
+                let targetIndex = Math.ceil(sliderItemsCount * value / 100);
                 return (document.querySelectorAll(`.filter-slider__bottom.slider-${i} .filter-slider__title`)[targetIndex] as HTMLElement).innerText
               }
             }
@@ -86,14 +121,12 @@ export class ParamModalComponent implements OnInit, OnDestroy {
         });
       }
       if (rangeSlider) {
-        rangeSlider.noUiSlider.on('change', function(values: any, handle: any) {
+        rangeSlider.noUiSlider.on('change', (values: any, handle: any) => {
           let value = Number(values[0]);
           const span = 100 / sliderItemsCount
           let valueSanitized = Math.abs((value % span) / span) < 0.3 ? Math.round(value / span) * span : Math.ceil(value / span) * span;
-          if (value !== valueSanitized) {
-            rangeSlider.noUiSlider.set(valueSanitized);
-          }
-          console.log(rangeSlider.noUiSlider.get(valueSanitized));
+          rangeSlider.noUiSlider.set(valueSanitized);
+          this.duration = sliderItemsCount * valueSanitized / 100
         });
       }
     })
@@ -118,6 +151,24 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     this.categories = this.categories.filter(category => category.id !== cat.id)
   }
 
+  choseSpeciality(spec: SpecialityType) {
+    const specInvert: SpecialityType = {
+      id: spec.id,
+      title: spec.title,
+      selected: !spec.selected
+    }
+
+    if (this.chosenSpecialities.includes(spec || specInvert)) {
+      if (spec.selected === false) {
+        this.removeSpeciality(spec)
+      }
+      return
+    }
+    spec.selected = true;
+    this.chosenSpecialities.push(spec);
+    this.specialities = this.specialities.filter(speciality => speciality.id !== spec.id)
+  }
+
   removeCategory(cat: CategoryType) {
     this.chosenCategories = this.chosenCategories.filter(category => category.id !== cat.id);
     this.categories = this.categoriesInitial.filter(category => {
@@ -129,10 +180,44 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeSpeciality(spec: SpecialityType) {
+    this.chosenSpecialities = this.chosenSpecialities.filter(speciality => speciality.id !== spec.id);
+    this.specialities = this.specialitiesInitial.filter(speciality => {
+      return !this.chosenSpecialities.includes(speciality)
+    })
+    const specInInitial = this.specialitiesInitial.filter(speciality => speciality.id === spec.id)
+    if (specInInitial.length > 0) {
+      specInInitial[0].selected = false
+    }
+  }
+
   clear() {
     this.categories = this.categoriesInitial;
     this.chosenCategories = [];
     this.categoriesInitial.forEach(cat => cat.selected = false);
+
+    this.specialities = this.specialitiesInitial;
+    this.chosenSpecialities = [];
+    this.categoriesInitial.forEach(spec => spec.selected = false)
+
+    this.router.navigate([]).then();
+    this.rangeSliders.forEach(slider => slider.noUiSlider.set(0));
+  }
+
+  apply(type: 'events' | 'masters') {
+    this.closeModal();
+    const queryParams = {
+      ...this.activatedRoute.snapshot.queryParams,
+      ['categories']: type === 'events' ? this.chosenCategories.map(cat => cat.id): undefined,
+      ['specialities']: type === 'masters' ? this.chosenSpecialities.map(spec => spec.id) : undefined,
+      ['duration']: this.duration ? this.duration : undefined,
+    }
+
+    this.router.navigate(['/' + type], {
+      relativeTo: this.activatedRoute,
+      queryParams,
+      queryParamsHandling: 'replace'
+    }).then();
   }
 
   toggleCategoryDropdown(isOpen: boolean = false) {
@@ -141,5 +226,6 @@ export class ParamModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe();
+    this.getSpecialitiesSubscription?.unsubscribe();
   }
 }

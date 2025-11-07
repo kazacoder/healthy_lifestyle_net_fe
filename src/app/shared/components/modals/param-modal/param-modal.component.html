@@ -242,7 +242,7 @@
           <button class="param-modal__btn m-btn m-btn-gray m-btn-bounce" (click)="clear()">
             <span>Сбросить</span>
           </button>
-          <button class="param-modal__btn param-modal__btn--confirm m-btn m-btn-primary m-btn-bounce">
+          <button class="param-modal__btn param-modal__btn--confirm m-btn m-btn-primary m-btn-bounce" (click)="apply('events')">
             <span>Применить</span>
           </button>
         </div>
@@ -358,18 +358,9 @@
           </div>
           <div class="param-category__view1">
             <div class="publication-category__items _flex">
-              <div class="m-badge">
-                <span>Массажист</span>
-                <button class="m-badge__remove">
-                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.5 1L13.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
-                    <path d="M13.5 1L1.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                </button>
-              </div>
-              <div class="m-badge">
-                <span>Натуропат </span>
-                <button class="m-badge__remove">
+              <div class="m-badge" *ngFor="let spec of chosenSpecialities">
+                <span>{{ spec.title }}</span>
+                <button class="m-badge__remove" (click)="removeSpeciality(spec)">
                   <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1.5 1L13.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
                     <path d="M13.5 1L1.5 13" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" />
@@ -378,93 +369,10 @@
               </div>
             </div>
             <div class="publication-category__items2 _flex">
-              <div class="publication-category__item">
+              <div class="publication-category__item" *ngFor="let speciality of specialities"
+                   (click)="choseSpeciality(speciality)">
                 <img src="assets/img/plus2.svg" alt="">
-                <span>Любой</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
-              </div>
-              <div class="publication-category__item">
-                <img src="assets/img/plus2.svg" alt="">
-                <span>Тип</span>
+                <span>{{ speciality.title }}</span>
               </div>
             </div>
           </div>
@@ -533,7 +441,7 @@
           <button class="param-modal__btn m-btn m-btn-gray m-btn-bounce" (click)="clear()">
             <span>Сбросить</span>
           </button>
-          <button class="param-modal__btn param-modal__btn--confirm m-btn m-btn-primary m-btn-bounce">
+          <button class="param-modal__btn param-modal__btn--confirm m-btn m-btn-primary m-btn-bounce" (click)="apply('masters')">
             <span>Применить</span>
           </button>
         </div>
