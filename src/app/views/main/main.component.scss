@@ -24,6 +24,10 @@
   .swiper{
     &-container{
       width: calc(100% + .625em);
+
+
+      padding: 0 8px;
+      overflow: hidden;
     }
     &-wrapper{
       align-items: stretch;
@@ -31,6 +35,15 @@
     &-slide{
       padding-right: .625em;
       height: auto;
+
+
+      width: calc(100% / 2 - 8px);
+      @media (max-width: 575.98px) {
+        width: calc(100% - 16px);
+      }
+
+      transition: none !important;
+      animation: none !important;
     }
     &-button{
       transition: all .3s;

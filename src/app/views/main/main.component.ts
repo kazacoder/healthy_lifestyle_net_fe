@@ -97,6 +97,16 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
       nextEl: `.master-slider .swiper-button-next`,
       prevEl: `.master-slider .swiper-button-prev`,
     },
+
+
+    grabCursor: true,
+    // Для плавности анимации
+    speed: 300,
+    // Отключаем анимацию при быстрой прокрутке
+    followFinger: true,
+    // Отключаем "отскок" при достижении конца
+    resistance: true,
+    // Оптимизация для мобильных
   }
 
   @HostListener('window:resize', ['$event'])
@@ -216,6 +226,10 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
         is_favorite: isFavorite
       };
     }
+  }
+
+  trackByFn(index: number, item: any): any {
+    return item.id; // или другое уникальное поле
   }
 
   ngOnDestroy() {
