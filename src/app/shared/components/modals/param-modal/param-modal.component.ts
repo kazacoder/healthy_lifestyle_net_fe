@@ -12,6 +12,10 @@ import {SpecialityType} from '../../../../../types/speciality.type';
 import {SpecialityService} from '../../../services/speciality.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {DefaultResponseType} from '../../../../../types/default-response.type';
+import {FiltersDataType} from '../../../../../types/filters-data.type';
+import {EventService} from '../../../services/event.service';
+import {FormatType} from '../../../../../types/format.type';
+import {SuitType} from '../../../../../types/suit.type';
 
 @Component({
   selector: 'param-modal',
@@ -35,21 +39,39 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   categories: CategoryType[] = [];
   categoriesInitial: CategoryType[] = [];
   chosenCategories: CategoryType[] = [];
+  dropdown = {
+    categoryOpen: false,
+    durationOpen: false,
+    experienceOpen: false,
+    specialityOpen: false,
+  }
   categoryOpen: boolean = false;
   specialities: SpecialityType[] = [];
   specialitiesInitial: SpecialityType[] = [];
   chosenSpecialities: SpecialityType[] = [];
   specialitiesOpen: boolean = false;
   duration: number = 0;
+  experience: number = 0;
   rangeSliders: any[] = [];
+  formatOption: FormatType[] = [{id: 'all', title: 'Все'}];
+  formatChosen = 'all';
+  typeOption: FormatType[] = [];
+  typeChosen = 'all';
+  suitOption: SuitType[] = [];
+  suitChosen = 'all';
+  creatorChosen = 'all';
+  genderChosen = 'all';
+  durationOption: FormatType[] = [];
 
   getCategoriesSubscription: Subscription | null = null;
   getSpecialitiesSubscription: Subscription | null = null;
+  getEventFiltersSubscription: Subscription | null = null;
 
   constructor(private publicationService: PublicationService,
               private specialityService: SpecialityService,
               private router: Router,
-              private activatedRoute: ActivatedRoute,) {
+              private activatedRoute: ActivatedRoute,
+              private eventService: EventService) {
   }
 
   closeModal() {
@@ -62,6 +84,11 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.typeOption = [{id: 'all', title: 'Все'}, {id: 'paid', title: 'Платное'}, {id: 'free', title: 'Бесплатное'}];
+    this.durationOption = [{id: 'all', title: 'Любая'}, {id: '1_1', title: '1 час'}, {id: '2_1', title: '2 часа'}, {id: '1_2', title: '1 день'}];
+
+    this.getEventFiltersResponse();
 
     this.getCategoriesSubscription = this.publicationService.categoryList$.subscribe(categories => {
       this.categoriesInitial = categories;
@@ -127,6 +154,7 @@ export class ParamModalComponent implements OnInit, OnDestroy {
           let valueSanitized = Math.abs((value % span) / span) < 0.3 ? Math.round(value / span) * span : Math.ceil(value / span) * span;
           rangeSlider.noUiSlider.set(valueSanitized);
           this.duration = sliderItemsCount * valueSanitized / 100
+          this.experience = sliderItemsCount * valueSanitized / 100
         });
       }
     })
@@ -200,6 +228,13 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     this.chosenSpecialities = [];
     this.categoriesInitial.forEach(spec => spec.selected = false)
 
+
+    this.formatChosen = 'all';
+    this.typeChosen = 'all';
+    this.suitChosen = 'all';
+    this.creatorChosen = 'all';
+    this.genderChosen = 'all';
+
     this.router.navigate([]).then();
     this.rangeSliders.forEach(slider => slider.noUiSlider.set(0));
   }
@@ -210,7 +245,13 @@ export class ParamModalComponent implements OnInit, OnDestroy {
       ...this.activatedRoute.snapshot.queryParams,
       ['categories']: type === 'events' ? this.chosenCategories.map(cat => cat.id): undefined,
       ['specialities']: type === 'masters' ? this.chosenSpecialities.map(spec => spec.id) : undefined,
-      ['duration']: this.duration ? this.duration : undefined,
+      ['duration']: this.duration && type === 'events' ? this.duration : undefined,
+      ['experience']: this.experience && type === 'masters' ? this.experience : undefined,
+      ['format']: this.formatChosen === 'all' ? undefined : this.formatChosen, // for both filters
+      ['type']: this.typeChosen === 'all' || type === 'masters' ? undefined : this.typeChosen,
+      ['suit']: this.suitChosen === 'all' || type === 'masters' ? undefined : this.suitChosen,
+      ['creator']: this.creatorChosen === 'all' || type === 'masters' ? undefined : this.creatorChosen,
+      ['gender']: this.genderChosen === 'all' || type === 'events' ? undefined : this.genderChosen,
     }
 
     this.router.navigate(['/' + type], {
@@ -220,12 +261,35 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     }).then();
   }
 
-  toggleCategoryDropdown(isOpen: boolean = false) {
-    this.categoryOpen = !this.categoryOpen;
+  getEventFiltersResponse() {
+    this.getEventFiltersSubscription = this.eventService.getFiltersDataMain().subscribe({
+      next: (data: FiltersDataType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          console.log(error);
+          throw new Error(error);
+        }
+        const filters = data as FiltersDataType
+        this.formatOption.push(...filters.formats);
+        this.suitOption.push(...filters.suits);
+       },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          console.log(errorResponse.error.detail)
+        } else {
+          console.log('Ошибка получения данных фильтров')
+        }
+      }
+    });
+  }
+
+  toggleCategoryDropdown(type: 'categoryOpen' | 'durationOpen' | 'experienceOpen' |'specialityOpen') {
+    this.dropdown[type] = !this.dropdown[type]
   }
 
   ngOnDestroy() {
     this.getCategoriesSubscription?.unsubscribe();
     this.getSpecialitiesSubscription?.unsubscribe();
+    this.getEventFiltersSubscription?.unsubscribe();
   }
 }

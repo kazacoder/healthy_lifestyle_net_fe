@@ -45,17 +45,12 @@
               Формат мероприятия
             </div>
             <div class="param-group__items">
-              <div class="radio-btn">
-                <input type="radio" checked name="eventFormat">
-                <label>Все</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" name="eventFormat">
-                <label>Онлайн</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" name="eventFormat">
-                <label>Оффлайн</label>
+              <div class="radio-btn" *ngFor="let format of formatOption.slice(0, 3)">
+                <input [(ngModel)]="formatChosen"
+                       [value]="format.id"
+                       type="radio"
+                       name="eventFormat">
+                <label>{{ format.title }}</label>
               </div>
             </div>
           </div>
@@ -64,17 +59,12 @@
               Тип мероприятия
             </div>
             <div class="param-group__items">
-              <div class="radio-btn">
-                <input type="radio" checked name="eventType">
-                <label>Все</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" name="eventType">
-                <label>Платное</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" name="eventType">
-                <label>Бесплатное</label>
+              <div class="radio-btn" *ngFor="let type of typeOption">
+                <input [(ngModel)]="typeChosen"
+                       [value]="type.id"
+                       type="radio"
+                       name="eventType">
+                <label>{{ type.title }}</label>
               </div>
             </div>
           </div>
@@ -84,15 +74,15 @@
             </div>
             <div class="param-group__items">
               <div class="radio-btn">
-                <input type="radio" checked name="eventSex">
+                <input [(ngModel)]="suitChosen" value="all" type="radio" name="eventSex">
                 <label>Всех</label>
               </div>
               <div class="radio-btn">
-                <input type="radio" name="eventSex">
+                <input [(ngModel)]="suitChosen" value="3" type="radio" name="eventSex">
                 <label>Мужчин</label>
               </div>
               <div class="radio-btn">
-                <input type="radio" name="eventSex">
+                <input [(ngModel)]="suitChosen" value="2" type="radio" name="eventSex">
                 <label>Женщин</label>
               </div>
             </div>
@@ -105,15 +95,15 @@
             </div>
             <div class="param-group__items">
               <div class="radio-btn">
-                <input type="radio" checked name="eventMaker">
+                <input type="radio" [(ngModel)]="creatorChosen" value="all" name="eventMaker">
                 <label>Все</label>
               </div>
               <div class="radio-btn">
-                <input type="radio" name="eventMaker">
+                <input type="radio" [(ngModel)]="creatorChosen" value="master" name="eventMaker">
                 <label>Мастер</label>
               </div>
               <div class="radio-btn">
-                <input type="radio" name="eventMaker">
+                <input type="radio" [(ngModel)]="creatorChosen" value="user" name="eventMaker">
                 <label>Пользователь</label>
               </div>
             </div>
@@ -140,8 +130,8 @@
             </div>
           </div>
           <div class="param-duration__view2">
-            <div class="param-select _mob-top">
-              <div class="param-select__show">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.durationOpen}">
+              <div class="param-select__show" (click)="toggleCategoryDropdown('durationOpen')">
                 <div class="param-select__current">
                   1-2 часа
                 </div>
@@ -208,8 +198,8 @@
               </div>
           </div>
           <div class="param-category__view2">
-            <div class="param-select _mob-top" [ngClass]="{_open: categoryOpen}">
-              <div class="param-select__show" (click)="toggleCategoryDropdown(true)">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.categoryOpen}">
+              <div class="param-select__show" (click)="toggleCategoryDropdown('categoryOpen')">
                 <div class="param-select__current">
                   {{ chosenCategories.length > 0
                   ? chosenCategories.length > 1 ? chosenCategories[0].title + ", +" + (chosenCategories.length - 1) : chosenCategories[0].title
@@ -261,15 +251,15 @@
             </div>
             <div class="param-group__items">
               <div class="radio-btn">
-                <input type="radio" checked name="sex">
+                <input [(ngModel)]="genderChosen" value="all" type="radio" name="sex">
                 <label>Любой</label>
               </div>
               <div class="radio-btn">
-                <input type="radio" name="sex">
+                <input [(ngModel)]="genderChosen" value="female" type="radio" name="sex">
                 <label>Женский</label>
               </div>
               <div class="radio-btn">
-                <input type="radio" name="sex">
+                <input [(ngModel)]="genderChosen" value="male" type="radio" name="sex">
                 <label>Мужской</label>
               </div>
             </div>
@@ -279,17 +269,12 @@
               Формат мероприятия
             </div>
             <div class="param-group__items">
-              <div class="radio-btn">
-                <input type="radio" checked name="eventFormat2">
-                <label>Все</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" name="eventFormat2">
-                <label>Онлайн</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" name="eventFormat2">
-                <label>Оффлайн</label>
+              <div class="radio-btn" *ngFor="let format of formatOption.slice(0, 3)">
+                <input [(ngModel)]="formatChosen"
+                       [value]="format.id"
+                       type="radio"
+                       name="eventFormat2">
+                <label>{{ format.title }}</label>
               </div>
             </div>
           </div>
@@ -314,8 +299,8 @@
             </div>
           </div>
           <div class="param-duration__view2">
-            <div class="param-select _mob-top">
-              <div class="param-select__show">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.experienceOpen}">
+              <div class="param-select__show" (click)="toggleCategoryDropdown('experienceOpen')">
                 <div class="param-select__current">
                   1-2 часа
                 </div>
@@ -377,10 +362,12 @@
             </div>
           </div>
           <div class="param-category__view2">
-            <div class="param-select _mob-top">
-              <div class="param-select__show">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.specialityOpen}">
+              <div class="param-select__show" (click)="toggleCategoryDropdown('specialityOpen')">
                 <div class="param-select__current">
-                  Любой
+                  {{ chosenSpecialities.length > 0
+                  ? chosenSpecialities.length > 1 ? chosenSpecialities[0].title + ", +" + (chosenSpecialities.length - 1) : chosenSpecialities[0].title
+                  : "Выбрать" }}
                 </div>
                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.00134 14.5C8.90968 14.5001 8.8189 14.4821 8.73422 14.447C8.64954 14.4119 8.57263 14.3604 8.50791 14.2955L1.52875 7.31639C1.25604 7.04368 1.25604 6.60207 1.52875 6.32953C1.80146 6.057 2.24307 6.05682 2.5156 6.32953L9.00134 12.8153L15.4871 6.32953C15.7598 6.05682 16.2014 6.05682 16.4739 6.32953C16.7465 6.60224 16.7466 7.04385 16.4739 7.31639L9.49476 14.2955C9.43004 14.3604 9.35313 14.4119 9.26845 14.447C9.18377 14.4821 9.093 14.5001 9.00134 14.5Z" fill="black"/>
@@ -392,45 +379,13 @@
                   <img src="assets/img/search.svg" alt="" class="search-field__icon">
                 </div>
                 <div class="param-select__items">
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Любой">
-                    <label><span>Любой</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
-                  </div>
-                  <div class="param-select__option m-check">
-                    <input type="checkbox" data-value="Тип">
-                    <label><span>Тип</span></label>
+                  <div class="param-select__option m-check"
+                       *ngFor="let speciality of specialitiesInitial">
+                    <input type="checkbox"
+                           [(ngModel)]="speciality.selected"
+                           (ngModelChange)="choseSpeciality(speciality)"
+                           data-value="Любой">
+                    <label><span>{{ speciality.title }}</span></label>
                   </div>
                 </div>
               </div>

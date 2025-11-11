@@ -113,6 +113,10 @@ export class EventService {
     return this.http.get<FiltersDataType | DefaultResponseType>(`${environment.api}events/filters/`)
   }
 
+  getFiltersDataMain(): Observable<FiltersDataType | DefaultResponseType> {
+    return this.http.get<FiltersDataType | DefaultResponseType>(`${environment.api}events/filters_main/`)
+  }
+
   getRecentEventList(): Observable<EventType[] | DefaultResponseType> {
     return this.http.get<EventType[] | DefaultResponseType>(`${environment.api}recent-events/`)
   }
