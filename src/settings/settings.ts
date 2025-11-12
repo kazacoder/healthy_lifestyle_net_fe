@@ -1,3 +1,5 @@
+import {DurationOptionType} from '../types/duration-option.type';
+
 export const Settings = {
   accessTokenKey: 'access',
   refreshTokenKey: 'refresh',
@@ -27,6 +29,16 @@ export const Settings = {
   instagram_regex: /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?!.*\.\.)(?!\.)([a-zA-Z0-9._]{1,30})(?<!\.)\/?$/,
   offlineFormatsIDs: [2, 3], // Офлайн, Комбинированный
 }
+
+export const Duration: DurationOptionType[] = [
+  {title: 'Любая', duration_from: undefined, duration_to: undefined, time_period: undefined, selected: true},
+  {title: '1-2 часа', duration_from: 1, duration_to: 2, time_period: 'hours', selected: false},
+  {title: '3-12 часов', duration_from: 3, duration_to: 12, time_period: 'hours', selected: false},
+  {title: '1 день', duration_from: 1, duration_to: 1, time_period: 'days', selected: false},
+  {title: '2-4 дня', duration_from: 2, duration_to: 4, time_period: 'days', selected: false},
+  {title: '5 дней и более', duration_from: 5, duration_to: undefined, time_period: 'days', selected: false},
+  // {title: '6 дней и более', duration_from: 6, duration_to: undefined, time_period: 'days', selected: false},
+]
 
 
 // telegram_regex: /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[a-zA-Z][a-zA-Z0-9_]{4,31}$|^@[a-zA-Z][a-zA-Z0-9_]{4,31}$/,
