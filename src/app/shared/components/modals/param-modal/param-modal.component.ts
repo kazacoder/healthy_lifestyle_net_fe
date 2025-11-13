@@ -1,15 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {NgClass, NgForOf} from '@angular/common';
-import noUiSlider, {PipsMode} from 'nouislider';
+import noUiSlider, {Options, PipsMode} from 'nouislider';
 import {RegionSelectComponent} from '../../ui/region-select/region-select.component';
 import {PublicationService} from '../../../services/publication.service';
 import {CategoryType} from '../../../../../types/category.type';
@@ -24,8 +16,9 @@ import {FiltersDataType} from '../../../../../types/filters-data.type';
 import {EventService} from '../../../services/event.service';
 import {FormatType} from '../../../../../types/format.type';
 import {SuitType} from '../../../../../types/suit.type';
-import {Duration} from '../../../../../settings/settings';
+import {Duration, Experience} from '../../../../../settings/settings';
 import {DurationOptionType} from '../../../../../types/duration-option.type';
+import {ExperienceOptionType} from '../../../../../types/experience-option.type';
 
 @Component({
   selector: 'param-modal',
@@ -59,8 +52,9 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   specialitiesInitial: SpecialityType[] = [];
   chosenSpecialities: SpecialityType[] = [];
   duration: DurationOptionType = Duration[0];
-  experience: number = 0;
-  rangeSliders: any[] = [];
+  experience: ExperienceOptionType = Experience[0];
+  rangeSliderEvent: any;
+  rangeSliderMaster: any;
   formatOption: FormatType[] = [{id: 'all', title: 'Все'}];
   formatChosen = 'all';
   typeOption: FormatType[] = [];
@@ -70,6 +64,7 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   creatorChosen = 'all';
   genderChosen = 'all';
   durationOption: DurationOptionType[] = Duration;
+  experienceOption: ExperienceOptionType[] = Experience;
 
   getCategoriesSubscription: Subscription | null = null;
   getSpecialitiesSubscription: Subscription | null = null;
@@ -92,6 +87,9 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.rangeSliderEvent = document.querySelector(`.range-slider.event`);
+    this.rangeSliderMaster = document.querySelector(`.range-slider.master`);
 
     this.typeOption = [{id: 'all', title: 'Все'}, {id: 'paid', title: 'Платное'}, {id: 'free', title: 'Бесплатное'}];
 
@@ -126,51 +124,51 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   }
 
   makeRangeSliders() {
-    let filterSliders = document.querySelectorAll(".filter-slider")
-    filterSliders.forEach((slider, i) => {
-      const rangeSlider: any = slider.querySelector(`.range-slider`);
-      this.rangeSliders.push(rangeSlider)
-      const sliderItemsCount = (slider as any).dataset.max - 1;
-      const rangeInput = slider.querySelector(`.range-slider__input`);
 
-      if (rangeSlider) {
-        noUiSlider.create(rangeSlider, {
-          start: 0,
-          connect: [true, false],
-          step: 1,
-          range: {
-            min: 0,
-            max: 100
+    const sliderDurationItemsCount = this.durationOption.length - 1
+    const sliderExperienceItemsCount = this.experienceOption.length - 1
+
+    function makeSliderParams(itemCount: number, optionArray: DurationOptionType[] | ExperienceOptionType[]): Options {
+      return {
+        start: 0,
+        connect: [true, false],
+        step: 1,
+        range: {
+          min: 0,
+          max: 100
+        },
+        pips: {
+          mode: PipsMode.Range,
+          density: 1,
+          filter: function filterPips(value, type) {
+            return value % (100 / itemCount) ? - 1 : 1;
           },
-          pips: {
-            mode: PipsMode.Range,
-            density: 1,
-            filter: function filterPips(value, type) {
-              return value % (100 / sliderItemsCount) ? -1 : 1;
-            },
-            format: {
-              to: (value) => {
-                let targetIndex = Math.ceil(sliderItemsCount * value / 100);
-                if (i === 0) {
-                  return this.durationOption[targetIndex]['title'];
-                }
-                return (document.querySelectorAll(`.filter-slider__bottom.slider-${i} .filter-slider__title`)[targetIndex] as HTMLElement).innerText
-              }
+          format: {
+            to: (value) => {
+              let targetIndex = Math.ceil(itemCount * value / 100);
+              return optionArray[targetIndex]['title'];
             }
           }
-        });
+        }
       }
-      if (rangeSlider) {
-        rangeSlider.noUiSlider.on('change', (values: any, handle: any) => {
-          let value = Number(values[0]);
-          const span = 100 / sliderItemsCount
-          let valueSanitized = Math.abs((value % span) / span) < 0.3 ? Math.round(value / span) * span : Math.ceil(value / span) * span;
-          rangeSlider.noUiSlider.set(valueSanitized);
-          this.duration = this.durationOption[sliderItemsCount * valueSanitized / 100]
-          this.experience = sliderItemsCount * valueSanitized / 100
-        });
-      }
-    })
+    }
+
+    noUiSlider.create(this.rangeSliderEvent, makeSliderParams(sliderDurationItemsCount, this.durationOption));
+    noUiSlider.create(this.rangeSliderMaster, makeSliderParams(sliderExperienceItemsCount, this.experienceOption));
+
+    const handleSliderChange = (slider: any, options: DurationOptionType[] | ExperienceOptionType[], attrName: 'duration' | 'experience') => {
+      return (values: any, handle: any) => {
+        let value = Number(values[0]);
+        const span = 100 / (options.length - 1);
+        let valueSanitized = Math.abs((value % span) / span) < 0.3 ? Math.round(value / span) * span : Math.ceil(value / span) * span;
+        slider.noUiSlider.set(valueSanitized);
+        // @ts-ignore
+        this[attrName] = options[(options.length - 1) * valueSanitized / 100];
+      };
+    };
+
+    this.rangeSliderEvent.noUiSlider.on('change', handleSliderChange(this.rangeSliderEvent, this.durationOption, 'duration'));
+    this.rangeSliderMaster.noUiSlider.on('change', handleSliderChange(this.rangeSliderMaster, this.experienceOption, 'experience'));
   }
 
   choseCategory(cat: CategoryType) {
@@ -214,7 +212,14 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     this.duration = option;
     const chosenOptionIdx = this.durationOption.indexOf(option);
     const sliderValue = chosenOptionIdx / (this.durationOption.length - 1) * 100;
-    this.rangeSliders[0].noUiSlider.set(sliderValue);
+    this.rangeSliderEvent.noUiSlider.set(sliderValue);
+  }
+
+  choseExperienceOption(option: ExperienceOptionType) {
+    this.experience = option;
+    const chosenOptionIdx = this.experienceOption.indexOf(option);
+    const sliderValue = chosenOptionIdx / (this.experienceOption.length - 1) * 100;
+    this.rangeSliderMaster.noUiSlider.set(sliderValue);
   }
 
   removeCategory(cat: CategoryType) {
@@ -256,19 +261,24 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     this.genderChosen = 'all';
 
     this.router.navigate([]).then();
-    this.rangeSliders.forEach(slider => slider.noUiSlider.set(0));
+    this.rangeSliderMaster.noUiSlider.set(0);
+    this.rangeSliderEvent.noUiSlider.set(0);
+    this.duration = this.durationOption[0];
+    this.experience = this.experienceOption[0];
   }
 
   apply(type: 'events' | 'masters') {
-    // this.closeModal();
+    this.closeModal();
     const queryParams = {
       ...this.activatedRoute.snapshot.queryParams,
       ['categories']: type === 'events' ? this.chosenCategories.map(cat => cat.id): undefined,
       ['specialities']: type === 'masters' ? this.chosenSpecialities.map(spec => spec.id) : undefined,
-      ['duration_form']: type === 'events' ? this.duration.duration_from : undefined,
+      ['duration_from']: type === 'events' ? this.duration.duration_from : undefined,
       ['duration_to']: type === 'events' ? this.duration.duration_to : undefined,
       ['duration_period']: type === 'events' ? this.duration.time_period : undefined,
-      ['experience']: this.experience && type === 'masters' ? this.experience : undefined,
+      ['experience_from']: type === 'masters' ? this.experience.experience_from : undefined,
+      ['experience_to']: type === 'masters' ? this.experience.experience_to : undefined,
+      ['experience_period']: type === 'masters' ? this.experience.time_period : undefined,
       ['format']: this.formatChosen === 'all' ? undefined : this.formatChosen, // for both filters
       ['type']: this.typeChosen === 'all' || type === 'masters' ? undefined : this.typeChosen,
       ['suit']: this.suitChosen === 'all' || type === 'masters' ? undefined : this.suitChosen,
@@ -276,7 +286,7 @@ export class ParamModalComponent implements OnInit, OnDestroy {
       ['gender']: this.genderChosen === 'all' || type === 'events' ? undefined : this.genderChosen,
     }
 
-    this.router.navigate(['/'], {
+    this.router.navigate(['/' + type], {
       relativeTo: this.activatedRoute,
       queryParams,
       queryParamsHandling: 'replace'

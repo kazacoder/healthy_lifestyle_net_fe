@@ -1,4 +1,5 @@
 import {DurationOptionType} from '../types/duration-option.type';
+import {ExperienceOptionType} from '../types/experience-option.type';
 
 export const Settings = {
   accessTokenKey: 'access',
@@ -37,8 +38,17 @@ export const Duration: DurationOptionType[] = [
   {title: '1 день', duration_from: 1, duration_to: 1, time_period: 'days', selected: false},
   {title: '2-4 дня', duration_from: 2, duration_to: 4, time_period: 'days', selected: false},
   {title: '5 дней и более', duration_from: 5, duration_to: undefined, time_period: 'days', selected: false},
-  // {title: '6 дней и более', duration_from: 6, duration_to: undefined, time_period: 'days', selected: false},
 ]
+
+export const Experience: ExperienceOptionType[] = [
+  {title: 'Любой', experience_from: undefined, experience_to: undefined, time_period: undefined, selected: true},
+  {title: '6-12 месяцев', experience_from: 6, experience_to: 12, time_period: 'months', selected: false},
+  {title: '1-3 года', experience_from: 1, experience_to: 3, time_period: 'years', selected: false},
+  {title: '4-7 лет', experience_from: 4, experience_to: 7, time_period: 'years', selected: false},
+  {title: '8 лет и более', experience_from: 8, experience_to: undefined, time_period: 'years', selected: false},
+]
+
+
 
 
 // telegram_regex: /^(?:https?:\/\/)?(?:t\.me|telegram\.me)\/[a-zA-Z][a-zA-Z0-9_]{4,31}$|^@[a-zA-Z][a-zA-Z0-9_]{4,31}$/,
