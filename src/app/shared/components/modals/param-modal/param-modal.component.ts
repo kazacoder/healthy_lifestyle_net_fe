@@ -312,6 +312,7 @@ export class ParamModalComponent implements OnInit, OnDestroy {
       ['experience_from']: type === 'masters' ? this.experience.experience_from : undefined,
       ['experience_to']: type === 'masters' ? this.experience.experience_to : undefined,
       ['experience_period']: type === 'masters' ? this.experience.experience_period : undefined,
+      ['experience_id']: type === 'masters' && this.experience.id ? this.experience.id : undefined,
       ['format']: this.formatChosen === 'all' ? undefined : this.formatChosen, // for both filters
       ['type']: this.typeChosen === 'all' || type === 'masters' ? undefined : this.typeChosen,
       ['suit']: this.suitChosen === 'all' || type === 'masters' ? undefined : this.suitChosen,

@@ -18,7 +18,7 @@ import {SpecialityService} from '../../../shared/services/speciality.service';
 import {FilterObjectType} from '../../../../types/filter-object.type';
 import {AuthService} from '../../../core/auth/auth.service';
 import {ParamsObjectType} from '../../../../types/params-object.type';
-import {Settings} from '../../../../settings/settings';
+import {Experience, Settings} from '../../../../settings/settings';
 import {MasterResponseType} from '../../../../types/master-response.type';
 
 @Component({
@@ -81,10 +81,11 @@ export class MastersListComponent implements OnInit, OnDestroy {
           },
           {
             title: 'Стаж',
-            name: 'experience',
-            options: [{id: 1, title: '1 год'}, {id: 2, title: '2 года'}],
+            name: 'experience_id',
+            options: Experience.slice(1),
             search: false,
-            defaultOption: 'Любой'
+            defaultOption: 'Любой',
+            composite: true
           },
           {
             title: 'Вид деятельности',
