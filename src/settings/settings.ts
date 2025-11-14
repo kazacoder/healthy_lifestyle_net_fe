@@ -32,20 +32,20 @@ export const Settings = {
 }
 
 export const Duration: DurationOptionType[] = [
-  {title: 'Любая', duration_from: undefined, duration_to: undefined, time_period: undefined, selected: true},
-  {title: '1-2 часа', duration_from: 1, duration_to: 2, time_period: 'hours', selected: false},
-  {title: '3-12 часов', duration_from: 3, duration_to: 12, time_period: 'hours', selected: false},
-  {title: '1 день', duration_from: 1, duration_to: 1, time_period: 'days', selected: false},
-  {title: '2-4 дня', duration_from: 2, duration_to: 4, time_period: 'days', selected: false},
-  {title: '5 дней и более', duration_from: 5, duration_to: undefined, time_period: 'days', selected: false},
+  {id: '0',title: 'Любая', duration_from: undefined, duration_to: undefined, duration_period: undefined, selected: true},
+  {id: '1',title: '1-2 часа', duration_from: 1, duration_to: 2, duration_period: 'hours', selected: false},
+  {id: '2',title: '3-12 часов', duration_from: 3, duration_to: 12, duration_period: 'hours', selected: false},
+  {id: '3',title: '1 день', duration_from: 1, duration_to: 1, duration_period: 'days', selected: false},
+  {id: '4',title: '2-4 дня', duration_from: 2, duration_to: 4, duration_period: 'days', selected: false},
+  {id: '5',title: '5 дней и более', duration_from: 5, duration_to: undefined, duration_period: 'days', selected: false},
 ]
 
 export const Experience: ExperienceOptionType[] = [
-  {title: 'Любой', experience_from: undefined, experience_to: undefined, time_period: undefined, selected: true},
-  {title: '6-12 месяцев', experience_from: 6, experience_to: 12, time_period: 'months', selected: false},
-  {title: '1-3 года', experience_from: 1, experience_to: 3, time_period: 'years', selected: false},
-  {title: '4-7 лет', experience_from: 4, experience_to: 7, time_period: 'years', selected: false},
-  {title: '8 лет и более', experience_from: 8, experience_to: undefined, time_period: 'years', selected: false},
+  {id: '0', title: 'Любой', experience_from: undefined, experience_to: undefined, experience_period: undefined, selected: true},
+  {id: '1', title: '6-12 месяцев', experience_from: 6, experience_to: 12, experience_period: 'months', selected: false},
+  {id: '2', title: '1-3 года', experience_from: 1, experience_to: 3, experience_period: 'years', selected: false},
+  {id: '3', title: '4-7 лет', experience_from: 4, experience_to: 7, experience_period: 'years', selected: false},
+  {id: '4', title: '8 лет и более', experience_from: 8, experience_to: undefined, experience_period: 'years', selected: false},
 ]
 
 

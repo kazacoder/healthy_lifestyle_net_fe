@@ -307,10 +307,11 @@ export class ParamModalComponent implements OnInit, OnDestroy {
       ['specialities']: type === 'masters' ? this.chosenSpecialities.map(spec => spec.id) : undefined,
       ['duration_from']: type === 'events' ? this.duration.duration_from : undefined,
       ['duration_to']: type === 'events' ? this.duration.duration_to : undefined,
-      ['duration_period']: type === 'events' ? this.duration.time_period : undefined,
+      ['duration_period']: type === 'events' ? this.duration.duration_period : undefined,
+      ['duration_id']: type === 'events' && this.duration.id ? this.duration.id : undefined,
       ['experience_from']: type === 'masters' ? this.experience.experience_from : undefined,
       ['experience_to']: type === 'masters' ? this.experience.experience_to : undefined,
-      ['experience_period']: type === 'masters' ? this.experience.time_period : undefined,
+      ['experience_period']: type === 'masters' ? this.experience.experience_period : undefined,
       ['format']: this.formatChosen === 'all' ? undefined : this.formatChosen, // for both filters
       ['type']: this.typeChosen === 'all' || type === 'masters' ? undefined : this.typeChosen,
       ['suit']: this.suitChosen === 'all' || type === 'masters' ? undefined : this.suitChosen,

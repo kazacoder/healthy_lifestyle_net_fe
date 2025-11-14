@@ -18,6 +18,7 @@
                            [index]="i"
                            [search]="filter.search"
                            [multi]="filter.multi ? filter.multi : false"
+                           [composite]="filter.composite ? filter.composite : false"
                            (onDropdownOpen)="isFilterOpen($event)">
         </param-filter-item>
       </div>

@@ -4,6 +4,7 @@ export type FilterObjectType = {
   options: { id: string | number, title: string}[],
   search: boolean,
   defaultOption?: string,
-  multi?: boolean
+  multi?: boolean,
+  composite?: boolean,
 }
 

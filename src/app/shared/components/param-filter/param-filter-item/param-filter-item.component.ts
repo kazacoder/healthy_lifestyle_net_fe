@@ -4,6 +4,8 @@ import {WindowsUtils} from '../../../utils/windows-utils';
 import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {DurationOptionType} from '../../../../../types/duration-option.type';
+import {ExperienceOptionType} from '../../../../../types/experience-option.type';
 
 @Component({
   selector: 'param-filter-item',
@@ -21,9 +23,10 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
 
   @Input() filterTitle: string = ''
   @Input() filterName: string = ''
-  @Input() filterOptions: { id: string | number, title: string}[] = []
+  @Input() filterOptions: { id: string | number, title: string}[] | DurationOptionType[] | ExperienceOptionType[] = []
   @Input() search: boolean = false;
   @Input() multi: boolean = false;
+  @Input() composite: boolean = false;
   @Input() defaultOption: string | undefined = "Все"
   @Input() index: number = 0
 
@@ -93,6 +96,12 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
       [this.filterName]: null
     };
 
+    if (this.composite) {
+      Object.keys(this.filterOptions[0]).forEach(key => {
+        queryParams[key] = null;
+      })
+    }
+
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams,
@@ -123,6 +132,18 @@ export class ParamFilterItemComponent implements OnInit, OnDestroy {
       ...this.activatedRoute.snapshot.queryParams,
       [this.filterName]: this.selectedOptions.length ? this.selectedOptions : null
     };
+
+    if (this.composite) {
+      const filterPrefix = this.filterName.split('_')[0]
+      const selectedMultiOption = this.filterOptions.filter(filter => filter.id === this.selectedOptions[0])[0];
+
+      Object.keys(selectedMultiOption).forEach(key => {
+        if (key.startsWith(filterPrefix)) {
+          // @ts-ignore
+          queryParams[key] = selectedMultiOption[key];
+        }
+      })
+    }
 
     this.router.navigate([], {
       relativeTo: this.activatedRoute,

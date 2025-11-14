@@ -16,7 +16,7 @@ import {DefaultResponseType} from '../../../../types/default-response.type';
 import {HttpErrorResponse} from '@angular/common/http';
 import {EventType} from '../../../../types/event.type';
 import {EventResponseType} from '../../../../types/event-response.type';
-import {Settings} from '../../../../settings/settings';
+import {Duration, Settings} from '../../../../settings/settings';
 import {FiltersDataType} from '../../../../types/filters-data.type';
 import {FilterObjectType} from '../../../../types/filter-object.type';
 import {ActivatedRoute} from '@angular/router';
@@ -125,7 +125,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
         this.filterObjects.push({title: 'Категории', name: 'categories', options: filters.categories, search: true, multi: true});
         this.filterObjects.push({title: 'Тип мероприятия', name: 'type', options: [{id: 'paid', title: 'Платное'}, {id: 'free', title: 'Бесплатное'}], search: false});
         this.filterObjects.push({title: 'Для кого', name: 'suit', options: filters.suits, search: false, defaultOption: 'Всем'});
-        this.filterObjects.push({title: 'Длительность', name: 'duration', options: [{id: '1_1', title: '1 час'}, {id: '2_1', title: '2 часа'}, {id: '1_2', title: '1 день'}], search: false, defaultOption: 'Любая'});
+        this.filterObjects.push({title: 'Длительность', name: 'duration_id', options: Duration.slice(1), search: false, defaultOption: 'Любая', composite: true});
         this.filterObjects.push({title: 'Создатель мероприятия', name: 'master',
           options: filters.masters.map(item => {
             return { id: item.id, title: item.full_name}
@@ -136,7 +136,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
         if (errorResponse.error && errorResponse.error.detail) {
           this._snackBar.open(errorResponse.error.detail)
         } else {
-          this._snackBar.open('Ошибка получения данных фильтов')
+          this._snackBar.open('Ошибка получения данных фильтров')
         }
       }
     });
