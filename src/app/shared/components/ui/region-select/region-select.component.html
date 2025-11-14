@@ -1,5 +1,6 @@
 <div class="param-select region-select"
      (click)="regionSelectToggle()"
+     (change)="setCity()"
      [ngClass]="isOpenDropDown ? '_open' : ''">
   <div class="param-select__show">
     <div class="param-select__current">

@@ -45,6 +45,8 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
   getEventsSubscription: Subscription | null = null;
   isLoggedSubscription: Subscription | null = null;
   isLogged:boolean = false;
+  citiesEvent: string[] = [];
+  citiesMaster: string[] = [];
 
   isCityModalOpened:boolean = false;
   isParamModalOpened:boolean = false;
@@ -178,6 +180,10 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
       Object.assign(this.masterSwiper, this.masterSwiperParams);
       this.masterSwiper.initialize();
     }
+  }
+
+  fillCitiesEvent(citesList: string[]) {
+    this.citiesEvent = citesList
   }
 
   toggleCalendarActive(value: boolean) {

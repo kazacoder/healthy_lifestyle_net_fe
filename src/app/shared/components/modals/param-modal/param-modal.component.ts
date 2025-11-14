@@ -28,6 +28,7 @@ import {SuitType} from '../../../../../types/suit.type';
 import {Duration, Experience} from '../../../../../settings/settings';
 import {DurationOptionType} from '../../../../../types/duration-option.type';
 import {ExperienceOptionType} from '../../../../../types/experience-option.type';
+import {CitesListResponseType} from '../../../../../types/city-response.type';
 
 @Component({
   selector: 'param-modal',
@@ -45,6 +46,7 @@ import {ExperienceOptionType} from '../../../../../types/experience-option.type'
 })
 export class ParamModalComponent implements OnInit, OnDestroy {
   @Input() isOpened: boolean = false;
+  @Input() citiesEvent: string[] = [];
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
 
   modalType: 'event' | 'master' = "event"
@@ -74,10 +76,16 @@ export class ParamModalComponent implements OnInit, OnDestroy {
   genderChosen = 'all';
   durationOption: DurationOptionType[] = Duration;
   experienceOption: ExperienceOptionType[] = Experience;
+  citiesMaster: string[] = [];
+  chosenCity: {[key: string]: null | string} = {
+    master: null,
+    event: null,
+  }
 
   getCategoriesSubscription: Subscription | null = null;
   getSpecialitiesSubscription: Subscription | null = null;
   getEventFiltersSubscription: Subscription | null = null;
+  getCitiesListSubscription: Subscription | null = null;
 
   constructor(private publicationService: PublicationService,
               private specialityService: SpecialityService,
@@ -152,6 +160,26 @@ export class ParamModalComponent implements OnInit, OnDestroy {
         }
       }
     })
+
+    this.getCitiesListSubscription = this.eventService.getCitiesList('masters').subscribe({
+      next: (data: CitesListResponseType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).detail !== undefined) {
+          const error = (data as DefaultResponseType).detail;
+          console.error(error);
+          throw new Error(error);
+        }
+        this.citiesMaster = (data as CitesListResponseType).cities;
+        // this.citiesFiltered = (data as CitesListResponseType).cities;
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.error && errorResponse.error.detail) {
+          console.error(errorResponse.error.detail)
+        } else {
+          console.error('Ошибка получения данных')
+        }
+      }
+    })
+
     this.makeRangeSliders();
   }
 
@@ -201,6 +229,10 @@ export class ParamModalComponent implements OnInit, OnDestroy {
 
     this.rangeSliderEvent.noUiSlider.on('change', handleSliderChange(this.rangeSliderEvent, this.durationOption, 'duration'));
     this.rangeSliderMaster.noUiSlider.on('change', handleSliderChange(this.rangeSliderMaster, this.experienceOption, 'experience'));
+  }
+
+  setCurrentCity(city: string, type: 'master' | 'event') {
+    this.chosenCity[type] = city;
   }
 
   choseCategory(cat: CategoryType) {
@@ -276,10 +308,16 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  getChosenCity(type: 'master' | 'event') {
+    return this.chosenCity[type] ? this.chosenCity[type] : 'Любой';
+  }
+
   clear() {
     this.categories = this.categoriesInitial;
     this.chosenCategories = [];
     this.categoriesInitial.forEach(cat => cat.selected = false);
+    this.chosenCity['master'] = null;
+    this.chosenCity['event'] = null;
 
     this.specialities = this.specialitiesInitial;
     this.chosenSpecialities = [];
@@ -304,15 +342,16 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     const queryParams = {
       ...this.activatedRoute.snapshot.queryParams,
       ['categories']: type === 'events' ? this.chosenCategories.map(cat => cat.id): undefined,
+      ['city']: type === 'events' ? this.chosenCity['event'] : this.chosenCity['master'],
       ['specialities']: type === 'masters' ? this.chosenSpecialities.map(spec => spec.id) : undefined,
       ['duration_from']: type === 'events' ? this.duration.duration_from : undefined,
       ['duration_to']: type === 'events' ? this.duration.duration_to : undefined,
       ['duration_period']: type === 'events' ? this.duration.duration_period : undefined,
-      ['duration_id']: type === 'events' && this.duration.id ? this.duration.id : undefined,
+      ['duration_id']: type === 'events' && this.duration.id !== '0' ? this.duration.id : undefined,
       ['experience_from']: type === 'masters' ? this.experience.experience_from : undefined,
       ['experience_to']: type === 'masters' ? this.experience.experience_to : undefined,
       ['experience_period']: type === 'masters' ? this.experience.experience_period : undefined,
-      ['experience_id']: type === 'masters' && this.experience.id ? this.experience.id : undefined,
+      ['experience_id']: type === 'masters' && this.experience.id !== '0' ? this.experience.id : undefined,
       ['format']: this.formatChosen === 'all' ? undefined : this.formatChosen, // for both filters
       ['type']: this.typeChosen === 'all' || type === 'masters' ? undefined : this.typeChosen,
       ['suit']: this.suitChosen === 'all' || type === 'masters' ? undefined : this.suitChosen,
@@ -357,5 +396,6 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     this.getCategoriesSubscription?.unsubscribe();
     this.getSpecialitiesSubscription?.unsubscribe();
     this.getEventFiltersSubscription?.unsubscribe();
+    this.getCitiesListSubscription?.unsubscribe();
   }
 }

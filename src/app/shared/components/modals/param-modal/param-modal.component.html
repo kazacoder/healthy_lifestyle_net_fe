@@ -36,9 +36,9 @@
         <div class="param-modal__groups">
           <div class="param-field">
             <div class="param-field__title text20 font2 medium-text">
-              Регион
+              Город
             </div>
-            <region-select></region-select>
+            <region-select (onCitiChoice)="setCurrentCity($event, 'event')" [cities]="citiesEvent"></region-select>
           </div>
           <div class="param-group">
             <div class="param-group__title text20 font2 medium-text">
@@ -219,9 +219,11 @@
         <div class="param-modal__groups">
           <div class="param-field">
             <div class="param-field__title text20 font2 medium-text">
-              Регион
+              Город
             </div>
-            <region-select></region-select>
+            <region-select (onCitiChoice)="setCurrentCity($event, 'master')"
+                           [currentCity]="getChosenCity('event')"
+                           [cities]="citiesMaster"></region-select>
           </div>
           <div class="param-group">
             <div class="param-group__title text20 font2 medium-text">

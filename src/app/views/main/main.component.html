@@ -141,6 +141,8 @@
             [chosenCity]="chosenCity"
             (onChoiceCity)="chooseCity($event)"
             modalType="events"
+            (onInitModal)="fillCitiesEvent($event)"
             (onCloseModal)="toggleCityModal($event)"></city-modal>
 <param-modal [isOpened]="isParamModalOpened"
+             [citiesEvent]="citiesEvent"
              (onCloseModal)="toggleParamModal($event)"></param-modal>

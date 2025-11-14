@@ -4,7 +4,6 @@ import {DateFeedComponent} from '../../../shared/components/page-blocks/date-fee
 import {PosterInfoComponent} from '../../../shared/components/events/poster-info/poster-info.component';
 import {WindowsUtils} from '../../../shared/utils/windows-utils';
 import {CityModalComponent} from '../../../shared/components/modals/city-modal/city-modal.component';
-import {ParamModalComponent} from '../../../shared/components/modals/param-modal/param-modal.component';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {EventCard2Component} from '../../../shared/components/cards/event-card2/event-card2.component';
 import {ParamFilterComponent} from '../../../shared/components/param-filter/param-filter.component';
@@ -30,7 +29,6 @@ import {AuthService} from '../../../core/auth/auth.service';
     DateFeedComponent,
     PosterInfoComponent,
     CityModalComponent,
-    ParamModalComponent,
     NgClass,
     EventCard2Component,
     NgForOf,

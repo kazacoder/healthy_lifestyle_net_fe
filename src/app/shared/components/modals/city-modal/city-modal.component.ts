@@ -33,6 +33,7 @@ export class CityModalComponent implements OnInit, OnDestroy {
 
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
   @Output() onChoiceCity: EventEmitter<string> = new EventEmitter();
+  @Output() onInitModal: EventEmitter<string[]> = new EventEmitter();
 
   activatedRouterSubscription: Subscription | null = null;
   getCitiesListSubscription: Subscription | null = null;
@@ -63,6 +64,7 @@ export class CityModalComponent implements OnInit, OnDestroy {
           throw new Error(error);
         }
         this.cities = (data as CitesListResponseType).cities;
+        this.onInitModal.emit(this.cities);
         this.citiesFiltered = (data as CitesListResponseType).cities;
       },
       error: (errorResponse: HttpErrorResponse) => {
