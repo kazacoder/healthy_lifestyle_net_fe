@@ -1,4 +1,13 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {NgClass, NgForOf} from '@angular/common';
 import noUiSlider, {Options, PipsMode} from 'nouislider';
@@ -75,6 +84,29 @@ export class ParamModalComponent implements OnInit, OnDestroy {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private eventService: EventService) {
+  }
+
+  @HostListener('document: click', ['$event'])
+  onClick(event: MouseEvent) {
+    // Обработка закрытия dropdown по крику вне их, мобильный вид
+    if (this.isOpened) {
+      // Проверяем все открытые dropdown'ы (только если само модальное окно открыто)
+      const paths: [keyof typeof this.dropdown, string][] = [
+        ['categoryOpen', '#categoryDropdown'],
+        ['durationOpen', '#durationDropdown'],
+        ['experienceOpen', '#experienceDropdown'],
+        ['specialityOpen', '#specialityDropdown'],
+      ];
+
+      paths.forEach(([key, selector]) => {
+        if (this.dropdown[key]) {
+          const dropdownElem = document.querySelector(selector);
+          if (dropdownElem && !dropdownElem.contains(event.target as Node)) {
+            this.dropdown[key] = false;
+          }
+        }
+      });
+    }
   }
 
   closeModal() {

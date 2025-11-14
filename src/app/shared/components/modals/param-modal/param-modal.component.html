@@ -124,7 +124,7 @@
             </div>
           </div>
           <div class="param-duration__view2">
-            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.durationOpen}">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.durationOpen}" id="durationDropdown">
               <div class="param-select__show" (click)="toggleCategoryDropdown('durationOpen')">
                 <div class="param-select__current">
                   {{ duration.title }}
@@ -176,7 +176,7 @@
               </div>
           </div>
           <div class="param-category__view2">
-            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.categoryOpen}">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.categoryOpen}" id="categoryDropdown">
               <div class="param-select__show" (click)="toggleCategoryDropdown('categoryOpen')">
                 <div class="param-select__current">
                   {{ chosenCategories.length > 0
@@ -272,7 +272,7 @@
             </div>
           </div>
           <div class="param-duration__view2">
-            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.experienceOpen}">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.experienceOpen}" id="experienceDropdown">
               <div class="param-select__show" (click)="toggleCategoryDropdown('experienceOpen')">
                 <div class="param-select__current">
                   {{ experience.title }}
@@ -323,7 +323,7 @@
             </div>
           </div>
           <div class="param-category__view2">
-            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.specialityOpen}">
+            <div class="param-select _mob-top" [ngClass]="{_open: dropdown.specialityOpen}" id="specialityDropdown">
               <div class="param-select__show" (click)="toggleCategoryDropdown('specialityOpen')">
                 <div class="param-select__current">
                   {{ chosenSpecialities.length > 0
