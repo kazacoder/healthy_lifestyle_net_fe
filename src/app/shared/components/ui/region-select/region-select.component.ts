@@ -1,4 +1,11 @@
-import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  Output
+} from '@angular/core';
 import {NgClass, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -13,11 +20,14 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './region-select.component.html',
   styleUrl: './region-select.component.scss'
 })
-export class RegionSelectComponent {
-  isOpenDropDown = false;
+export class RegionSelectComponent implements OnChanges {
   @Input() currentCity: string = 'Любой'
   @Input() cities: string[] = [];
   @Output() onCitiChoice: EventEmitter<string> = new EventEmitter();
+
+  isOpenDropDown = false;
+  searchField: string = '';
+  citiesFiltered: string[] = [];
 
 
   // Closing dropdown region select if click outside
@@ -31,6 +41,21 @@ export class RegionSelectComponent {
     }
   }
 
+  ngOnChanges() {
+    if (this.currentCity === 'Любой') {
+      this.searchField = '';
+    }
+    this.citiesFiltered = [...this.cities]
+  }
+
+  filterCity() {
+    const query = this.searchField.trim().toLowerCase();
+    if (query) {
+      this.citiesFiltered = this.cities.filter(city => city.toLowerCase().includes(query))
+    } else {
+      this.citiesFiltered = [...this.cities];
+    }
+  }
 
   regionSelectToggle() {
     this.isOpenDropDown = !this.isOpenDropDown;

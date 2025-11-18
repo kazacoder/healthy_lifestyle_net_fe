@@ -10,11 +10,14 @@
   </div>
   <div class="param-select__hidden">
     <div class="fg search-field">
-      <input type="text" placeholder="Введите название города">
+      <input type="text"
+             [(ngModel)]="searchField"
+             (input)="filterCity()"
+             placeholder="Введите название города">
       <img src="assets/img/search.svg" alt="" class="search-field__icon">
     </div>
     <div class="param-select__items">
-      <div class="param-select__option m-check" *ngFor="let city of cities">
+      <div class="param-select__option m-check" *ngFor="let city of citiesFiltered">
         <input type="radio"
                [value]="city"
                name="@@name"
