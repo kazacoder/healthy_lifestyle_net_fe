@@ -308,7 +308,7 @@ export class ParamModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  getChosenCity(type: 'master' | 'event') {
+  getCurrentCity(type: 'master' | 'event') {
     return this.chosenCity[type] ? this.chosenCity[type] : 'Любой';
   }
 

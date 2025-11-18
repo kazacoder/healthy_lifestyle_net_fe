@@ -38,7 +38,9 @@
             <div class="param-field__title text20 font2 medium-text">
               Город
             </div>
-            <region-select (onCitiChoice)="setCurrentCity($event, 'event')" [cities]="citiesEvent"></region-select>
+            <region-select (onCitiChoice)="setCurrentCity($event, 'event')"
+                           [currentCity]="getCurrentCity('event')"
+                           [cities]="citiesEvent"></region-select>
           </div>
           <div class="param-group">
             <div class="param-group__title text20 font2 medium-text">
@@ -222,7 +224,7 @@
               Город
             </div>
             <region-select (onCitiChoice)="setCurrentCity($event, 'master')"
-                           [currentCity]="getChosenCity('event')"
+                           [currentCity]="getCurrentCity('master')"
                            [cities]="citiesMaster"></region-select>
           </div>
           <div class="param-group">

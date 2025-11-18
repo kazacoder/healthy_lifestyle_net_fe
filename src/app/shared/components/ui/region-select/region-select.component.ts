@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {NgClass, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -13,21 +13,24 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './region-select.component.html',
   styleUrl: './region-select.component.scss'
 })
-export class RegionSelectComponent implements OnChanges {
+export class RegionSelectComponent {
   isOpenDropDown = false;
   @Input() currentCity: string = 'Любой'
   @Input() cities: string[] = [];
   @Output() onCitiChoice: EventEmitter<string> = new EventEmitter();
 
 
-  // Todo доделать
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['currentCity']) {
-      this.currentCity = changes['currentCity'].currentValue
-      console.log(changes['currentCity'].currentValue)
-      console.log(this.currentCity)
+  // Closing dropdown region select if click outside
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+
+    if (!Array.from(document.querySelectorAll('.region-select')).some(node => {
+       return node.contains(event.target as Node)
+    })) {
+      this.isOpenDropDown = false;
     }
   }
+
 
   regionSelectToggle() {
     this.isOpenDropDown = !this.isOpenDropDown;
@@ -35,6 +38,7 @@ export class RegionSelectComponent implements OnChanges {
 
   setCity() {
     this.onCitiChoice.emit(this.currentCity);
+    this.regionSelectToggle();
   }
 
 }

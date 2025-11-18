@@ -1,8 +1,6 @@
 <div class="param-select region-select"
-     (click)="regionSelectToggle()"
-     (change)="setCity()"
      [ngClass]="isOpenDropDown ? '_open' : ''">
-  <div class="param-select__show">
+  <div class="param-select__show" (click)="regionSelectToggle()">
     <div class="param-select__current">
       {{ currentCity }}
     </div>
@@ -17,7 +15,11 @@
     </div>
     <div class="param-select__items">
       <div class="param-select__option m-check" *ngFor="let city of cities">
-        <input checked type="radio" [value]="city" name="@@name" [(ngModel)]="currentCity">
+        <input type="radio"
+               [value]="city"
+               name="@@name"
+               [(ngModel)]="currentCity"
+               (ngModelChange)="setCity()">
         <label><span>{{ city }}</span></label>
       </div>
     </div>
