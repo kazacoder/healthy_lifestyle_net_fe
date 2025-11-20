@@ -24,6 +24,7 @@ import {EventCard3Component} from '../../../shared/components/cards/event-card3/
 import {ChatModalComponent} from '../../../shared/components/modals/chat-modal/chat-modal.component';
 import {UserShortType} from '../../../../types/user-info.type';
 import {UserService} from '../../../shared/services/user.service';
+import {ShareModalComponent} from '../../../shared/components/modals/share-modal/share-modal.component';
 
 @Component({
   selector: 'app-master-detail',
@@ -36,7 +37,8 @@ import {UserService} from '../../../shared/services/user.service';
     NgClass,
     ClaimModalComponent,
     EventCard3Component,
-    ChatModalComponent
+    ChatModalComponent,
+    ShareModalComponent
   ],
   standalone: true,
   templateUrl: './master-detail.component.html',
@@ -50,6 +52,7 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
   isLogged: boolean = false;
   isClaimModalOpen: boolean = false;
   isChatModalOpen: boolean = false;
+  isShareModalOpen: boolean = false;
   masterIsSelfUser: boolean = false;
   isLoggedSubscription: Subscription | null = null;
   masterId: string | null | undefined = null;
@@ -126,7 +129,9 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
       this.getMasterDetail();
       this.getMastersEvents();
     });
-    this.masterIsSelfUser = this.masterId === this.userService.getUserId()
+    this.masterIsSelfUser = this.masterId === this.userService.getUserId();
+    console.log(this.router.url)
+    console.log(window.location.href)
   }
 
   getMasterDetail() {
@@ -274,6 +279,11 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     WindowsUtils.fixBody(val);
   }
 
+  toggleShareModal(val: boolean) {
+    this.isShareModalOpen = val;
+    WindowsUtils.fixBody(val);
+  }
+
   toggleCHatModal(val: boolean) {
     if (!this.isLogged && val) {
       this._snackBar.open('Чтобы отправить сообщение необходимо войти')
@@ -289,4 +299,6 @@ export class MasterDetailComponent implements AfterViewInit, OnInit, OnDestroy {
     this.toggleFavoriteMasterSubscription?.unsubscribe();
     this.isLoggedSubscription?.unsubscribe();
   }
+
+  protected readonly window = window;
 }

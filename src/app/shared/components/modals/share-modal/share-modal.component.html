@@ -1,0 +1,25 @@
+<div class="modal" [ngClass]="{'_active _active2': isOpen}">
+  <div class="modal__bg modal-bg _close-modal" (click)="closeModal()"></div>
+  <div class="modal__dialog _share">
+    <button class="close-btn _close-modal" (click)="closeModal()">
+      <img src="assets/img/close2.svg" alt="">
+    </button>
+    <close-btn-mob (click)="closeModal()"></close-btn-mob>
+    <div class="modal__top text-center">
+      <div class="text30 text24-tablet semi-bold-text text-center">
+        {{ title }}
+      </div>
+      <div class="_flex _flex-around">
+        <button [cdkCopyToClipboard]="url" class="share-contacts__item">
+          <img src="assets/img/link.svg" alt="">
+        </button>
+        <a href="https://t.me/share/url?url={{ url }}" class="share-contacts__item">
+          <img src="assets/img/tg.svg" alt="">
+        </a>
+        <a href="https://wa.me/?text={{ url }}" class="share-contacts__item">
+          <img src="assets/img/whatsapp.svg" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

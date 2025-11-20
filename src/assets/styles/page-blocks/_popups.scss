@@ -51,6 +51,9 @@
         padding: 4em 4em 3.625em;
         border-radius: 1.25em;
         display: inline-block;
+      &._share {
+        width: unset;
+      }
     }
     .close-btn{
         position: absolute;
@@ -168,6 +171,9 @@
             padding: 2.5em .6875em 1.875em;
             transition: all .3s;
             transform: translateY(100%);
+            &._share {
+              width: 100%;
+            }
         }
         &._active2{
             .modal__dialog{
