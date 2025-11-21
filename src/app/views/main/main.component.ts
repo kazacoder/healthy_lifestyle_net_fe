@@ -77,7 +77,6 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
     observer: true,
     observeParents: true,
     observeSlideChildren: true,
-
     navigation: {
       nextEl: `.events-slider .swiper-button-next`,
       prevEl: `.events-slider .swiper-button-prev`,
@@ -87,28 +86,30 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   event2Swiper: SwiperContainer | null = null;
   event2SwiperParams = {
-    spaceBetween: 0,
     slidesPerView: "auto",
-    freeMode: true,
+    spaceBetween: 0,
     watchSlidesProgress: true,
+    preventClicks :true,
+    a11y: false,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
     navigation: {
       nextEl: `.events-slider2 .swiper-button-next`,
       prevEl: `.events-slider2 .swiper-button-prev`,
     },
-    observer: true,
-    observeParents: true,
-    resistanceRatio: 0, // предотвращает "отскок" в конце
-    touchReleaseOnEdges: true,
-    simulateTouch: true,
-    passiveListeners: false,
   }
 
   masterSwiper: SwiperContainer | null = null;
   masterSwiperParams = {
-    spaceBetween: 0,
     slidesPerView: "auto",
-    freeMode: true,
+    spaceBetween: 0,
     watchSlidesProgress: true,
+    preventClicks :true,
+    a11y: false,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
     navigation: {
       nextEl: `.master-slider .swiper-button-next`,
       prevEl: `.master-slider .swiper-button-prev`,
