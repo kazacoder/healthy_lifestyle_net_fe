@@ -55,20 +55,34 @@ export class MainComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   eventSwiper: SwiperContainer | null = null;
   eventSwiperParams = {
-    spaceBetween: 0,
+    // spaceBetween: 0,
+    // slidesPerView: "auto",
+    // freeMode: true,
+    // watchSlidesProgress: true,
+    // preventClicks :true,
+    // a11y: false,
+    // observeSlideChildren: true,
+    // observer: true,
+    // observeParents: true,
+    // resistanceRatio: 0, // предотвращает "отскок" в конце
+    // touchReleaseOnEdges: true,
+    // simulateTouch: true,
+    // passiveListeners: false,
+
     slidesPerView: "auto",
-    freeMode: true,
+    spaceBetween: 0,
     watchSlidesProgress: true,
+    preventClicks :true,
+    a11y: false,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
+
     navigation: {
       nextEl: `.events-slider .swiper-button-next`,
       prevEl: `.events-slider .swiper-button-prev`,
     },
-    observer: true,
-    observeParents: true,
-    resistanceRatio: 0, // предотвращает "отскок" в конце
-    touchReleaseOnEdges: true,
-    simulateTouch: true,
-    passiveListeners: false,
+
   }
 
   event2Swiper: SwiperContainer | null = null;
