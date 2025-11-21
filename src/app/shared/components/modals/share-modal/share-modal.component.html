@@ -10,13 +10,13 @@
         {{ title }}
       </div>
       <div class="_flex _flex-around">
-        <button [cdkCopyToClipboard]="url" class="share-contacts__item">
+        <button (click)="copyToClipboard()" class="share-contacts__item">
           <img src="assets/img/link.svg" alt="">
         </button>
-        <a href="https://t.me/share/url?url={{ url }}" class="share-contacts__item">
+        <a (click)="closeModal()" target="_blank" href="https://t.me/share/url?url={{ url }}" class="share-contacts__item">
           <img src="assets/img/tg.svg" alt="">
         </a>
-        <a href="https://wa.me/?text={{ url }}" class="share-contacts__item">
+        <a (click)="closeModal()" target="_blank" href="https://wa.me/?text={{ url }}" class="share-contacts__item">
           <img src="assets/img/whatsapp.svg" alt="">
         </a>
       </div>

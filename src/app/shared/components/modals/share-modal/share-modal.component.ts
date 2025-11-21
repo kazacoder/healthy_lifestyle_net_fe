@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CloseBtnMobComponent} from '../../ui/close-btn-mob/close-btn-mob.component';
 import {NgClass, NgIf} from '@angular/common';
 import {PhoneFormatPipe} from '../../../pipes/phone-format.pipe';
-import {ClipboardModule} from '@angular/cdk/clipboard';
+import {Clipboard} from '@angular/cdk/clipboard';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'share-modal',
@@ -11,7 +12,6 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     NgClass,
     NgIf,
     PhoneFormatPipe,
-    ClipboardModule
   ],
   standalone: true,
   templateUrl: './share-modal.component.html',
@@ -24,8 +24,18 @@ export class ShareModalComponent {
 
   @Output() onCloseModal: EventEmitter<boolean> = new EventEmitter(false);
 
+  constructor(private clipboard: Clipboard,
+              private _snackBar: MatSnackBar) {
+  }
+
   closeModal() {
     this.isOpen = false;
     this.onCloseModal.emit(false)
+  }
+
+  copyToClipboard () {
+    this.clipboard.copy(this.url);
+    this._snackBar.open('Ссылка скопирована в буфер обмена');
+    this.closeModal();
   }
 }
