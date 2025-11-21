@@ -75,7 +75,7 @@
           <img src="assets/img/favourite3.svg" alt="" class="_view1">
           <img src="assets/img/favourite2.svg" alt="" class="_view2">
         </button>
-        <a href="" class="share-btn">
+        <button (click)="toggleShareModal(true)" class="share-btn">
           <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="0.5" y="0.5" width="44" height="44" rx="22" stroke="#BDDA13"/>
             <g clip-path="url(#clip0_40_9954)">
@@ -83,7 +83,7 @@
             </g>
           </svg>
           <span class="text18">Поделиться</span>
-        </a>
+        </button>
         <div class="event-action__price">
           <div class="text24 text14-tablet" *ngIf="!event?.is_free">
             <span class="_hide-tablet">от</span> {{ event?.price | toInt }}₽
@@ -94,3 +94,8 @@
     </div>
   </div>
 </div>
+
+<share-modal
+  [isOpen]="isShareModalOpen"
+  [url]="window.location.href"
+  (onCloseModal)="toggleShareModal($event)"></share-modal>

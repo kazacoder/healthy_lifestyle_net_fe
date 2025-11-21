@@ -10,6 +10,8 @@ import {Subscription} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FavoriteService} from '../../../../shared/services/favorite.service';
 import {AuthService} from '../../../../core/auth/auth.service';
+import {ShareModalComponent} from '../../../../shared/components/modals/share-modal/share-modal.component';
+import {WindowsUtils} from '../../../../shared/utils/windows-utils';
 
 @Component({
   selector: 'event-item',
@@ -19,7 +21,8 @@ import {AuthService} from '../../../../core/auth/auth.service';
     RouterLink,
     NgStyle,
     ToIntPipe,
-    NgClass
+    NgClass,
+    ShareModalComponent
   ],
   standalone: true,
   templateUrl: './event-item.component.html',
@@ -35,6 +38,7 @@ export class EventItemComponent implements OnInit, OnChanges, OnDestroy {
   toggleFavoriteEventSubscription: Subscription | null = null;
   isLoggedInSubscription: Subscription | null = null;
   isLoggedIn: boolean = false;
+  isShareModalOpen: boolean = false;
 
   constructor(private _snackBar: MatSnackBar,
               private favoriteService: FavoriteService,
@@ -87,8 +91,15 @@ export class EventItemComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  toggleShareModal(val: boolean) {
+    this.isShareModalOpen = val;
+    WindowsUtils.fixBody(val);
+  }
+
   ngOnDestroy() {
     this.toggleFavoriteEventSubscription?.unsubscribe();
     this.isLoggedInSubscription?.unsubscribe();
   }
+
+  protected readonly window = window;
 }
